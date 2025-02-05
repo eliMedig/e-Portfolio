@@ -411,7 +411,7 @@ plt.show()
 											<br>
 										</div>	
 
-									<div class="week-header">Week 5 - PENDING (Wiki activity & Reflection Adjustments)</div>
+									<div class="week-header">Week 5</div>
 										<div class="week-content">
 
 											<h2>Theory</h2>
@@ -499,8 +499,17 @@ silhouette_coefficients
 
 
 											<h2>Contributions & Artefacts</h2>
+
+
 											<p><strong>Wiki Activity</strong></p>
-											<p>The goal of this Wiki Activity was to share our thoughts of two clustering animations while also reviewing our peers posts.</p>
+											<p>This exercise aimed to provide a visual understanding of how the k-means clustering algorithm works by observing two different animations. The first animation demonstrated how the algorithm initializes centroids, updates them iteratively, and eventually finds clusters. The second animation allowed for manual selection of initial centroid positions on different data distributions were we focused on the uniform distribution for this exercise.</p>
+
+											<p>The <a href="https://shabal.in/visuals/kmeans/1.html" target="_blank">first animation</a> illustrated the step-by-step process of k-means clustering. It began with randomly placing centroids on the dataset, followed by an iterative process where data points were assigned to the nearest centroid. Then, the mean distance of data points to the centroids was calculated to reposition the centroid, followed by reassigning the data points to their nearest centroid. Depending on where the initial centroids were placed, the outcome varied significantly. Centroids placed at points outside the general data range led to either a very small number of assigned data points or even zero assignments, as other centroids were positioned between the outlying centroid and the next available data points. I noticed that a more central starting point (i.e., closer to the range of the dataset) led to a much better distribution of data points to the centroids.</p>
+
+											<p>The <a href="https://www.naftaliharris.com/blog/visualizing-k-means-clustering/" target="_blank">second animation</a> involved manually selecting the initial centroids in a uniformly distributed dataset. Regardless of the chosen starting points, the final clusters always ended up evenly spaced. This demonstrated that in uniformly distributed data, k-means consistently converges to the same clustering result, as there are no inherent biases in the data distribution that might mislead the algorithm.</p>
+											
+											<p>In summary, we can conclude that the initial placement of centroids is as important as the data distribution within the dataset for k-means clustering to provide meaningful results.</p>											
+
 											<p><strong>Jaccard Coefficient Calculations</strong></p>
 											<p>We received a table with data for which we had to calcualted the Jaccard Coefficient for the pairs (Jack, Mary), (Jack, Jim) and (Jim, Mary).</p>
 											<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
@@ -607,7 +616,7 @@ silhouette_coefficients
 
 
 											<h2>Reflection of this week</h2>
-											<p>This week was very interesting as I delved into the world of clustering, particularly focusing on k-means. I enjoyed exploring how unsupervised learning works, especially since it presents unique challenges compared to supervised methods. The insights gained helped me understand how a computer system can perform clustering tasks without any prior knowledge of the groups it needs to form. I’m looking forward to deepening my understanding of clustering techniques and applying k-means on real data to further solidify my learning.</p>
+											<p>This week was very interesting as I delved into the world of clustering, particularly focusing on k-means. I enjoyed exploring how unsupervised learning works, especially since it presents unique challenges compared to supervised methods. The insights gained helped me understand how a computer system can perform clustering tasks without any prior knowledge of the groups it needs to form. The videos we were provided which showcased how data distribution and centroid placement affect the algorithm were very useful to get a better understanding of the process. I’m looking forward to deepening my understanding of clustering techniques and applying k-means on real data to further solidify my learning.</p>
 
 											<h2>References</h2>
 											<ul>
@@ -1560,7 +1569,7 @@ LABEL_NAMES[y_test[16][0]]
 
 											<h2>Contributions & Artefacts</h2>
 												
-											<p>*Link: <a href="https://github.com/eliMedig/e-Portfolio/blob/main/files/unit11notebook1.ipynb" target="_blank">Jupyter Notebook Week 10.1</a></p>
+											<p>*Link: <a href="https://github.com/eliMedig/e-Portfolio/blob/main/files/unit11notebook1.ipynb" target="_blank">Jupyter Notebook Week 11.1</a></p>
 
 											<p><strong>Model Performance Measurement</strong></p>
 											<p>We used a Jupyter Notebook to go through various model performance measurements using sklearn and matplotlib. We started by building a confusion matrix that showed us 22 of the cases where correctly identified as positive or negative while 1 case was false positive and 2 cases were false negative:</p>
