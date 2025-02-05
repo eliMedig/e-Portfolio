@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		<div id="wrapper">
+			<header id="header">
+				<div class="inner">
+					<div class="button-container">
+						<a href="../index.html" class="logo home-button">
+							<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+						</a>
+						<a href="../projects.html" class="logo back-button">
+							<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+						</a>
+					</div>
+					<nav>
+						<ul>
+							<li><a href="#menu">Menu</a></li>
+						</ul>
+					</nav>
+				</div>
+			</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+					<div id="main">
+						<div class="inner">
+							<h1>Project 1: Implementation of a Fully Connected  Neural Network (FCNN)</h1>
+								<ul class="actions small">
+									<li><a href="project1Intro.html" class="button primary disabled">Introduction</a></li>
+									<li><a href="project1Part1.html" class="button primary">Part 1</a></li>
+									<li><a href="project1Part2.html" class="button primary">Part 2</a></li>
+									<li><a href="project1Result.html" class="button primary">Results</a></li>
+								</ul>
+							<div class="modern-background">
+								<h2>Introduction</h2>
+								<p><strong>Background</strong></p>
+								<p>A Fully Connected Neural Network (FCNN) is a type of artificial neural network where every neuron in one layer is connected to every neuron in the next layer. This architecture is widely used for tasks such as regression and classification. The process begins with one node for each feature in the input data. These inputs are processed through one or more hidden layers, each containing a specified number of neurons. In a fully connected network, every neuron in a given layer is linked to all neurons in the preceding layer, giving the network its name. Finally, the outputs are computed in the last layer, providing the model’s predictions.</p>
+								<span class="image main"><img src="../images/fcnnImage.jpg" alt="" /></span>
+								<p><strong>Scope</strong></p>
+								<p>This project should demonstrate the implementation of a fully connected neural network (FCNN) for a regression task using Python. The aim is to build a scalable pipeline that preprocesses data, trains a neural network and evaluates its performance while providing an option for customization through user inputs via console (CLI). In a second step it should be possible to use the model with new data to get predictions by AI solutions.</p>
+								<p><strong>Deliverables (High-Level)</strong></p>
+									<ul>
+										<li>The base layer that builds and stores the FCNN model together with all parameters and other configurative information while also providing options for parameter tuning during model creation via the console (CLI).</li>
+										<li>The usage layer which allows to use the saved model with new data. This part will aims at creating predictions and storing the outcome in a CSV file.</li>
+										<li>Feature engineering including quality checks, encoding and scaling must be included.</li>
+										<li>The solution should not have any hardcoded file sources or a hard coded file structure but rather allow users to use it with various valid dataset.</li>
+									</ul>
+								<p>The solution will be built using Python with the <a href="https://www.tensorflow.org/" target="_blank">TensorFlow</a> library for all machine learning capabilities. The machine learning algorithm used will the introduced FCNN and the parameters for finetuning will include the test size, number of hidden layers, number of neurons per layer, epochs, batch size and validation split. All data will be obtained from the <a href="https://archive.ics.uci.edu/datasets" target="_blank">ICU Machine Learning Repository</a>.</p>
+								<p><strong>High-Level Design</strong></p>
+								<span class="image main"><img src="../images/project1Hld.jpg" alt="HLD" /></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

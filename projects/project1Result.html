@@ -1,0 +1,156 @@
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div class="inner">
+						<div class="button-container">
+							<a href="../index.html" class="logo home-button">
+								<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+							</a>
+							<a href="../projects.html" class="logo back-button">
+								<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+							</a>
+						</div>
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+					</div>
+				</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+					<div id="main">
+						<div class="inner">
+							<h1>Project 1: Implementation of a Fully Connected  Neural Network (FCNN)</h1>
+
+							<ul class="actions small">
+                                <li><a href="project1Intro.html" class="button primary">Introduction</a></li>
+                                <li><a href="project1Part1.html" class="button primary">Part 1</a></li>
+                                <li><a href="project1Part2.html" class="button primary">Part 2</a></li>
+                                <li><a href="project1Result.html" class="button primary disabled">Results</a></li>
+							</ul>
+							<div class="modern-background">			
+							<h2>Results</h2>
+                            <p><strong>Model Build and Parameters</strong></p>
+							<p>The FCNN has been created successfully and an image of the neural network architecture has been stored along side the model, parameters, features and scalers information. For reproducability all parameters are listed here: </p>
+								<li>Random State = 1234</li>
+								<li>Test Size (split percentage) = 0.3</li>
+								<li>Hidden Layers = 3</li>
+								<li>Neurons per Layer = 128</li>
+								<li>Epochs = 50</li>
+								<li>Batch Size = 32</li>
+								<li>Validation Split (split percentage) = 0.2</li>
+                            	<br>
+							<p><strong>Model Evaluation</strong></p>
+							<p>Using these paremeters with the bike sharing dataset resulted in following model evaluation metrics:</p>
+							<img src="../images/metricsResult.jpg" alt="FCNN Model" style="max-width: 100%; height: auto;">
+									<br>
+									<br>
+								<li>Mean Squared Error (MSE: 1.90): A lower MSE indicates better model performance. In this case, the MSE suggests that the model's predictions are close to the actual values.</li>
+								<li>Mean Absolute Error (MAE: 1.03): An MAE of 1.03 indicates that, on average, the model's predictions deviate from the true values by approximately 1 unit</li>
+								<li>R² Score (0.9999): The R² score indicates the proportion of variance in the target variable explained by the model. An R² value of 0.9999 means the model explains nearly 100% of the variance, indicating an excellent fit.</li>
+									<br>
+							<p><strong>Result Interpretation</strong></p>
+							<p>By comparing the expected results with the predicted values, we can evaluate the model's performance. In this case, the predictions closely align with the actual values, indicating strong accuracy.</p>
+							<p><strong>Note:</strong>The small deviations observed are reflected in the evaluation metrics presented earlier. Overall they confirm that the model achieves an excellent fit to the data. More finetuning could further icnrease the model accuracy.</p>
+									<br>
+							<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
+								<thead>
+									<tr style="background-color: #8d8d8d; color: #333333;">
+										<th style="padding: 10px; border: 1px solid #ddd;">Dataset</th>
+										<th style="padding: 10px; border: 1px solid #ddd;">Predicted Value (FCNN Result)</th>
+										<th style="padding: 10px; border: 1px solid #ddd;">Expected Value (Control Value)</th>
+										<th style="padding: 10px; border: 1px solid #ddd;">Difference (FCNN Deviation)</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="padding: 10px; border: 1px solid #ddd;">1</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">94.5368423461914</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">93</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">1.5368</td>
+									</tr>
+									<tr>
+										<td style="padding: 10px; border: 1px solid #ddd;">2</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">68.8176498413086</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">67</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">1.8176</td>
+									</tr>
+									<tr>
+										<td style="padding: 10px; border: 1px solid #ddd;">3</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">35.34605407714844</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">35</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">0.3461</td>
+									</tr>
+									<tr>
+										<td style="padding: 10px; border: 1px solid #ddd;">4</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">36.78642272949219</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">37</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">-0.2136</td>
+									</tr>
+									<tr>
+										<td style="padding: 10px; border: 1px solid #ddd;">5</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">35.923160552978516</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">36</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">-0.0768</td>
+									</tr>
+									<tr>
+										<td style="padding: 10px; border: 1px solid #ddd;">6</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">32.77050018310547</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">34</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">-1.2295</td>
+									</tr>
+									<tr>
+										<td style="padding: 10px; border: 1px solid #ddd;">7</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">27.173233032226562</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">28</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">-0.8268</td>
+									</tr>
+									<tr>
+										<td style="padding: 10px; border: 1px solid #ddd;">8</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">38.892486572265625</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">39</td>
+										<td style="padding: 10px; border: 1px solid #ddd;">-0.1075</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

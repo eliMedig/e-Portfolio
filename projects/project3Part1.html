@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div class="inner">
+						<div class="button-container">
+							<a href="../index.html" class="logo home-button">
+								<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+							</a>
+							<a href="../projects.html" class="logo back-button">
+								<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+							</a>
+						</div>
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+					</div>
+				</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+					<div id="main">
+						<div class="inner">
+							<h1>Project 3: Real-time object detection with YOLOv8</h1>
+							<ul class="actions small">
+                                <li><a href="project3Intro.html" class="button primary">Introduction</a></li>
+                                <li><a href="project3Part1.html" class="button primary disabled">Part 1</a></li>
+                                <li><a href="project3Part2.html" class="button primary">Part 2</a></li>
+                                <li><a href="project3Result.html" class="button primary">Results</a></li>
+							</ul>
+							<div class="modern-background">									
+								<h2>Frontend</h2>
+									<ul>
+										<li>
+											A simple frontend built using Tkinter that opens a window including 4 buttons:
+											<ol>
+												<li>Start Video Feed: Begins capturing and displaying live video feed from the camera.</li>
+												<li>Stop Video Feed: Stops the video feed and replaces the display with a black frame.</li>
+												<li>Start Object Detection: Enables YOLOv8-based object detection, which processes frames to identify and annotate detected objects.</li>
+												<li>Stop Object Detection: Disables object detection while keeping the live feed running.</li>
+											</ol>
+										</li>
+										<li>The frontend sends raw video frames to the backend for processing and receives processed frames in return.</li>
+										<li>Processed frames (with or without annotations) are displayed in real-time on the frontend window.</li>
+									</ul>
+									<pre><code class="language-python">
+import tkinter as tk
+from tkinter import Label, Button, Frame
+from PIL import Image, ImageTk
+import backend
+
+
+class LiveFeedApp:
+	#initialize and build the window and buttons
+	def __init__(self, root):
+		self.root = root
+		self.root.title("Live Camera Feed")
+		self.root.geometry("640x480")
+		
+		# Backend handler
+		self.video_handler = backend.VideoStreamHandler()
+
+		# Create a frame for the buttons
+		button_frame = Frame(root)
+		button_frame.pack(pady=10)
+
+		# Add buttons to the frame
+		self.start_button = Button(button_frame, text="Start Live Feed", command=self.start_feed, font=("Arial", 12))
+		self.start_button.pack(side="left", padx=5)
+
+		self.stop_button = Button(button_frame, text="Stop Live Feed", command=self.stop_feed, font=("Arial", 12))
+		self.stop_button.pack(side="left", padx=5)
+
+		self.detect_button = Button(button_frame, text="Start Object Detection", command=self.start_detection, font=("Arial", 12))
+		self.detect_button.pack(side="left", padx=5)
+
+		self.stop_detect_button = Button(button_frame, text="Stop Object Detection", command=self.stop_detection, font=("Arial", 12))
+		self.stop_detect_button.pack(side="left", padx=5)
+		
+		# Label for video feed
+		self.video_label = Label(root)
+		self.video_label.pack()
+		
+		self.running = False
+
+	#start the video feed
+	def start_feed(self):
+		if not self.running:
+			self.running = True
+			self.video_handler.start_stream()
+			self.update_feed()
+
+	#update the video feed
+	def update_feed(self):
+		if self.running:
+			frame = self.video_handler.get_frame()
+			if frame is not None:
+				img = Image.fromarray(frame)
+			else:
+				img = Image.fromarray(self.video_handler.get_black_frame())
+
+			imgtk = ImageTk.PhotoImage(image=img)
+			self.video_label.imgtk = imgtk
+			self.video_label.configure(image=imgtk)
+			
+			self.root.after(10, self.update_feed)
+
+	#start object detection (backend call)
+	def start_detection(self):
+		self.video_handler.enable_detection()
+
+	#end object detection (backend call)
+	def stop_detection(self):
+		self.video_handler.disable_detection()
+
+	#stop the video feed
+	def stop_feed(self):
+		if self.running:
+			self.running = False
+			self.video_handler.disable_detection()
+			self.video_handler.stop_stream()
+			
+			# Set a black frame
+			black_frame = self.video_handler.get_black_frame()
+			black_img = Image.fromarray(black_frame)
+			black_imgtk = ImageTk.PhotoImage(image=black_img)
+			self.video_label.imgtk = black_imgtk
+			self.video_label.configure(image=black_imgtk)
+
+	#properly close the tool
+	def close(self):
+		self.running = False
+		self.video_handler.stop_stream()
+		self.root.destroy()
+
+#main
+if __name__ == "__main__":
+	root = tk.Tk()
+	app = LiveFeedApp(root)
+	root.protocol("WM_DELETE_WINDOW", app.close)  # Handle window close
+	root.mainloop()
+									</code></pre>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

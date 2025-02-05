@@ -1,0 +1,487 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Module Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+	<div id="wrapper">
+		<header id="header">
+			<div class="inner">
+					<a href="../../index.html" class="logo">
+						<span class="symbol"><img src="../../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+					</a>
+					<nav>
+						<ul>
+							<li><a href="#menu">Menu</a></li>
+						</ul>
+					</nav>
+			</div>
+		</header>
+
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../../index.html">Home</a></li>
+						<li><a href="../inductionModule.html">Induction Module</a></li>
+						<li><a href="../aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../machineLearning.html">Machine Learning</a></li>
+						<li><a href="../knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+
+					<div id="main">
+						<div class="inner">
+
+							<h1>NUMERICAL ANALYSIS</h1>
+
+							<ul class="actions small"> 
+								<li><a href="../numericalAnalysis.html" class="button primary">Introduction</a></li>
+								<li><a href="numericalAnalysis1.html" class="button primary disabled">Weekly Data Activities</a></li>
+								<li><a href="numericalAnalysis2.html" class="button primary">Final Assessment</a></li>
+							</ul>
+							<div class="modern-background">
+							<h2>Artefacts from this module</h2>
+							<p>This page documents all artefacts from the weekly data activities that were part of the Numerical Analysis module as one of the several pillars of learning offered by the module.</p>
+							<div id="weeks">
+								<div class="week">
+									<div class="week-header">Week 1: Activities</div>
+										<div class="week-content">
+											<h3>Activity</h3>
+											<p>The Data Activities of this week consisted of:</p>
+											<ol>
+												<li>Installing and gettign started with R Studio (IDE for R).</li>
+												<li>Downloading the <a href="https://beta.ukdataservice.ac.uk/datacatalogue/studies/study?id=8011#!/details" target="_blank"> Crime Survey for England and Wales, 2013-2014: Unrestricted Access Teaching Dataset</a> and creating a summary statistic with R Studio using the antisocx variable.</li>
+											</ol>
+													<h3>Results</h3>	
+													<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
+														<thead>
+															<tr style="background-color: #8d8d8d;  color: #333333;">
+																<th style="border: 1px solid #ddd; padding: 8px;">Statistic</th>
+																<th style="border: 1px solid #ddd; padding: 8px;">Value</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td style="border: 1px solid #ddd; padding: 8px;">Min</td>
+																<td style="border: 1px solid #ddd; padding: 8px;">-1.215</td>
+															</tr>
+															<tr>
+																<td style="border: 1px solid #ddd; padding: 8px;">1st Qu.</td>
+																<td style="border: 1px solid #ddd; padding: 8px;">-0.788</td>
+															</tr>
+															<tr>
+																<td style="border: 1px solid #ddd; padding: 8px;">Median</td>
+																<td style="border: 1px solid #ddd; padding: 8px;">-0.185</td>
+															</tr>
+															<tr>
+																<td style="border: 1px solid #ddd; padding: 8px;">Mean</td>
+																<td style="border: 1px solid #ddd; padding: 8px;">-0.007</td>
+															</tr>
+															<tr>
+																<td style="border: 1px solid #ddd; padding: 8px;">3rd Qu.</td>
+																<td style="border: 1px solid #ddd; padding: 8px;">0.528</td>
+															</tr>
+															<tr>
+																<td style="border: 1px solid #ddd; padding: 8px;">Max</td>
+																<td style="border: 1px solid #ddd; padding: 8px;">4.015</td>
+															</tr>
+															<tr>
+																<td style="border: 1px solid #ddd; padding: 8px;">NA's</td>
+																<td style="border: 1px solid #ddd; padding: 8px;">6694</td>
+															</tr>
+														</tbody>
+													</table>	
+										</div>
+									</div>
+
+								<div class="week">
+									<div class="week-header">Week 2: Activities</div>
+										<div class="week-content">
+											<h3>Activity</h3>
+											<p>The second week consisted of more statistical theory as well as some additional data activities using the <a href="https://beta.ukdataservice.ac.uk/datacatalogue/studies/study?id=8011#!/details" target="_blank"> Crime Survey for England and Wales, 2013-2014: Unrestricted Access Teaching Dataset</a>:</p>
+											<ol>
+												<li>Exploring whether survey respondents experienced any crime in the 12 months prior to the survey using the variable bcsvictim.</li>
+												<li>Creating a frequency table to count if survey respondents experienced any crime in the previous 12 months using the table() command.</li>
+												<li>Assessing the results and deciding to convert this variable into a factor variable using as_factor.</li>
+											</ol>
+												<h3>Results</h3>
+												<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
+													<thead>
+														<tr style="background-color: #8d8d8d;  color: #333333;">
+															<th style="border: 1px solid #ddd; padding: 8px;">Before Conversion (without factors)</th>
+															<th style="border: 1px solid #ddd; padding: 8px;">After Conversion (with factors)</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td style="border: 1px solid #ddd; padding: 8px;">
+																<code>table(csew1314teachingopen$bcsvictim)</code><br>
+																0 : 7460<br>
+																1 : 1383
+															</td>
+															<td style="border: 1px solid #ddd; padding: 8px;">
+																<code>table(csew1314teachingopen$bcsvictim)</code><br>
+																Not a Victim of Crime: 7460<br>
+																Victim of Crime: 1383
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<p>This analysis highlighted that 1,383 respondents were victims of crime within the 12 months prior to the survey. Converting the variable to a factor added interpretability and meaning to the results.</p>
+										</div>
+									</div>
+
+								<div class="week">
+									<div class="week-header">Week 3: Activities</div>
+										<div class="week-content">
+											<h3>Activity</h3>
+											<p>During week three we did some further exploration of the <a href="https://beta.ukdataservice.ac.uk/datacatalogue/studies/study?id=8011#!/details" target="_blank"> Crime Survey for England and Wales, 2013-2014: Unrestricted Access Teaching Dataset</a>:</p>
+											<ol>
+												<li>Filtering the dataset using subset() to include only individuals aged 75+ and who were a victim of crime.</li>
+												<li>Saving the filtered dataset as crime_75victim for further analysis.</li>
+												<li>Counting the total number of individuals in the subset to document the sample size.</li>
+											</ol>
+											<h3>Results</h3>
+													<p><strong>Step 1: Inspecting the field agegrp7</strong></p>
+													<p>To confirm the value representing respondents aged 75+, the labels for the agegrp7 field were checked using: 
+														<br><code>attributes(csew1314teachingopen$agegrp7)</code></p>
+													<p>The results showed that the value 7 corresponds to the age group "75+".</p>
+													
+													<p><strong>Step 2: Creating the Subset</strong></p>
+													<p>A subset of individuals aged 75+ who were also victims of crime was created using the following command: 
+														<br> <code>crime_75victim <- subset(csew1314teachingopen, agegrp7 == "7" & bcsvictim == "Victim of crime")</code></p>		
+
+													<p><strong>Step 3: Exporting the Subset</strong></p>
+													<p>The subset was exported to a CSV file for further use with the command: 
+														<br> <code>write.csv(crime_75victim, "crime_75victim.csv", row.names = FALSE)</code></p>
+
+													<p><strong>Step 4: Verifying the Subset</strong></p>
+													<p>To verify the results, the number of rows in the subset was counted using: 
+														<br> <code>nrow(crime_75victim)</code></p>
+													<p> This confirmed that the subset contains 67 individuals.</p>
+
+										</div>
+									</div>
+
+								<div class="week">
+									<div class="week-header">Week 4: Activities</div>
+										<div class="week-content">
+											<h3>Activity</h3>
+											<p>This week included several online data activities:</p>
+											<ol>
+												<li>Doing online statistics exercises on <a href="https://demonstrations.wolfram.com/MarbleProbability/" target="_blank">Wolfram.com</a>.</li>
+												<li>Exploring everyday use of probabilities and exploring different types of sampling.</li>
+												<li>Getting through discrete probability examples for Bionominal, poisson and hypergeometric simulation as well as going through examples for continous probability distribution looking at nominal, uniform, exponential and gaussian propability distributions.</li>
+												<li>Doing some additional practice questions from Chapter 3 of the Holmes et al. (2017).</li>
+											</ol>
+										</div>
+									</div>
+
+								<div class="week">
+									<div class="week-header">Week 5: Activities</div>
+										<div class="week-content">
+											<h3>Activity</h3>
+											<p>The data activities of week 5 aimed at introducing visaluzation:</p>
+											<ol>
+												<li>Creating a boxplot with boxplot and ggplot2 to assess levels of anti-social behaviour in neighbourhoods.</li>
+												<li>Creating a barplot to show how how many samples fall into which category. </li>
+												<li>Starting the first stastisics discussion in the course module.</li>
+											</ol>
+											<h3>Results</h3>
+												<p><strong>Step 1: Boxplot of Anti-Social Behaviour Levels</strong></p>
+												<p>The first task was to create a boxplot for the variable antisocx, which assesses the level of anti-social behaviour that survey respondents experienced in their neighbourhood. Using the boxplot() function in R (with base graphics), the plot was created with the title "Levels of anti-social behaviour in neighbourhood 'antisocx'", and the boxplot was coloured purple with outliers in blue.</p>
+													<code>boxplot(csew1314teachingopen$antisocx,</code><br>
+													<code>main = "Levels of anti-social behaviour in neighbourhood 'antisocx'",</code><br> 
+													<code>col = "purple",</code><br> 
+													<code>outcol = "blue")</code><br>
+												<br>	
+												<p>The boxplot() visualized the distribution of anti-social behaviour levels among respondents, with the outliers distinctly marked in blue.</p>
+												<img src="../../images/boxplot.jpg" alt="Boxplot of Crime Victimization" style="max-width: 100%; height: auto; border: 1px solid #ddd; margin-top: 10px;">
+
+
+												<p><strong>Step 2: Boxplot of Anti-Social Behaviour Using ggplot2</strong></p>
+												<p>As an alternative, a boxplot was also created using ggplot2 for a more aesthetic and customizable plot. This version featured yellow for the boxplot fill and red for the outliers.</p>
+													<code>ggplot(csew1314teachingopen, aes(x = "", y = antisocx)) + </code><br>
+													<code>geom_boxplot(fill = "yellow", outlier.colour = "red") + </code><br>
+												  <code>labs(title = "Levels of anti-social behaviour in neighbourhood 'antisocx')") + </code><br>
+												  <code>theme_minimal() </code><br>
+												<br>
+												<p>The ggplot2 version provided a visually appealing alternative, enhancing readability through custom colors and a minimalistic theme.</p>
+												<img src="../../images/ggplot2.jpg" alt="GGPlot Plot of Crime Victimization" style="max-width: 100%; height: auto; border: 1px solid #ddd; margin-top: 10px;">
+
+												<p><strong>Step 3: Bar Plot of Crime Victimization</strong></p>
+												<p>The second task was to create a bar plot to assess whether survey respondents experienced crime in the 12 months prior to the survey using the bcsvictim variable. A frequency table was first created, and then a bar plot was generated using the barplot() function with orange bars, which visually displayed the number of respondents who were victims of crime versus those who were not.</p>
+													<code>barplot(crime_counts, </code><br>
+													<code>main = "Survey Respondents - Victims of Crime", </code><br>
+													<code>col = "orange", </code><br>
+													<code>xlab = "Crime Experience", </code><br>
+													<code>ylab = "Number of Respondents")</code><br>
+												<br>
+												<p>This bar plot illustrated the distribution of crime victimization among the respondents, highlighting the number of individuals who experienced crime in the past 12 months:</p>
+												<img src="../../images/barplot.jpg" alt="Bar Plot of Crime Victimization" style="max-width: 100%; height: auto; border: 1px solid #ddd; margin-top: 10px;">
+
+
+												<p><strong>First Group Discussion</strong></p>
+												<p>The first group discussion was about streamlining data visualization by optimizing an existing table of a report.</p>
+												<ul>
+													<li><strong>Challenges:</strong> The table was dense, mixing numbers and percentages, with discrepancies in respondent counts (490–547).</li>
+													<li><strong>Actions Taken:</strong> Separated data into clearer columns, added total respondents, and used ChatGPT to generate Python code for visualization.</li>
+													<li><strong>Outcome:</strong> A cleaner table and a dynamic visualization using matplotlib.</li>
+												</ul>
+												<img src="../../images/discussion1.jpg" alt="Discussion Input" style="max-width: 100%; height: auto; border: 1px solid #ddd; margin-top: 10px;">
+
+										</div>
+									</div>
+
+								<div class="week">
+									<div class="week-header">Week 6: Activities</div>
+										<div class="week-content">
+											<h3>Activity</h3>
+											<p>During week 6 there was only one data activity:</p>
+											<ol>
+												<li>Continuing and contributing to an ongoing stastics discussion on the modules course page/moodle that started in week 5 and will end in week 7.</li>
+											</ol>
+										</div>
+									</div>
+
+								<div class="week">
+									<div class="week-header">Week 7: Activities</div>
+										<div class="week-content">
+											<h3>Activity</h3>
+											<p>Week 7 consisted of several data activites based on a health information dataset:</p>
+											<ol>
+												<li>Find out mean, median and mode of variables sbp, dbp and income.</li>
+												<li>Find out the five-figure summary of income variable and present it using a Boxplot.</li>
+												<li>Run a suitable hypothesis test to see if there is any association between systolic blood pressure and presence and absence of peptic ulcer.</li>
+												<li>Final summary of discussion with other students.</li>
+											</ol>
+											<h3>Results</h3>
+
+											
+													<p><strong>Step 1: getting mean, median and modestrong</strong></p4>
+													<p>To get the median and mode of each of those variable we can use the following commands in R: </p>
+		
+													<strong>The means for each:</strong><br>
+													<code>mean_sbp <- mean(Health_Data$sbp, na.rm = TRUE)</code><br>
+													<code>mean_dbp <- mean(Health_Data$dbp, na.rm = TRUE)</code><br>
+													<code>mean_income <- mean(Health_Data$income, na.rm = TRUE)</code><br>
+													<br>
+													<strong>The median for each:</strong><br>
+													<code>median_sbp <- median(Health_Data$sbp, na.rm = TRUE)</code><br>
+													<code>median_dbp <- median(Health_Data$dbp, na.rm = TRUE)</code><br>
+													<code>median_income <- median(Health_Data$income, na.rm = TRUE)</code><br>
+													<br>
+													<strong>The mode for each:</strong><br>
+													<code>mode_sbp <- getmode(Health_Data$sbp)</code><br>
+													<code>mode_dbp <- getmode(Health_Data$dbp)</code><br>
+													<code>mode_income <- getmode(Health_Data$income)</code><br>								
+
+
+													<p><strong>Step 2: Create a boxplot for the income variable</strong></p>
+													<p>To create a boxplot for the variable income we can use the boxplot command: </p>
+													<code>boxplot(Health_Data$income, main = "Boxplot of Income", ylab = "Income", col = "lightblue")</code>
+													<br>
+													<br>
+													<p>This results in a boxplot that shows the income distribution:</p>
+													<img src="../../images/incomeboxplot.jpg" style="max-width: 100%; height: auto; border: 1px solid #ddd; margin-top: 10px;">
+
+													<p><strong>Step 3: Run a hypothesis test to see if there is any association between systolic blood pressure and presence and absence of peptic ulcer.</strong></p>
+													<p>To compare the means of two groups and check if there is any statistically relevant correlation we can use the T-Test:</p>
+													<code>t_test_result <- t.test(sbp ~ pepticulcer, data = Health_Data)</code>
+													<br>
+													<br>
+													<p>This results can be shown by simply typing t_test_result. They indicate that there is no significant evidence for the hypothesis that peptic ulcer is associated with systolic blood pressure:</p>
+													<img src="../../images/ttestresult.jpg" style="max-width: 100%; height: auto; border: 1px solid #ddd; margin-top: 10px;">
+
+										</div>
+									</div>
+
+								<div class="week">
+									<div class="week-header">Week 8: Activities</div>
+										<div class="week-content">
+											<h3>Activities</h3>
+											<p>Following data activities were part of week 8:</p>
+											<ol>
+												<li>Find out the mean, median and mode of age variable.</li>
+												<li>Find out whether median diastolic blood pressure is same among diabetic and non-diabetic participants.</li>
+												<li>Find out whether systolic BP is different across occupational groups.</li>
+												<li>Additional: Scenario-Based Exercise 95% Confidence Interval.</li>
+											</ol>
+											<h3>Results</h3>
+
+												<p><strong>Step 1: Get statistical information about a variable</strong></p>
+												The mode, mean and median:<br>
+													<code>mean_age <- mean(Health_Data$age, na.rm = TRUE)</code><br>
+													<code>median_age <- median(Health_Data$age, na.rm = TRUE)</code><br>
+													<code>mode_age <- as.numeric(names(sort(table(Health_Data$age), decreasing = TRUE))[1])</code><br>
+												<br>
+												<p>As a result the following values have been found:</p>
+												<img src="../../images/result_8_1.jpg" alt="Result" style="max-width: 100%; height: auto; border: 1px solid #ddd; margin-top: 10px;">
+
+
+												<p><strong>Step 2: Diastolic blood pressure check</strong></p>
+												<p>The second step was to 1. split the data into diabetic and non-diabetic while 2. also taking the dbp value for each. This can then be used to perfom a Mann-Withney U test to compare the median dbp between the diabetic and non-diabetic entries.</p>
+												Split into a diabetic and non-diabetic list while keeping the dbp for each:<br>
+												<code>diabetic_group <- Health_Data$dbp[Health_Data$diabetes == 1]</code><br>
+												<code>non_diabetic_group <- Health_Data$dbp[Health_Data$diabetes == 2]</code><br>
+												<br>
+												Performing the Mann-Withney U test:<br>
+												<code>result <- wilcox.test(diabetic_group, non_diabetic_group, exact = FALSE)</code>
+												<br>
+												<br>
+												<p>Result was a p value of 0.7999 which means that the hypothesis was strongly rejected being much greater than the 0.05 treshhold usually taken to validate.</p>
+												<img src="../../images/result_8_2.jpg" alt="Result" style="max-width: 100%; height: auto; border: 1px solid #ddd; margin-top: 10px;">
+
+
+												<p><strong>Step 3: Systolic BP check</strong></p>
+												<p>The third step was to check the systolic BP for being different across occupationl groups.</p>
+												First we run a shapiro test to understand the normality for each occupation group:<br>
+												<code>shapiro_results <- by(Health_Data$sbp, Health_Data$occupation, shapiro.test)</code><br> 
+												<br>
+												The p-values for all 4 occupational groups was below 0.05 which means we can reject the null hypothesis indicating that the data is not normally distributed. We will use the Kruskal-Wallis test to check the data as it does not require normality. The result should tell us wherte there is a significant differenct in systolic blood pressure across the occupational groups:<br>
+												<code>kruskal_result <- kruskal.test(sbp ~ occupation, data = Health_Data)</code><br> 
+												<br>
+												<p>The kruskal test resulted in a p value of 0.8545 which means we can reject the null hypothesis and the occupations do not have a significant difference in blood pressure distribution. The following image shows how the systolic blood pressure is distributed among the four occupation categories:</p>
+												<img src="../../images/result_8_3.jpg" alt="Result" style="max-width: 100%; height: auto; border: 1px solid #ddd; margin-top: 10px;">
+
+
+												<p><strong>Step 4: Getting through the scenario based solution</strong></p>
+												<p>We will import the data to R where there will be an aray for each of the three vendors:</p>
+													<code>vendor1 <- c(45, 29, 56, 52, 45, 45, 41)</code><br>
+													<code>vendor2 <- c(61, 53, 41, 58, 53, 47, 44)</code><br>
+													<code>vendor3 <- c(35, 21, 33, 27, 22, 26, 30)</code><br>
+												<p>We will now take the mean of each vendor to understand which has the highest mean:</p>
+													<code>mean_vendor1 <- mean(vendor1)</code><br>
+													<code>mean_vendor2 <- mean(vendor2)</code><br>
+													<code>mean_vendor3 <- mean(vendor3)</code><br>
+												<p>As a result vendor 2 has the highest mean which could indicate this as the best vendor for the training.</p>
+										</div>
+									</div>
+
+								<div class="week">
+									<div class="week-header">Week 9: Activities</div>
+										<div class="week-content">
+											<h3>Activities</h3>
+											<p>Week 9 data activites got back into analyzing the <a href="https://beta.ukdataservice.ac.uk/datacatalogue/studies/study?id=8011#!/details" target="_blank"> Crime Survey for England and Wales, 2013-2014: Unrestricted Access Teaching Dataset</a>:</p>
+											<ol>
+												<li>Create a crosstab to assess how individuals’ experience of any crime in the previous 12 months bcsvictim vary by age group agegrp7. Create the crosstab with bcsvictim in the rows and agegrp7 in the columns, and produce row percentages, rounded to 2 decimal places.</li>
+												<li>Looking at the crosstab you have produced, which age groups were the most likely, and least likely, to be victims of crime?</li>
+											</ol>
+											<h3>Results</h3>
+
+											<p><strong>Step 1: Creating Cross Table</strong></p>
+												<p>The first step was to create a crosstab using the table function. We will also round it to two decimals in this step:</p>
+													<code>raw_crosstab <- table(csew1314teachingopen$bcsvictim, csew1314teachingopen$agegrp7)</code><br>
+													<code>row_percentages <- prop.table(raw_crosstab, margin = 1) * 100</code><br>
+													<code>row_percentages <- round(row_percentages, 2)</code><br>
+												<br>
+												<p>Result shows the percentage of people that have been victim and not grouped into their age group. The most likely group to be victim of crime is the age group 2 and the least likely age group 1: <p>
+												<img src="../../images/result_9_1.jpg" alt="Result" style="max-width: 100%; height: auto; border: 1px solid #ddd; margin-top: 10px;">
+										</div>
+									</div>
+
+								<div class="week">
+									<div class="week-header">Week 10: Activities</div>
+										<div class="week-content">
+											<h3>Activities</h3>
+											<p>The following data activities were conducted during week 10:</p>
+											<ol>
+												<li>Find out correlation between systolic and diastolic BP.</li>
+												<li>Produce a scatter plot between systolic and diastolic BP.</li>
+											</ol>
+											<h3>Results</h3>
+
+											<p><strong>Step 1: Finding the correlation between systolic and diastolic blood pressure</strong></p>
+												<p>The first step was to get the correlation between the two variables which can be done with the following code in R:</p>
+												<code>correlation <- cor(Health_Data$sbp, Health_Data$dbp, use = "complete.obs")</code><br><br>
+												<p>The result was 0.846808 which indiactes a strong positive correlation of around 84.7%</p>
+
+												<p><strong>Step 2: Creating a Scatter Plot</strong></p>
+												<p>To create a scatter plot the plot function of R can be used:</p>
+												<code>plot(Health_Data$sbp, Health_Data$dbp,</code><br>
+												<code>main = "Scatter Plot of Systolic vs Diastolic Blood Pressure",</code><br>
+												<code>xlab = "Systolic Blood Pressure (SBP)",</code><br>
+												<code>ylab = "Diastolic Blood Pressure (DBP)",</code><br>
+												<code>pch = 19, col = "blue")</code><br><br>
+												<p>This is the plot created:</p>
+												<img src="../../images/result_10_1.jpg" alt="Result" style="max-width: 100%; height: auto; border: 1px solid #ddd; margin-top: 10px;">
+										</div>
+									</div>
+
+								<div class="week">
+									<div class="week-header">Week 11: Activities</div>
+										<div class="week-content">
+											<h3>Activities</h3>
+											<p>The data activities during this week focused on working with regression:</p>
+											<ol>
+												<li>Perform simple linear regression analysis to find the population regression equation to predict the diastolic BP by systolic BP.</li>
+												<li>Interpret the findings of regression analysis at 5% level of significance.</li>
+											</ol>
+											<h3>Results</h3>
+											
+											<p><strong>Step 1: Fit the linear regression model</strong></p>
+												<p>We use the lm() function in R to fit the model:</p>
+													<code>model <- lm(dbp ~ sbp, data = Health_Data)</code><br>
+												<br>
+												<p>The linear regression model to predict diastolic blood pressure (DBP) based on systolic blood pressure (SBP) is DBP=19.41+0.496⋅SBP. The following can be interpreted from the results:</p>
+													<ol>
+														<li>19.41 is the intercept: The predicted diastolic blood pressure when systolic blood pressure is 0 (not practically meaningful but part of the equation).</li>
+														<li>0.496is the slope: For every unit increase in SBP, DBP is expected to increase by 0.496 units on average.</li>
+														<li>The p value is smaller than 0.05 this means the relationship between sbp and dbp is highly statistically significant at the 5% level of significance.</li>
+														<li>The multiple R square of 0.7171 indicates that 71.71% of the variability in dbp is explained by sbp.</li>
+														<li>The adjusted R square of 0.7157 is very close to the multiple R square which indicates that the model is well fit.</li>
+														<li>The residual standard error (RSE) is 6.264 which represents the typical deviation of observed DBP values from the predicted values.</li>
+													</ol>
+												<p>The regression analysis shows a strong and statistically significant positive relationship between SBP and DBP:</p>
+												<img src="../../images/result_11_1.jpg" alt="Result" style="max-width: 100%; height: auto; border: 1px solid #ddd; margin-top: 10px;">
+											</div>
+										</div>
+									</div>
+
+								<div class="week">
+									<div class="week-header">Week 12: Activities</div>
+
+										<div class="week-content">
+											<h3>Activities</h3>
+											<p>Week 12 only included the following data activites:</p>
+											<ol>
+												<li>The activity focuses on Baye’s Probability and was a moodle based activity that included calculation of various statistical values.</li>
+											</ol>
+										</div>
+									</div>
+								</div>			
+							</div>
+
+			<script src="../../assets/js/jquery.min.js"></script>
+			<script src="../../assets/js/browser.min.js"></script>
+			<script src="../../assets/js/breakpoints.min.js"></script>
+			<script src="../../assets/js/util.js"></script>
+			<script src="../../assets/js/main.js"></script>
+			<script src="../../assets/js/darkmode.js"></script>
+			<script>
+				document.querySelectorAll('.week-header').forEach(header => {
+					header.addEventListener('click', function () {
+						const content = this.nextElementSibling;
+						if (content.style.display === "none" || content.style.display === "") {
+							content.style.display = "block";
+						} else {
+							content.style.display = "none";
+						}
+					});
+				});
+			</script>
+
+	</body>
+</html>

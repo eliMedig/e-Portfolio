@@ -1,0 +1,280 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div class="inner">
+						<div class="button-container">
+							<a href="../index.html" class="logo home-button">
+								<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+							</a>
+							<a href="../projects.html" class="logo back-button">
+								<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+							</a>
+						</div>
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+					</div>
+				</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+					<div id="main">
+						<div class="inner">
+							<h1>Project 4: Reinforcement Learning Maze Solver</h1>
+							<ul class="actions small">
+								<li><a href="project4Intro.html" class="button primary">Introduction</a></li>
+								<li><a href="project4Part1.html" class="button primary disabled">Part 1</a></li>
+								<li><a href="project4Part2.html" class="button primary">Part 2</a></li>
+								<li><a href="project4Part3.html" class="button primary">Part 3</a></li>
+								<li><a href="project4Result.html" class="button primary">Results</a></li>
+							</ul>
+							<div class="modern-background">									
+								<h2>Maze Builder</h2>
+									<ul>
+										<li>Generates mazes according to specific parameters (width, height, start and goal position).</li>
+										<li>Provides a CLI (Command Line Interface) to modify default parameters for flexible usage.</li>
+										<li>Allows the user to generate multiple mazes with the same parameters (mazes will be different).</li>
+										<li>Generates and saves each maze as a JSON file containing the maze grid and parameters (size and start/goal position).</li>
+										<li>Saves the maze as a png including start and endpoint as well as a path solving the maze.</li>
+									</ul>
+									<p>This is an example for a maze created by the tool:</p>
+									<img src="../images/project4maze.jpg" alt="Maze Example" style="max-width: 100%; height: auto;">
+									<br><br>
+									<p>The code was built with python using <a href="https://pypi.org/project/mazelib/" target="_blank">mazelib</a> and <a href="https://matplotlib.org/" target="_blank">matplotlib</a>.</p>
+									<pre><code class="language-python">
+import os
+from mazelib import Maze
+from mazelib.generate.Prims import Prims
+import json
+import re
+import matplotlib.pyplot as plt
+import numpy as np
+from collections import deque
+
+#function to find the next available number for the file name
+def get_next_file_number(output_folder, file_name):
+	os.makedirs(output_folder, exist_ok=True)
+
+	existing_files = os.listdir(output_folder)
+
+	pattern = re.compile(f"{re.escape(file_name)}_(\\d+)\\.json")
+
+	existing_numbers = [
+		int(match.group(1))
+		for f in existing_files
+		if (match := pattern.match(f))
+	]
+
+	return max(existing_numbers, default=0) + 1
+
+#create the maze function
+def create_maze(maze_width, maze_height, output_folder, file_name, file_number):
+	maze = Maze()
+	maze.generator = Prims(maze_width, maze_height)
+	maze.generate()
+
+	maze_grid = maze.grid.tolist()
+
+	maze_grid[start[0]][start[1]] = 0
+	maze_grid[goal[0]][goal[1]] = 0
+
+	if not is_path_exist(maze_grid, start, goal):
+		carve_path(maze_grid, start, goal)
+
+	maze_with_points = [row[:] for row in maze_grid]
+	maze_with_points[start[0]][start[1]] = "S"
+	maze_with_points[goal[0]][goal[1]] = "E"
+
+	#save the maze as JSON
+	file_path = os.path.join(output_folder, f"{file_name}_{file_number}.json")
+	maze_data = {
+		"maze": maze_grid,
+		"width": maze_width,
+		"height": maze_height,
+		"start": start,
+		"goal": goal,
+	}
+	with open(file_path, "w") as f:
+		json.dump(maze_data, f, indent=4)
+	print(f"Maze created and saved to {file_path}")
+
+	#return the generated maze grid used to create the image
+	return maze_grid
+
+#function to check if a path exists between start and goal
+def is_path_exist(maze, start, goal):
+	"""Check if there's a path between start and goal."""
+	rows, cols = len(maze), len(maze[0])
+	visited = [[False] * cols for _ in range(rows)]
+	queue = deque([start])
+
+	directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  #those are equivalent to right, down, left, up
+
+	while queue:
+		x, y = queue.popleft()
+		if (x, y) == goal:
+			return True
+
+		for dx, dy in directions:
+			nx, ny = x + dx, y + dy
+			if 0 <= nx < rows and 0 <= ny < cols and maze[nx][ny] == 0 and not visited[nx][ny]:
+				visited[nx][ny] = True
+				queue.append((nx, ny))
+
+	return False
+
+#function to carve a path from start to goal
+def carve_path(maze, start, goal):
+	"""Carve a direct path between start and goal."""
+	x1, y1 = start
+	x2, y2 = goal
+
+	#make a direct horizontal and vertical path
+	for x in range(min(x1, x2), max(x1, x2) + 1):
+		maze[x][y1] = 0
+	for y in range(min(y1, y2), max(y1, y2) + 1):
+		maze[x2][y] = 0
+
+#function to create maze image
+def create_maze_image(maze, start, goal, output_folder, file_name, file_number):
+	maze_array = np.array(maze)
+
+	cmap = plt.cm.binary
+
+	plt.figure(figsize=(8, 8))
+	plt.imshow(maze_array, cmap=cmap, origin="upper")
+
+	plt.text(
+		start[1], start[0], "S", color="green", ha="center", va="center", fontsize=16
+	)
+
+	plt.text(
+		goal[1], goal[0], "E", color="red", ha="center", va="center", fontsize=16
+	)
+	
+	#call function to draw the path
+	path = create_path_in_image(maze, start, goal)
+	for x, y in path:
+		plt.plot(y, x, marker="o", color="blue", markersize=5)
+
+	plt.axis("off")
+
+	#save the created image
+	image_path = os.path.join(output_folder, f"{file_name}_{file_number}.png")
+	plt.savefig(image_path, bbox_inches="tight")
+	print(f"Maze image created and saved to {image_path}")
+
+	plt.close()
+	
+#function to create the path in the image
+def create_path_in_image(maze, start, goal):
+	"""Find the path from start to goal and overlay it on the maze image."""
+	rows, cols = len(maze), len(maze[0])
+	visited = [[False] * cols for _ in range(rows)]
+	parent = {}
+	queue = deque([start])
+
+	directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  #those are equivalent to right, down, left, up
+	while queue:
+		x, y = queue.popleft()
+		if (x, y) == goal:
+			break
+
+		for dx, dy in directions:
+			nx, ny = x + dx, y + dy
+			if 0 <= nx < rows and 0 <= ny < cols and maze[nx][ny] == 0 and not visited[nx][ny]:
+				visited[nx][ny] = True
+				parent[(nx, ny)] = (x, y)
+				queue.append((nx, ny))
+
+	path = []
+	current = goal
+	while current != start:
+		path.append(current)
+		current = parent[current]
+	path.append(start)
+	return path
+
+#This is the main script
+if __name__ == "__main__":
+		
+	#variables
+	file_number = 0
+	output_folder = "mazes"
+	file_name = "maze"
+	maze_width_default = 25
+	maze_height_default = 25
+	start_default = (1, 1)
+	goal_default = (2 * maze_width_default - 1, 2 * maze_height_default - 1)
+	number_of_mazes_default = 1
+
+	#user inputs
+	maze_width = input(f"Provide the maze width (default={maze_width_default}): ").strip()
+	maze_width = int(maze_width) if maze_width else maze_width_default
+
+	maze_height = input(f"Provide the maze height (default={maze_height_default}): ").strip()
+	maze_height = int(maze_height) if maze_height else maze_height_default
+	
+	number_of_mazes = input(f"Provide the number of mazes you want to create (default={number_of_mazes_default}): ").strip()
+	number_of_mazes = int(number_of_mazes) if number_of_mazes else number_of_mazes_default
+
+	start = input(f"Provide the start position as two numbers separated by a comma (e.g., 0,0). This is where the maze will begin. Default={start_default}: ").strip()
+	start = tuple(map(int, start.split(","))) if start else start_default
+
+	goal = input(f"Provide the goal position as two numbers separated by a comma (e.g., x,y). Default=({2 * maze_width - 1}, {2 * maze_height}): ").strip()
+	try:
+		goal = tuple(map(int, goal.split(","))) if goal else (2 * maze_width - 1, 2 * maze_height)
+	except ValueError:
+		print("Invalid input. Goal must be two numbers separated by a comma. Using default value.")
+		goal = (2 * maze_height - 1, 2 * maze_width - 1)
+
+	for _ in range(number_of_mazes):
+		#call next file number function
+		file_number = get_next_file_number(output_folder, file_name)
+
+		#call maze function with parameters and get maze_grid as an output
+		maze_grid = create_maze(maze_width, maze_height, output_folder, file_name, file_number)
+
+		#all image creation
+		create_maze_image(maze_grid, start, goal, output_folder, file_name, file_number)
+									</code></pre>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

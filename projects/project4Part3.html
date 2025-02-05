@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div class="inner">
+						<div class="button-container">
+							<a href="../index.html" class="logo home-button">
+								<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+							</a>
+							<a href="../projects.html" class="logo back-button">
+								<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+							</a>
+						</div>
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+					</div>
+				</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+					<div id="main">
+						<div class="inner">
+							<h1>Project 4: Reinforcement Learning Maze Solver</h1>
+							<ul class="actions small">
+								<li><a href="project4Intro.html" class="button primary">Introduction</a></li>
+								<li><a href="project4Part1.html" class="button primary">Part 1</a></li>
+								<li><a href="project4Part2.html" class="button primary">Part 2</a></li>
+								<li><a href="project4Part3.html" class="button primary disabled">Part 3</a></li>
+								<li><a href="project4Result.html" class="button primary">Results</a></li>
+							</ul>
+							<div class="modern-background">									
+								<h2>Testing the Maze Solver with the Trained Model</h2>
+									<ul>
+										<li>Loads a maze from a JSON file and visualizes it (built with the maze builder but not part of the learning data for the Q-table).</li>
+										<li>Loads a pre-trained Q-table model to simulate maze solving (built with the model builder from step 2).</li>
+										<li>Creates a simulated environment to test the model's ability to navigate the maze from start to goal.</li>
+										<li>Visualizes the solving process step-by-step with real-time updates using Matplotlib.</li>
+										<li>Allows user input for step delay to customize the visualization speed.</li>
+										<li>Logs detailed information for each step, including state, action, rewards, and Q-values.</li>
+									</ul>
+									<br><br>
+									<pre><code class="language-python">
+import os
+import json
+import pickle
+import numpy as np
+import matplotlib.pyplot as plt
+
+class MazeEnv:
+	def __init__(self, maze, start, goal):
+		self.maze = np.array(maze)
+		self.start = tuple(start)
+		self.goal = tuple(goal)
+		self.position = self.start  # Initialize at start
+		self.actions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # right, down, left, up
+
+	def reset(self):
+		"""Reset the agent to the start position."""
+		self.position = self.start
+		print(f"Agent reset to start position: {self.position}")
+		return self.position
+
+	def step(self, action):
+		x, y = self.position
+		dx, dy = self.actions[action]
+		nx, ny = x + dx, y + dy
+
+		# Check bounds and walls
+		if 0 <= nx < self.maze.shape[0] and 0 <= ny < self.maze.shape[1] and self.maze[nx, ny] == 0:
+			self.position = (nx, ny)
+
+		# Check if goal is reached
+		done = self.position == self.goal
+		reward = 10 if done else -1  # Reward for reaching the goal, penalty for each step
+
+		return self.position, reward, done
+
+def render(self):
+	"""Visualize the maze with the current position."""
+	maze_copy = self.maze.copy()
+	maze_copy[self.position] = 2  # Mark current position
+	maze_copy[self.goal] = 3  # Mark goal
+	print(maze_copy)
+
+
+def load_test_maze(folder, filename):
+	"""Load a test maze JSON file."""
+	filepath = os.path.join(folder, filename)
+	with open(filepath, "r") as f:
+		maze_data = json.load(f)
+	return maze_data
+
+
+def load_model(folder, filename):
+	"""Load the trained Q-table from the model folder."""
+	filepath = os.path.join(folder, filename)
+	with open(filepath, "rb") as f:
+		q_table = pickle.load(f)
+	print(f"Model loaded from {filepath}")
+	return q_table
+
+def simulate_solver(env, q_table, step_delay=1):
+	"""Simulate the agent solving the maze with live rendering and detailed logs."""
+	state = env.reset()  # Reset to start
+	done = False
+	step_count = 0
+
+	plt.ion()
+	fig, ax = plt.subplots(figsize=(6, 6))
+
+	print("Starting maze solver...")
+	print(f"Solver initialized. Start position: {state}, Goal position: {env.goal}")
+
+	while not done:
+		ax.clear()
+		maze_copy = env.maze.copy()
+		maze_copy[env.position] = 2  # Mark agent
+		maze_copy[env.goal] = 3  # Mark goal
+
+		ax.imshow(maze_copy, cmap="binary", origin="upper")
+		ax.text(env.goal[1], env.goal[0], "E", color="red", ha="center", va="center", fontsize=16)
+		ax.text(env.position[1], env.position[0], "S", color="green", ha="center", va="center", fontsize=16)
+
+		plt.draw()
+		plt.pause(step_delay)
+
+		# Fetch Q-values for current state
+		q_values = q_table.get(state, [0, 0, 0, 0])
+
+		# Choose action based on Q-values
+		action = np.argmax(q_values)
+		print(f"Step {step_count}: Current state: {state}, Action: {action}, Q-values: {q_values}")
+
+		# Execute the action
+		state, reward, done = env.step(action)
+		print(f"  New state: {state}, Reward: {reward}, Goal reached: {done}")
+
+		step_count += 1
+
+		# Safety check to prevent infinite loops
+		if step_count > 1000:
+			print("Too many steps! Exiting to prevent infinite loop.")
+			break
+
+	plt.ioff()
+	plt.show()
+	print(f"Maze solved in {step_count} steps!")
+
+if __name__ == "__main__":
+	# Paths
+	test_maze_folder = "testMaze"
+	test_maze_file = "maze_Test.json"
+	model_folder = "model"
+	model_file = "q_table.pkl"
+
+	# Load the test maze
+	print("Loading test maze...")
+	test_maze_data = load_test_maze(test_maze_folder, test_maze_file)
+
+	# Load the trained model
+	print("Loading trained model...")
+	q_table = load_model(model_folder, model_file)
+
+	# Create the maze environment
+	print("Setting up the environment...")
+	env = MazeEnv(test_maze_data["maze"], test_maze_data["start"], test_maze_data["goal"])
+
+	# Get step delay from the user
+	try:
+		step_delay = float(input("Enter the step delay in seconds (e.g., 1 for 1 second per step): ").strip())
+	except ValueError:
+		print("Invalid input. Using default delay of 1 second.")
+		step_delay = 1.0
+
+	# Simulate and visualize the solution
+	print("Solving the maze...")
+	simulate_solver(env, q_table, step_delay)
+									</code></pre>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

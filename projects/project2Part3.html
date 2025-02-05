@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div class="inner">
+						<div class="button-container">
+							<a href="../index.html" class="logo home-button">
+								<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+							</a>
+							<a href="../projects.html" class="logo back-button">
+								<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+							</a>
+						</div>
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+					</div>
+				</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+					<div id="main">
+						<div class="inner">
+							<h1>Project 2: Interactive Machine Learning Predictions with LLM Integration</h1>
+							<ul class="actions small">
+                                <li><a href="project2Intro.html" class="button primary">Introduction</a></li>
+                                <li><a href="project2Part1.html" class="button primary">Part 1</a></li>
+                                <li><a href="project2Part2.html" class="button primary">Part 2</a></li>
+								<li><a href="project2Part3.html" class="button primary disabled">Part 3</a></li>
+                                <li><a href="project2Result.html" class="button primary">Results</a></li>
+							</ul>
+							<div class="modern-background">	
+							<h2>Orchestrator including LLM integration and user interface in console (CLI)</h2>
+							<p>The final phase focuses on creating a dynamic and interactive LLM-based front-end for user interaction. Key steps include:</p>
+							<ul>
+								<li>Using the console for user interaction.</li>
+								<li>Configuring a meaningful system prompt that will ensure proper data input gathering and JSON creation by the LLM.</li>
+								<li>Providing the LLM the model input definition to ensure it will create the JSON in the correct format.</li>
+								<li>Including proper error handling by the Orchestrator based on the LLM responses.</li>
+								<li>Callling the Model Use Layer once the LLM provides the final JSON in the correct format.</li>
+								<li>Sending predictions and errors to the LLM to generate a meaningful response and provide this response to the user.</li>
+							</ul>
+							<pre><code class="language-python">
+import requests
+import json
+
+conversation = "This is the initial prompt. Please tell the user your purpose and ask for the information you require."
+messageToUser = ""
+code = ""
+currentUserInput = ""
+body = ""
+
+#load features from the JSON template file
+def load_features_from_template(file_path):
+	with open(file_path, 'r') as file:
+		template = json.load(file)
+	return template["features"]
+
+#function to interact with OpenAI API
+def call_openai_api(conversation, features):
+	#endpoint
+	uri = "https://api.openai.com/v1/chat/completions"
+	
+	#variables temp
+	currentAiResponse = ""
+		
+	#OpenAI API key to use the OpenAI endpoint
+	api_key = "KEY"
+	
+	#format the system prompt dynamically with features
+	system_prompt = f""" INSERT SYSTEM PROMPT
+	
+	#request payload
+	data = {
+		"model": "gpt-4",
+		"messages": [
+			{
+				"role": "system",
+				"content": system_prompt
+			},
+			{
+				"role": "user",
+				"content": conversation
+			}
+		],
+		"temperature": 0.7,
+		"max_tokens": 300,
+		"n": 1,
+		"stop": None
+	}
+
+	#HTTP headers
+	headers = {
+	"Content-Type": "application/json",
+	"Authorization": f"Bearer {api_key}"
+	}
+
+	#make api call
+	response = requests.post(uri, headers=headers, json=data)
+	
+	
+	#handle response
+	if response.status_code == 200:
+		#parse the API response
+		currentAiResponse = response.json()
+		content = currentAiResponse["choices"][0]["message"]["content"]
+
+		#safely parse the content into a dictionary
+		parsed_content = json.loads(content)
+
+		#extract the `code` and `message` fields
+		code = parsed_content["code"]
+		message = parsed_content["message"]
+		body = parsed_content["body"]
+
+		return code, message, body
+		
+	else:
+		raise Exception(f"OpenAI API Error: {response.status_code} - {response.text}")
+	
+#call model
+def call_model(body):
+	#endpoint
+	uri = "http://127.0.0.1:5000/predictions"
+	
+	try:
+		#send the POST request
+		response = requests.post(uri, json=body)
+		
+		#check if the request was successful
+		if response.status_code == 200:
+			return response.json()
+		else:
+			raise Exception(f"Model API Error: {response.status_code} - {response.text}")
+	
+	except requests.RequestException as e:
+		raise Exception(f"Error calling model API: {e}")
+	
+#main function
+def main():
+	global conversation
+	
+	features = load_features_from_template("model/feature_template.json")
+	
+	#keep running until the code is not "pending"
+	while True:
+		try:
+			#call OpenAI API
+			code, message, body = call_openai_api(conversation, features)
+			
+			#check the status code
+			if code == "pending":
+				#append the assistant's message to the conversation
+				conversation += f"\nAssistant: {message}"
+				#print(f"CODE VARIABLE FOR DEBUGGING: \n\n{code}\n\n")
+				print(f"\n\nAI: {message}\n\n")
+				
+				#get user input
+				currentUserInput = input("Your response: ")
+				
+				#append user input to the conversation
+				conversation += f"\nUserResponse: {currentUserInput}"
+			else:
+				#print(f"CODE VARIABLE FOR DEBUGGING: \n\n{code}\n\n")
+				print(f"\n\nAI: {message}.\n\n")
+				
+				try:
+					#call the model API
+					model_response = call_model(body)
+					#print(f"MODEL RESPONSE FOR DEBUGGING: \n\n{model_response}\n\n")
+					
+					#extract the `code` and `message` from the response
+					code = model_response.get("code", "unknown")
+					
+					#if code is `prediction ready`, exit the loop
+					if code == "prediction ready":
+						conversation += f"\n\nPrediction from the machine learning layer {model_response}. Please provide a final response that can be provided to the user. Don't forget to keep your format as described in the system prompt."
+						try:
+							code, message, body = call_openai_api(conversation, features)
+							print(f"AI: {message}\n\n")
+							break
+						except Exception as e:
+							print(f"\nError calling OpenAI API: {e}")
+							#print(f"CONVERSATION VARIABLE FOR DEBUGGING: \n\n{conversation}\n\n")
+							break
+					else:
+						print(f"\nError: {model_response}")
+						break
+					
+				except Exception as e:
+					print(f"\nError calling Model API: {e}")
+					break
+
+		except Exception as e:
+			print(f"\nError calling OpenAI API: {e}")
+			break
+			
+#entry point
+if __name__ == "__main__":
+	main()
+					</code></pre>
+
+<p><strong>Following the system prompt that has been used:</strong></p>
+<p>
+
+You are an intelligent assistant designed to guide users in providing all the necessary information to complete a JSON body required for a machine learning model prediction. Your sole focus is to gather the required inputs and ensure the JSON body is correctly populated.
+<br>
+<br>
+The JSON body to be completed is structured as follows:<br>
+{<br>
+	"features": {<br>
+		{", ".join([f'"{feature}"' for feature in features])}<br>
+	}<br>
+}<br>
+<br>
+**Your Responsibilities:**<br>
+1. Always prioritize gathering the required inputs for the JSON body. Politely redirect the user if they ask unrelated questions, stating that your primary function is to collect the necessary information for the machine learning prediction.<br>
+2. If the user's input provides enough information to populate the JSON body completely:<br>
+	- Return `code=ready`.<br>
+	- Include the completed JSON body in the `body` field of your response.<br>
+3. If the information is incomplete:<br>
+	- Return `code=pending`.<br>
+	- Include a `message` field specifying exactly what additional information is needed from the user to complete the JSON body.<br>
+4. If you receive a prediction from the ML model with `code=prediction ready`:<br>
+	- Validate the prediction and check for errors.<br>
+	- If the prediction is valid:<br>
+		- Return `code=final answer` with a `message` summarizing the prediction for the user.<br>
+	- If the prediction contains errors or needs correction:<br>
+		- Return `code=pending` and request the user to provide additional or corrected inputs.<br>
+		<br><br>
+**Response Format:**<br>
+Your responses must always follow this structure:<br>
+{<br>
+	"code": "pending|ready|prediction ready|final answer",<br>
+	"message": "A clear, structured message for the user",<br>
+	"body": "JSON body or an empty object if not applicable"<br>
+}<br>
+<br><br>
+Your primary goal is to efficiently guide the user step-by-step to provide the required information for the JSON body. Always prioritize clarity and structure, and ensure the `code` is included at the beginning of every response also make sure to provide consistent response structure so your responses can be parsed.
+Make sure to always responde with the correct form. If the user provides confusing input just go along and make sure to keep the status on pending until all detials are resolved. If there are other errors for exmaple from the ML layer also set the status back to pending and ask the user to update the inputs according to the error you recevied.
+<br>
+<br>
+
+</p>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

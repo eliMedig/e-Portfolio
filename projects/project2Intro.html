@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div class="inner">
+						<div class="button-container">
+							<a href="../index.html" class="logo home-button">
+								<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+							</a>
+							<a href="../projects.html" class="logo back-button">
+								<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+							</a>
+						</div>
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+					</div>
+				</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+					<div id="main">
+						<div class="inner">
+							<h1>Project 2: Interactive Machine Learning Predictions with LLM Integration</h1>
+							<ul class="actions small">
+                                <li><a href="project2Intro.html" class="button primary disabled">Introduction</a></li>
+                                <li><a href="project2Part1.html" class="button primary">Part 1</a></li>
+                                <li><a href="project2Part2.html" class="button primary">Part 2</a></li>
+								<li><a href="project2Part3.html" class="button primary">Part 3</a></li>
+                                <li><a href="project2Result.html" class="button primary">Results</a></li>
+							</ul>
+							<div class="modern-background">									
+								<h2>Introduction</h2>
+								<p><strong>Background</strong></p>
+								<p>A Large Language Model (LLM) is a type of artificial intelligence model trained to understand and generate human-like text. These models are built using deep learning techniques, specifically neural networks, and are trained on vast amounts of text data. Some of the most famous models are <a href="https://openai.com/chatgpt/overview/" target="_blank">OpenAI's ChatGPT, <a href="https://gemini.google.com/app" target="_blank"></a>Google's Gemini</a> and <a href="https://www.anthropic.com/claude" target="_blank">Anthropic's Claude</a>. Large Language Models (LLM) are are widely used for generating content, aiding research, and providing interactive AI experiences. Designed to collaborate with humans, they are particularly effective in facilitating user interaction and enhancing productivity.</p>
+								<p><strong>Scope</strong></p>
+								<p>This project combines the strengths of Large Language Models (LLMs) and traditional Machine Learning (ML) to create an interactive solution for classification tasks. The goal is to provide a user-friendly front-end where the LLM dynamically gathers the required input data and performs feature engineering. Once the input data is prepared, an API will invoke the ML model to perform the classification. The results are returned to the LLM, which generates a clear and meaningful output for the user.</p>
+								<p><strong>Deliverables (High-Level)</strong></p>
+									<ul>
+										<li>A simple frontend (CLI) that allows the user to communicate with the LLM.</li>
+										<li>A properly configured LLM to ensure it can gather the required information from the user and create a valid JSON that can be used to do data predictions with the ML model.</li>
+										<li>An Orchestrator that orchestrates the traffic between the User, LLM and Model Use layer.</li>
+										<li>A Model Build layer that creates a classification ML model and stores it together with all relevant information.</li>
+										<li>A Model Use layer that uses the ML model to get predictions based on input data in JSON format.</li>
+									</ul>
+								<p>The solution will be built using an <a href="https://platform.openai.com/docs/overview" target="_blank">OpenAI API</a> endpoint for the LLM capabilities an Python with <a href="https://www.tensorflow.org/" target="_blank">TensorFlow</a> for the machine learning capabilities. The machine learning algorithm used will be a Decision Tree (DT) algorithm for a simple classification problem. All data will be obtained from the <a href="https://archive.ics.uci.edu/datasets" target="_blank">ICU Machine Learning Repository</a>.</p>
+								<p><strong>Out of Scope</strong></p>
+									<ul>
+										<li>Provide an option to perform multiple predictions at once.</li>
+										<li>Allowing to change the model parameters via the user frontend.</li>
+										<li>Storing LLM discussions (conversations are limited to the session).</li>
+										<li>Any other additional feature that is not described in the deliverables above.</li>
+									</ul>
+								<p><strong>High-Level Design</strong></p>
+								<span class="image main"><img src="../images/project2Hld.jpg" alt="HLD" /></span>
+								<br>
+								<p><strong>Activity Diagram</strong></p>
+								<span class="image main"><img src="../images/project2Activity.jpg" alt="Activity Diagram" /></span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

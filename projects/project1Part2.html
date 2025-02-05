@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div class="inner">
+						<div class="button-container">
+							<a href="../index.html" class="logo home-button">
+								<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+							</a>
+							<a href="../projects.html" class="logo back-button">
+								<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+							</a>
+						</div>
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+					</div>
+				</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+					<div id="main">
+						<div class="inner">
+							<h1>Project 1: Implementation of a Fully Connected  Neural Network (FCNN)</h1>
+
+							<ul class="actions small">
+                                <li><a href="project1Intro.html" class="button primary">Introduction</a></li>
+                                <li><a href="project1Part1.html" class="button primary">Part 1</a></li>
+                                <li><a href="project1Part2.html" class="button primary disabled">Part 2</a></li>
+                                <li><a href="project1Result.html" class="button primary">Results</a></li>
+							</ul>
+							<div class="modern-background">							
+							<h2>Model Prediction with New Data</h2>
+							<ul>
+								<li>Load the saved files containing the trained model, encoders and scalers.</li>
+								<li>Ask the user for the input file containing the data for which a prediction should be made.</li>
+								<li>Apply similar validation checks and preprocessing steps as in the training phase, encoding all categorical data as necessary and use the correct scalers for scaling.</li>
+								<li>Add the default value 0 to all missing columns and remove extra columns.</li>
+								<li>Pass the processed data through the model to generate predictions.</li>
+								<li>Present the final predictions and storing them in a csv file.</li>
+							</ul>
+							<pre><code class="language-python">
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+import tensorflow as tf
+import joblib
+import sys
+
+#set default values for file
+default_csv_file = "data/regression.csv"
+
+def predict_with_new_data(dataInput):
+    # load the model, scalers and encoder files
+    loaded_model = tf.keras.models.load_model('model/fcnn_reg_trained_model.keras')
+    feature_scaler = joblib.load('model/fcnn_reg_feature_scaler.pkl')
+    target_scaler = joblib.load('model/fcnn_reg_target_scaler.pkl')
+    loaded_label_encoders = joblib.load('model/fcnn_reg_label_encoders.pkl')
+    expected_columns = joblib.load('model/fcnn_reg_training_features.pkl')  # Load saved feature columns
+
+    #load the new data
+    new_data = pd.read_csv(dataInput)
+
+    #align new data columns with training features
+    missing_columns = set(expected_columns) - set(new_data.columns)
+    extra_columns = set(new_data.columns) - set(expected_columns)
+
+    #add missing columns with default value 0
+    for col in missing_columns:
+        new_data[col] = 0
+
+    #remove extra columns
+    new_data = new_data[expected_columns]
+
+    #encode all categorical columns
+    for column in new_data.columns:
+        if column in loaded_label_encoders:
+            encoder = loaded_label_encoders[column]
+            try:
+                new_data[column] = encoder.transform(new_data[column].fillna("Unknown"))
+            except ValueError:
+                print(f"Warning: Unseen categories in column '{column}'. Replacing with default value.")
+                new_data[column] = new_data[column].apply(
+                    lambda x: encoder.transform([x])[0] if x in encoder.classes_ else 0
+                )
+
+    #scale features with scaler
+    try:
+        new_data_scaled = feature_scaler.transform(new_data)
+    except ValueError:
+        print("\nError: The new data's feature dimensions do not match the training data.")
+        sys.exit(1)
+
+    #make predictions
+    predictions_scaled = loaded_model.predict(new_data_scaled)
+
+    #inverse-transform predictions back to original scale
+    predictions_original = target_scaler.inverse_transform(predictions_scaled)
+
+    return predictions_original
+
+#get CSV file name by user with default option
+csv_file = input(f"Enter name of CSV data source (default: {default_csv_file}): ").strip()
+csv_file = csv_file if csv_file else default_csv_file
+
+#load file and include error handling
+try:
+    data = pd.read_csv(csv_file)
+except FileNotFoundError:
+    print("\nError: File not found. Please check the file name and path.")
+    sys.exit(1)
+
+#validate CSV and provide an error if empty
+if data.empty:
+    print("\nError: The provided CSV file is empty. Please provide a valid file with data.")
+    sys.exit(1)
+
+#validate CSV and provide an error if not at least 2 columns
+if len(data.columns) < 2:
+    print("\nError: The CSV file must contain at least two columns (features and target column).")
+    sys.exit(1)
+
+#validate CSV and provide an error if all null or invalid data
+if data.isnull().all().all():
+    print("\nError: The CSV file contains only null or invalid data. Please provide a valid file.")
+    sys.exit(1)
+
+#prediction on new CSV file
+predictions = predict_with_new_data(csv_file)
+
+#create prediction output
+print("\nPredictions:")
+for i, pred in enumerate(predictions):
+    print(f"Row {i + 1}: Predicted Value = {pred[0]}")
+
+#save predictions to a CSV file
+output_file = "predictions/predictionsFcnnRegression.csv"
+pd.DataFrame(predictions, columns=["Predicted Value"]).to_csv(output_file, index=False)
+print(f"\nPredictions have been saved to {output_file}.")
+							</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

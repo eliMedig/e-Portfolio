@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div class="inner">
+						<div class="button-container">
+							<a href="../index.html" class="logo home-button">
+								<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+							</a>
+							<a href="../projects.html" class="logo back-button">
+								<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+							</a>
+						</div>
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+					</div>
+				</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+				<div id="main">
+					<div class="inner">
+						<h1>Project 5: Hierarchical Clustering and SVM: Conceptual Design and Analysis</h1>
+						<ul class="actions small">
+							<li><a href="project5Intro.html" class="button primary disabled">Introduction</a></li>
+						</ul>
+						<div class="modern-background">
+							<h2>Introduction</h2>
+							<p><strong>Building and implementing the solution is currently not planned. Therefore only the background, scope, deliverables, high-level design and process parts are documented as part of this introduction page. The solution may be implemented at a later stage.</strong>.</p>
+							<p><strong>Background</strong></p>
+							<p>The goal is to build a solution that implements a combintation of Hierarchical Clustering (unsupervised learning) and Support Vector Machines SVM (supervised learning).</p>
+							<p>Hierarchical clustering is an unsupervised learning technique used to group data points based on their similarity. This algorithm builds a hierarchy of clusters by either merging smaller clusters (agglomerative approach) or splitting larger clusters (divisive approach). The resulting clusters are visualized as a dendrogram, where each branch represents a cluster. The method is widely used in exploratory data analysis to reveal natural groupings in the data without requiring predefined cluster numbers. On this picture you can see how hierrarchical clustering clusters the elements A-F in a dendogram (right image):</p>
+							
+							<span class="image main"><img src="../images/project5Background1.png" alt="Hierarchical Clustering" /></span>
+							<p>Support Vector Machines (SVMs) on the other hand are supervised learning models used for classification and regression tasks.</p>
+							<ol>
+								<li>Separating Hyperplane: The hyperplane is the decision boundary that separates the data points into different classes (e.g., "+" and "-"). The objective of the SVM is to find the hyperplane that best divides the classes while maximizing the margin.</li>
+								<li>Margin: The margin is the distance between the separating hyperplane and the closest data points from each class. The larger the margin, the better the generalization of the model.</li>
+								<li>Support Vectors: These are the data points that lie closest to the separating hyperplane. They are critical in defining the hyperplane and margin, as the SVM uses only these points to determine the optimal decision boundary.</li>
+							</ol>
+							<p>This image illustrates the key concepts of SVM in a classification scenario:</p>
+							<span class="image main"><img src="../images/project5Background2.jpg" alt="Hierarchical Clustering" /></span>
+							<p><strong>Scope</strong></p>
+							<p>Building a hybrid machine learning application combining unsupervised and supervised learning techniques to achieve and enhnaced classification solution. Hierarchical clustering (unsupervised learning) will be used in the first step to identify natural groupings within the learning data, and the resulting cluster labels will be used as additional features for a supervised SVM classifier that predicts the final classes.</p>
+							<p><strong>Deliverables (High-Level Scope)</strong></p>
+							<ul>
+								<li>A clustering machine learning module that performs hierarchical clustering.</li>
+								<li>Automated augmentation of the existing dataset by incorporating cluster labels as a feature for classification.</li>
+								<li>An SVM model that uses the augmented dataset to classify based on the original features and the cluster result.</li>
+								<li>Evaluation of the pipeline's effectiveness using classification metrics and cluster validation metrics.</li>
+							</ul>
+							<p><strong>Out of Scope</strong></p>
+							<ul>
+								<li>Real-time predictions or deployment of the solution (focus is on model training and evaluation).</li>
+								<li>Advanced clustering methods like DBSCAN or Gaussian Mixture Models (limited to hierarchical clustering).</li>
+								<li>Sophisticated feature engineering beyond the integration of cluster labels.</li>
+								<li>Advanced error handling beyond basic input data validation checks.</li>
+							</ul>
+							<p><strong>High-Level Design</strong></p>
+							<span class="image main"><img src="../images/project5Hld.jpg" alt="HLD" /></span>
+							<ol>
+								<p>Process for setting up the environment:</p>
+								<li>The <strong>(1) Data Store</strong> is responsible for storing the datasets. Initially, it requires a clean clustering learning dataset as well as a clean SVM learning dataset with classes.</li>
+								<li>The <strong>(2) Clustering Model Builder</strong> is the layer responsible for building the hierarchical clustering model (unsupervised learning) based on the clean clustering learning dataset.</li>
+								<li>The <strong>(4) ML Model</strong> is stored together with all relevant parameters for its usage.</li>
+								<li>The <strong>(5) Clustering Model Use</strong> layer is responsible for running the clustering algorithm on the clean SVM learning dataset (class is removed for this step). It will send the cluster predictions to the Dataset Augmentation.</li>
+								<li>The <strong>(7) Dataset Augmentation</strong> is responsible for creating the augmented dataset required to train the SVM algorithm.</li>
+								<li>The <strong>(1) Data Store</strong> is used to store the augmented dataset.</li>
+								<li>The <strong>(3) SVM Model Builder</strong> layer is responsible for building the SVM model based on the augmented dataset.</li>
+								<li>The <strong>(4) ML Model</strong> is stored together with all relevant parameters for its usage.</li>
+								<br><br>
+								<p>Process for usage of the Environment:</p>
+								<li>The <strong>(1) Data Store</strong> requires a clean prediction dataset without classes.</li>
+								<li>The <strong>(5) Clustering Model Use</strong> is used to create clustering predictions based on the clean prediction dataset without classes.</li>
+								<li>The <strong>(7) Dataset Augmentation</strong> is responsible for creating the augmented dataset required to run the SVM model prediction.</li>
+								<li>The <strong>(6) SVM Model Use</strong> layer is responsible for running the final SVM predictions against the augmented dataset including the clustering result. It will provide the final predictions.</li>
+							</ol>
+
+						</div>
+					</div>
+				</div>
+				
+					
+			</div>
+
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

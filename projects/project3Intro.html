@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div class="inner">
+						<div class="button-container">
+							<a href="../index.html" class="logo home-button">
+								<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+							</a>
+							<a href="../projects.html" class="logo back-button">
+								<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+							</a>
+						</div>
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+					</div>
+				</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+					<div id="main">
+						<div class="inner">
+							<h1>Project 3: Real-time object detection with YOLOv8</h1>
+							<ul class="actions small">
+                                <li><a href="project3Intro.html" class="button primary disabled">Introduction</a></li>
+                                <li><a href="project3Part1.html" class="button primary">Part 1</a></li>
+                                <li><a href="project3Part2.html" class="button primary">Part 2</a></li>
+                                <li><a href="project3Result.html" class="button primary">Results</a></li>
+							</ul>
+							<div class="modern-background">									
+								<h2>Introduction</h2>
+								<p><strong>Background</strong></p>
+								<p>Object Detection is a computer vision task where a model identifies and localizes multiple objects within an image or video. This involves not only classifying objects but also predicting their positions through bounding boxes. A popular approach to object detection is the YOLO (You Only Look Once) family of models, known for their speed and accuracy.</p>
+								<p><a href="https://yolov8.com/" target="_blank">YOLOv8</a> is the latest iteration in this series, designed to enhance performance, simplify use, and expand versatility. YOLOv8 uses a single-stage architecture, meaning it predicts bounding boxes and class probabilities in one pass through the network, making it faster than many alternatives.</p>
+								<p><strong>Scope</strong></p>
+								<p>This project demonstrates a real-time object detection application using Python. The system leverages the YOLO object detection model and a simple tkinter user interface to allow users to start and stop a live webcam feed with object detection enabled.</p>
+								<p>Note: This project will be a rather small project introducing how easily object detection can be used with pre-trained models.</p>
+								<p><strong>Deliverables (High-Level Scope)</strong></p>
+									<ul>
+										<li>A simple frontend built with <a href="https://docs.python.org/3/library/tkinter.html" target="_blank">tkinter</a> that allows the user to start and stop the live video feed and also enable and disable object detection.</li>
+										<li>A backend that uses YOLO object detection objects in real-time.</li>
+									</ul>
+								<p><strong>Out of Scope</strong></p>
+									<ul>
+										<li>Training the machine learning algorithm. A pre-built model will be used.</li>
+										<li>Any adjustment options of the tool by the user.</li>
+										<li>Any other additional feature that is not described in the deliverables above.</li>
+									</ul>
+								<p><strong>High-Level Design</strong></p>
+								<span class="image main"><img src="../images/project3Hld.jpg" alt="HLD" /></span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

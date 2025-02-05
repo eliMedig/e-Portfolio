@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div class="inner">
+						<div class="button-container">
+							<a href="../index.html" class="logo home-button">
+								<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+							</a>
+							<a href="../projects.html" class="logo back-button">
+								<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+							</a>
+						</div>
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+					</div>
+				</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+					<div id="main">
+						<div class="inner">
+							<h1>Project 2: Interactive Machine Learning Predictions with LLM Integration</h1>
+							<ul class="actions small">
+                                <li><a href="project2Intro.html" class="button primary">Introduction</a></li>
+                                <li><a href="project2Part1.html" class="button primary">Part 1</a></li>
+                                <li><a href="project2Part2.html" class="button primary">Part 2</a></li>
+								<li><a href="project2Part3.html" class="button primary">Part 3</a></li>
+                                <li><a href="project2Result.html" class="button primary disabled">Results</a></li>
+							</ul>
+							<div class="modern-background">	
+								<h2>Results</h2>
+									<p>The solution successfully enables users to obtain machine learning predictions through interaction with an LLM.</p>
+									<p><strong>Model Creation</strong></p>
+									<p>The Decision Tree (DT) model was built using the dataset <a href="https://archive.ics.uci.edu/dataset/53/iris">Iris Dataset from UCI</a>:</p>
+									<ul>
+										<li>All parameters where kept to the default parameters set for the model creation layer which can be found in the python of <a href="project2Part1.html">Part 1</a>.</li>
+										<li>The Decision Tree (DT) model achieved an accuracy of 97.8% (Accuracy Measurement: 0.9777777777777777).</li>
+									</ul>
+									<p>Following the Classification Report for the Decision Tree (DT) model:</p>
+									<img src="../images/project2Report.jpg" alt="dummy" style="max-width: 100%; height: auto;">
+									<br><br>
+									<p><strong>User Journey</strong></p>
+									<p><strong>STEP 1</strong> - The user will be greeted by the LLM including information about what it wants to achieve and what it requires from the user. The specific field values are not hardcoded but retrieved from the feature_template.json file created during model creation which makes this part more dynamic and allowes to introduce new ML models easily without adjustment to the orchestrator:</p>
+									<img src="../images/userJourney1.jpg" alt="dummy" style="max-width: 100%; height: auto;">
+									<p><strong>STEP 2</strong> - Once the user provides an input the he LLM will process it always trying to focus on its main goal of creating a meaningful JSON body for the ML prediction:</p>
+									<img src="../images/userJourney2.jpg" alt="dummy" style="max-width: 100%; height: auto;">
+									<p><strong>STEP 3</strong> - In case the user does not provides wrong information (wrong format, wrong features etc.) the LLM will ask the user for correction:</p>
+									<img src="../images/userJourney3.jpg" alt="dummy" style="max-width: 100%; height: auto;">
+									<p><strong>STEP 4</strong> - Once all required information has been provided to the LLM it will return the correct body and flag it for prediction processing which will be done via the Orchestration Layer:</p>
+									<img src="../images/userJourney4.jpg" alt="dummy" style="max-width: 100%; height: auto;">
+									<p><strong>STEP 5</strong> - The prediction will be returned to the LLM with the instructions to create a final answer for the user. If an error appears the LLM will act accordingly and inform the user as well:</p>
+									<img src="../images/userJourney5.jpg" alt="dummy" style="max-width: 100%; height: auto;">
+									<br><br>
+									<p><strong>Conclusion and Outlook</strong></p>
+									<p>In summary, this project demonstrates the utility of integrating Large Language Models (LLMs) to orchestrate feature engineering by:</p>
+									<ol>
+										<li>Gathering appropriate data: Leveraging the LLM's conversational capabilities to interact with the user and obtain the necessary information.</li>
+										<li>Formatting data correctly: Ensuring the data aligns with the requirements of the machine learning model.</li>
+									</ol>
+									<p>This proof of concept (PoC) serves as a foundational step in showcasing how such an integration can function effectively. The following improvements and extensions could significantly enhance its usability and scalability:</p>
+									<ul>
+										<li><strong>Enhanced Error Handling:</strong> Introducing more robust mechanisms to handle errors across the entire pipeline—from user interaction with the LLM to data validation and ML predictions.</li>
+										<li><strong>Model-Agnostic Orchestration:</strong> Expanding the solution to work with multiple machine learning models and multiple predictions at once (predict a full list of input values not only one row). This would involve querying the user about the type of prediction required and dynamically selecting the appropriate model and preparing the relevant data.</li>
+										<li><strong>User-Friendly Interface:</strong> Developing a graphical user interface (GUI) or web-based application to replace the console-based interaction, making it accessible to non-technical users.</li>
+										<li><strong>Advanced Model Setup:</strong> Utilizing LLM-guided assistance for building and fine-tuning machine learning models. This could include suggesting hyperparameters, data transformations, and even challenging predefined configurations for optimized results.</li>
+										<li><strong>Enhanced User Experience:</strong> Gathering additional information about the data and prediction goals during model creation could help the LLM to better understand the machine learning layer and therefore ask bettter questions while also increasing feature engineering capabilities (Feature Definition, Data Descriptions etc.).</li>
+									</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

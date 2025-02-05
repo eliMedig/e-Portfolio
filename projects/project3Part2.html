@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div class="inner">
+						<div class="button-container">
+							<a href="../index.html" class="logo home-button">
+								<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+							</a>
+							<a href="../projects.html" class="logo back-button">
+								<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+							</a>
+						</div>
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+					</div>
+				</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+					<div id="main">
+						<div class="inner">
+							<h1>Project 3: Real-time object detection with YOLOv8</h1>
+							<ul class="actions small">
+                                <li><a href="project3Intro.html" class="button primary">Introduction</a></li>
+                                <li><a href="project3Part1.html" class="button primary">Part 1</a></li>
+                                <li><a href="project3Part2.html" class="button primary disabled">Part 2</a></li>
+                                <li><a href="project3Result.html" class="button primary">Results</a></li>
+							</ul>
+							<div class="modern-background">									
+								<h2>Backend</h2>
+									<ul>
+										<li>
+											The backend, built using OpenCV and the YOLOv8 model from the <a href="https://docs.ultralytics.com/models/yolov8/" target="_blank">Ultralytics library</a>, performs the following tasks:
+											<ol>
+												<li>Receive Video Frames: Accepts raw video frames from the frontend.</li>
+												<li>Process Frames:
+													<ul>
+														<li>If object detection is enabled, frames are passed through YOLOv8 for detection. Objects are identified, and bounding boxes are drawn around them.</li>
+														<li>If object detection is disabled, frames are returned unprocessed.</li>
+													</ul>
+												</li>
+												<li>Send Processed Frames: Returns processed frames (with or without annotations) back to the frontend.</li>
+											</ol>
+										</li>
+										<li>The backend ensures efficient frame processing and skips unnecessary computations when object detection is turned off.</li>
+									</ul>
+
+									<pre><code class="language-python">
+import cv2
+import numpy as np
+from PIL import Image, ImageTk
+from ultralytics import YOLO
+
+class VideoStreamHandler:
+	def __init__(self):
+		self.cap = None
+		self.model = YOLO("yolov8n.pt")  # Load YOLOv8 model
+		self.detecting = False
+
+	def start_stream(self):
+		if self.cap is None:
+			self.cap = cv2.VideoCapture(0)  # Open webcam
+
+	def get_frame(self):
+		if self.cap and self.cap.isOpened():
+			ret, frame = self.cap.read()
+			if ret:
+				if self.detecting:
+					results = self.model(frame)  # YOLOv8 detection
+					frame = results[0].plot()  # Annotate frame
+				return cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Convert to RGB
+		return None
+
+	def enable_detection(self):
+		self.detecting = True
+
+	def disable_detection(self):
+		self.detecting = False
+
+	def stop_stream(self):
+		if self.cap:
+			self.cap.release()
+			self.cap = None
+
+	def get_black_frame(self):
+		return np.zeros((480, 640, 3), dtype=np.uint8)  # Black frame
+									</code></pre>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

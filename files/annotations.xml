@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<annotations>
+  <version>1.1</version>
+  <meta>
+    <task>
+      <id>1159152</id>
+      <name>Annotation Test</name>
+      <size>1</size>
+      <mode>annotation</mode>
+      <overlap>0</overlap>
+      <bugtracker></bugtracker>
+      <created>2025-01-23 10:03:56.185959+00:00</created>
+      <updated>2025-01-23 10:31:58.306259+00:00</updated>
+      <subset>default</subset>
+      <start_frame>0</start_frame>
+      <stop_frame>0</stop_frame>
+      <frame_filter></frame_filter>
+      <segments>
+        <segment>
+          <id>1979077</id>
+          <start>0</start>
+          <stop>0</stop>
+          <url>https://app.cvat.ai/api/jobs/1976599</url>
+        </segment>
+      </segments>
+      <owner>
+        <username>REMOVED</username>
+        <email>REMOVED</email>
+      </owner>
+      <assignee></assignee>
+      <labels>
+        <label>
+          <name>Player</name>
+          <color>#8616a0</color>
+          <type>any</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>Enemy</name>
+          <color>#ef0966</color>
+          <type>any</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>Border</name>
+          <color>#5b064e</color>
+          <type>any</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>Gate</name>
+          <color>#18fecd</color>
+          <type>any</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>Multiplier</name>
+          <color>#22788e</color>
+          <type>any</type>
+          <attributes>
+          </attributes>
+        </label>
+      </labels>
+    </task>
+    <dumped>2025-01-23 10:33:32.444360+00:00</dumped>
+  </meta>
+  <image id="0" name="frame_1737623600444_edgedetection.png" width="1920" height="1080">
+    <polygon label="Enemy" source="manual" occluded="0" points="94.85,712.50;79.77,851.04;168.36,895.33;198.51,847.27;150.45,808.63;157.05,711.56" z_order="0">
+    </polygon>
+    <polygon label="Enemy" source="manual" occluded="0" points="240.92,721.93;279.56,779.41;230.56,857.63;281.45,893.45;329.51,835.96;430.35,808.63;548.15,796.38;544.38,725.70;482.18,726.64;411.50,740.78;388.88,695.54;379.46,619.20;337.99,609.78" z_order="0">
+    </polygon>
+    <polygon label="Enemy" source="manual" occluded="0" points="98.62,911.35;137.26,921.72;126.89,1017.84;69.40,1026.33;58.09,966.01;73.17,916.06" z_order="0">
+    </polygon>
+    <polygon label="Enemy" source="manual" occluded="0" points="177.78,929.26;167.41,1010.30;282.39,992.40;291.81,929.26" z_order="0">
+    </polygon>
+    <polygon label="Enemy" source="manual" occluded="0" points="767.73,381.72;801.65,414.70;762.07,437.32;796.94,532.50;909.09,498.58;923.23,482.56;1069.30,521.19;1101.34,436.38;1057.05,326.12;1109.82,282.76;1131.50,234.70;1166.37,187.58;1199.35,150.83;1234.22,139.52;1259.67,126.32;1263.43,143.29;1247.41,164.96;1270.03,191.35;1314.33,170.62;1318.09,138.58;1380.29,51.87;1376.52,37.74;1276.63,31.14;1260.61,53.76;1231.39,70.72;1203.12,58.47;1164.48,94.28;1155.06,124.44;1111.71,154.60;1068.36,177.22;1045.74,217.74;1044.80,240.36;1014.64,262.97;999.56,282.76;970.35,285.59;936.42,268.63;915.69,281.82;875.16,263.92;857.26,287.48;802.60,319.52" z_order="0">
+    </polygon>
+    <box label="Player" source="manual" occluded="0" xtl="976.00" ytl="714.39" xbr="1034.43" ybr="777.53" z_order="0">
+    </box>
+    <polygon label="Gate" source="manual" occluded="0" points="396.42,393.03;192.86,586.22;156.11,541.93;370.97,351.56" z_order="0">
+    </polygon>
+    <polygon label="Gate" source="manual" occluded="0" points="134.43,406.22;28.88,672.92;0.00,662.67;0.00,653.35;1.55,610.72;85.42,384.54" z_order="0">
+    </polygon>
+    <polygon label="Gate" source="manual" occluded="0" points="1561.24,734.18;1600.82,782.24;1813.80,589.05;1777.05,546.64" z_order="0">
+    </polygon>
+    <polygon label="Gate" source="manual" occluded="0" points="1820.40,996.17;1882.60,998.05;1900.50,726.64;1846.79,721.93" z_order="0">
+    </polygon>
+    <polygon label="Gate" source="manual" occluded="0" points="1640.40,217.74;1675.27,248.84;1846.79,44.34;1817.57,23.60" z_order="0">
+    </polygon>
+    <polygon label="Gate" source="manual" occluded="0" points="1116.42,869.88;1164.48,883.08;1215.37,599.41;1170.14,591.87" z_order="0">
+    </polygon>
+    <polygon label="Gate" source="manual" occluded="0" points="1272.86,1002.77;1320.92,1008.42;1371.81,717.22;1321.86,707.79" z_order="0">
+    </polygon>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1130.93" ytl="248.71" xbr="1162.40" ybr="267.64" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1197.21" ytl="146.83" xbr="1219.97" ybr="178.64" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1194.93" ytl="205.53" xbr="1225.65" ybr="235.83" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1321.43" ytl="168.04" xbr="1357.45" ybr="206.29" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1264.62" ytl="212.73" xbr="1295.71" ybr="231.66" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1233.94" ytl="224.09" xbr="1263.52" ybr="244.54" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1281.66" ytl="293.40" xbr="1296.09" ybr="317.26" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1402.86" ytl="225.60" xbr="1425.24" ybr="239.24" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1396.04" ytl="176.75" xbr="1416.53" ybr="191.14" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1265.76" ytl="351.34" xbr="1290.03" ybr="364.22" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1337.72" ytl="362.71" xbr="1358.21" ybr="396.03" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1373.32" ytl="337.33" xbr="1386.23" ybr="359.68" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1397.56" ytl="354.37" xbr="1419.18" ybr="367.63" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1391.50" ytl="283.93" xbr="1412.36" ybr="299.46" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1467.62" ytl="270.30" xbr="1485.08" ybr="288.10" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1463.08" ytl="291.13" xbr="1493.41" ybr="308.17" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1417.25" ytl="305.14" xbr="1443.42" ybr="327.48" z_order="0">
+    </box>
+    <box label="Multiplier" source="manual" occluded="0" xtl="1489.21" ytl="342.63" xbr="1512.73" ybr="354.75" z_order="0">
+    </box>
+    <polygon label="Border" source="manual" occluded="0" points="2.35,1044.58;1917.17,1054.08;1918.41,1080.00;1035.02,1080.00;2.35,1077.15" z_order="0">
+    </polygon>
+    <polygon label="Border" source="manual" occluded="0" points="0.99,523.46;37.63,29.49;1885.96,29.49;1918.53,678.03;1917.17,2.35;5.06,3.57" z_order="0">
+    </polygon>
+  </image>
+</annotations>
