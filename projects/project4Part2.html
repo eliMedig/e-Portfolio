@@ -341,29 +341,126 @@
 									</video>
 									<br><br>
 								</div>
-								
 
-								<pre><code class="language-python">
+								<p>I continued by further tweaking and changing the rewards and learning parameteres. This part was very hard as it was not always clear why the agent acted in a specific way and how the changes of parameteres affected it:</p>
+								<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
+									<thead>
+										<tr style="background-color: #8d8d8d; color: #333333;">
+											<th style="padding: 10px; border: 1px solid #ddd;">Attempt</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Parameters / Log Mention</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Success Rate</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">6</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">I increased the rewards for exploration further and adjusted the max step count as well as the learning parameters.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">55.80%</td>
+										</tr>
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">7</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Changed the alpha (0.6) and gamma value (0.96).</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">57.77%</td>
+										</tr>
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">8</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Removed penalties for walking into walls and moving further away from the goal while also adjusting all reward sizes to simplify the model. Adjust alpha (0.44) and gamma value (0.9).</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">58.59%</td>
+										</tr>
+									</tbody>
+								</table>
+								<p>PENDING</p>
+							
+								This was the final code used to build the model:
+								<br><br>
+								<pre><code class="language-python">import os
 import os
 import json
-import numpy as np
 import pickle
+import random
 from collections import deque
+import numpy as np
+import matplotlib.pyplot as plt
+
+# ===================================================
+# Configuration
+# ===================================================
+
+CONFIG = {
+	# Maze reward/penalty parameters
+	"step_penalty": -0.005,           # Even smaller step penalty
+	"goal_reward": 500,               # Reasonable goal reward (was 50)
+	"reward_closer": 0.2,             # Smaller incremental reward
+	"reward_further": -0.05,          # Very small penalty
+	"wall_penalty": -0.1,             # Much smaller wall penalty
+	"exploration_bonus": 0.5,         # Modest exploration bonus
+	"revisit_penalty": -0.01,         # Minimal revisit penalty
+	"loop_detection_threshold": 15,   # Very permissive loop detection
+	
+	# Learning parameters - focused on stable learning
+	"episodes": 15000,                # More episodes (was 50'000)
+	"alpha": 0.05,                    # Smaller learning rate for stability
+	"gamma": 0.95,                    # Slightly reduced discount factor
+	"epsilon_start": 1.0,
+	"epsilon_end": 0.15,              # Higher final exploration rate
+	"epsilon_decay": 0.9999,          # Very slow epsilon decay
+	"temperature_start": 2.0,
+	"temperature_end": 0.5,
+	"temperature_decay": 0.9999,
+	"max_steps": 1000,
+	"max_stuck_steps": 20,            # Very patient with getting stuck
+	
+	# Q-value initialization
+	"optimistic_value": 2,            # Slight optimism (was 1)
+	
+	# Experience replay - more aggressive
+	"use_experience_replay": True,
+	"replay_buffer_size": 100000,     # Much larger buffer
+	"replay_batch_size": 128,         # Larger batch size
+	"replay_frequency": 4,            # More frequent replay
+	
+	# Prioritized sweeping - more updates
+	"use_prioritized_sweeping": True,
+	"priority_threshold": 0.05,       # Even lower threshold
+	
+	# Curriculum learning - much more gradual
+	"use_curriculum_learning": True,
+	"curriculum_phases": 20           # Start with very simple mazes
+}
+
+# ===================================================
+# Maze Environment
+# ===================================================
 
 class MazeEnv:
 	def __init__(self, maze, start, goal):
 		self.maze = np.array(maze)
 		self.start = tuple(start)
 		self.goal = tuple(goal)
-		self.position = self.start
-		self.actions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # right, down, left, up
-		self.previous_direction = None  # To track the previous action
-		self.visited_states = set()  # To track visited states
+		# Define actions: right, down, left, up
+		self.actions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+		self.reset()
+		
+		# Calculate maze complexity metrics
+		self.complexity = self.calculate_complexity()
+
+	def calculate_complexity(self):
+		"""Calculate a complexity score for this maze"""
+		# Manhattan distance from start to goal
+		manhattan_dist = abs(self.start[0] - self.goal[0]) + abs(self.start[1] - self.goal[1])
+		
+		# Count number of walls
+		wall_count = np.sum(self.maze == 1)
+		total_cells = self.maze.shape[0] * self.maze.shape[1]
+		wall_ratio = wall_count / total_cells
+		
+		# Combine metrics
+		return manhattan_dist * (1 + wall_ratio)
 
 	def reset(self):
 		self.position = self.start
-		self.previous_direction = None  # Reset the direction tracker
-		self.visited_states = set()  # Clear visited states
+		self.visited_states = {self.start: 1}  # Track visit count
+		self.path = [self.start]  # Track full path for analysis
 		return self.position
 
 	def step(self, action):
@@ -371,148 +468,556 @@ class MazeEnv:
 		dx, dy = self.actions[action]
 		nx, ny = x + dx, y + dy
 
-		# Check bounds and walls
-		if 0 <= nx < self.maze.shape[0] and 0 <= ny < self.maze.shape[1] and self.maze[nx, ny] == 0:
-			self.position = (nx, ny)
+		# Check boundaries/walls
+		if (0 <= nx < self.maze.shape[0] and 0 <= ny < self.maze.shape[1] and self.maze[nx, ny] == 0):
+			new_position = (nx, ny)
+		else:
+			new_position = self.position
+
+		done = False
+
+		# Base step reward
+		reward = CONFIG["step_penalty"]
 
 		# Check if goal is reached
-		done = self.position == self.goal
-		reward = 10 if done else -1
+		if new_position == self.goal:
+			reward = CONFIG["goal_reward"]
+			done = True
+		else:
+			# Distance-based reward/penalty
+			old_dist = abs(x - self.goal[0]) + abs(y - self.goal[1])
+			new_dist = abs(new_position[0] - self.goal[0]) + abs(new_position[1] - self.goal[1])
+			if new_dist < old_dist:
+				reward += CONFIG["reward_closer"]
+			elif new_dist > old_dist:
+				reward += CONFIG["reward_further"]
 
-		# Movement incentives
-		if not done:
-			current_distance = abs(x - self.goal[0]) + abs(y - self.goal[1])
-			new_distance = abs(nx - self.goal[0]) + abs(ny - self.goal[1])
-			if new_distance < current_distance:
-				reward += 5  # Reward for getting closer
-			elif new_distance > current_distance:
-				reward -= 1  # Penalty for moving away
-			if self.position == (x, y):  # No movement
-				reward -= 10
+			# Penalty for hitting a wall or out-of-bounds
+			if new_position == self.position and (nx, ny) != self.position:
+				reward += CONFIG["wall_penalty"]
 
-		# Check for direction change
-		if self.previous_direction is not None and self.previous_direction != action:
-			reward -= 2  # Penalty for changing direction
+			# Exploration bonus or revisit penalty with increasing penalty for frequently visited states
+			if new_position not in self.visited_states:
+				reward += CONFIG["exploration_bonus"]
+				self.visited_states[new_position] = 1
+			else:
+				# Increasing penalty for frequently visited states
+				visit_count = self.visited_states[new_position]
+				revisit_penalty = CONFIG["revisit_penalty"] * (1 + 0.1 * visit_count)
+				reward += revisit_penalty
+				self.visited_states[new_position] += 1
 
-		# Reward for visiting a new state
-		if self.position not in self.visited_states:
-			reward += 5  # Reward for exploring
-			self.visited_states.add(self.position)
+		self.position = new_position
+		self.path.append(new_position)
+		return new_position, reward, done
 
-		# Update the previous direction
-		self.previous_direction = action
-
-		return self.position, reward, done
+# ===================================================
+# Helper Functions
+# ===================================================
 
 def load_mazes(folder):
-	"""Load JSON mazes from the specified folder."""
-	files = [f for f in os.listdir(folder) if f.endswith(".json")]
 	mazes = []
-	for file in files:
-		with open(os.path.join(folder, file), "r") as f:
-			maze_data = json.load(f)
-			mazes.append(maze_data)
+	for fname in os.listdir(folder):
+		if fname.endswith(".json"):
+			path = os.path.join(folder, fname)
+			with open(path, "r") as f:
+				mazes.append(json.load(f))
 	return mazes
 
-def train_q_learning(mazes, episodes=5000, alpha=0.1, gamma=0.9, epsilon=1.0, max_failed_attempts=10, max_steps=5000):
-	q_table = {}
-	total_rewards = []
-	episode_lengths = []
-	successes = 0
-
-	for maze_idx, maze_data in enumerate(mazes, start=1):
+def sort_mazes_by_complexity(mazes):
+	"""Sort mazes by estimated complexity for curriculum learning"""
+	sorted_mazes = []
+	for maze_data in mazes:
 		env = MazeEnv(maze_data["maze"], maze_data["start"], maze_data["goal"])
-		failed_attempts = 0
+		sorted_mazes.append((env.complexity, maze_data))
+	
+	# Sort by complexity score
+	sorted_mazes.sort(key=lambda x: x[0])
+	return sorted_mazes
 
-		print(f"Training on Maze {maze_idx}...")
+def select_action(q_values, epsilon, temperature):
+	if np.random.rand() < epsilon:
+		return np.random.randint(len(q_values))
+	
+	# Softmax action selection with temperature
+	max_q = max(q_values)
+	exp_values = [np.exp((q - max_q) / max(temperature, 1e-8)) for q in q_values]
+	sum_exp = sum(exp_values)
+	probs = [val / sum_exp for val in exp_values]
+	return np.random.choice(len(q_values), p=probs)
 
-		for episode in range(episodes):
-			state = env.reset()
-			done = False
-			total_reward = 0
-			steps = 0
+def get_q_values(q_table, state, num_actions=4):
+	"""Return Q-values for a given state with optimistic initialization."""
+	if state not in q_table:
+		q_table[state] = [CONFIG["optimistic_value"]] * num_actions
+	return q_table[state]
 
-			while not done:
-				steps += 1
-				if steps > max_steps:
-					print(f"Episode terminated early after {max_steps} steps (likely stuck).")
-					failed_attempts += 1
-					break
-
-				if np.random.random() < epsilon:
-					action = np.random.choice(len(env.actions))  # Explore
-				else:
-					action = np.argmax(q_table.get(state, [0, 0, 0, 0]))  # Exploit
-
-				next_state, reward, done = env.step(action)
-				total_reward += reward
-
-				if state == next_state:
-					reward -= 20  # Penalize staying in the same place
-
-				q_values = q_table.get(state, [0, 0, 0, 0])
-				q_values[action] += alpha * (
-					reward + gamma * max(q_table.get(next_state, [0, 0, 0, 0])) - q_values[action]
-				)
-				q_table[state] = q_values
-				state = next_state
-
-			total_rewards.append(total_reward)
-			episode_lengths.append(steps)
-			if total_reward >= 10:
-				successes += 1
-
-			if failed_attempts >= max_failed_attempts:
-				print(f"Skipping Maze {maze_idx} after {failed_attempts} failed attempts.")
-				break
-
-			epsilon = max(0.01, epsilon * 0.995)  # Change epsilon faster or slower convergence to exploitation
-
-	avg_reward = np.mean(total_rewards) if total_rewards else 0
-	avg_length = np.mean(episode_lengths) if episode_lengths else 0
-	success_rate = (successes / (len(mazes) * episodes)) * 100 if len(mazes) > 0 else 0
-
-	print("\nTraining Metrics:")
-	print(f"  Average Reward per Episode: {avg_reward:.2f}")
-	print(f"  Average Episode Length: {avg_length:.2f} steps")
-	print(f"  Success Rate: {success_rate:.2f}%")
-
+def experience_replay(q_table, experience_buffer, batch_size, alpha, gamma):
+	"""Learn from randomly sampled past experiences"""
+	if len(experience_buffer) < batch_size:
+		return q_table
+	
+	# Sample random batch of experiences
+	batch = random.sample(experience_buffer, batch_size)
+	
+	for state, action, reward, next_state, done in batch:
+		q_values = get_q_values(q_table, state)
+		if done:
+			# Terminal state update
+			new_q = q_values[action] + alpha * (reward - q_values[action])
+		else:
+			# Standard Q-learning update
+			next_q_values = get_q_values(q_table, next_state)
+			best_next_q = max(next_q_values)
+			new_q = q_values[action] + alpha * (reward + gamma * best_next_q - q_values[action])
+		
+		q_values[action] = new_q
+		q_table[state] = q_values
+	
 	return q_table
 
-def save_model(model, folder, filename):
-	"""Save the trained Q-table to a file."""
-	os.makedirs(folder, exist_ok=True)
-	filepath = os.path.join(folder, filename)
+def prioritized_sweeping(q_table, state_transitions, alpha, gamma, priority_threshold=0.5):
+	"""Update Q-values for states with significant changes"""
+	if not state_transitions:
+		return q_table
+	
+	# Sort transitions by absolute TD error (priority)
+	for state, action, reward, next_state, done in state_transitions:
+		q_values = get_q_values(q_table, state)
+		
+		if done:
+			td_error = abs(reward - q_values[action])
+		else:
+			next_q_values = get_q_values(q_table, next_state)
+			best_next_q = max(next_q_values)
+			td_error = abs(reward + gamma * best_next_q - q_values[action])
+		
+		# Only update if error is significant
+		if td_error > priority_threshold:
+			if done:
+				new_q = q_values[action] + alpha * (reward - q_values[action])
+			else:
+				new_q = q_values[action] + alpha * (reward + gamma * best_next_q - q_values[action])
+			
+			q_values[action] = new_q
+			q_table[state] = q_values
+	
+	return q_table
+
+def detect_early_stopping(rewards, episode_window=500, improvement_threshold=0.001):
+	"""Disable early stopping to allow full training"""
+	return False  # Never trigger early stopping
+
+def visualize_sample_mazes(sorted_mazes, num_to_visualize=3):
+	"""Visualize a few sample mazes to verify they're solvable"""
+	os.makedirs("maze_visualizations", exist_ok=True)
+	
+	for i in range(min(num_to_visualize, len(sorted_mazes))):
+		complexity, maze_data = sorted_mazes[i]
+		maze = np.array(maze_data["maze"])
+		start = tuple(maze_data["start"])
+		goal = tuple(maze_data["goal"])
+		
+		plt.figure(figsize=(8, 8))
+		plt.imshow(maze, cmap='binary')
+		plt.scatter(start[1], start[0], c='green', s=200, marker='o', label='Start')
+		plt.scatter(goal[1], goal[0], c='red', s=200, marker='*', label='Goal')
+		plt.title(f'Maze #{i+1} - Complexity: {complexity:.2f}')
+		plt.legend()
+		plt.grid(False)
+		plt.savefig(f"maze_visualizations/maze_sample_{i+1}.png")
+		plt.close()
+	
+	print(f"Visualized {num_to_visualize} sample mazes in 'maze_visualizations' folder")
+
+def train_q_learning(
+	mazes,
+	episodes=CONFIG["episodes"],
+	alpha=CONFIG["alpha"],
+	gamma=CONFIG["gamma"],
+	epsilon_start=CONFIG["epsilon_start"],
+	epsilon_end=CONFIG["epsilon_end"],
+	epsilon_decay=CONFIG["epsilon_decay"],
+	temperature_start=CONFIG["temperature_start"],
+	temperature_end=CONFIG["temperature_end"],
+	temperature_decay=CONFIG["temperature_decay"],
+	max_steps=CONFIG["max_steps"],
+	max_stuck_steps=CONFIG["max_stuck_steps"]
+):
+	# For tracking training progress
+	q_table = {}
+	total_rewards = []
+	success_count = 0
+	steps_per_episode = []
+	epsilon_values = []
+	success_rates = []
+	mean_reward_per_1000 = []
+
+	epsilon = epsilon_start
+	temperature = temperature_start
+	
+	# Sort mazes for curriculum learning if enabled
+	if CONFIG["use_curriculum_learning"]:
+		sorted_mazes = sort_mazes_by_complexity(mazes)
+		print(f"Sorted {len(sorted_mazes)} mazes by complexity for curriculum learning")
+		
+		# Visualize a few sample mazes to verify they're solvable
+		visualize_sample_mazes(sorted_mazes, num_to_visualize=3)
+		
+		# Print complexity information for first few mazes
+		print("Maze complexity distribution:")
+		for i in range(min(5, len(sorted_mazes))):
+			print(f"  Maze {i+1}: Complexity score {sorted_mazes[i][0]:.2f}")
+		
+		sorted_mazes = [m[1] for m in sorted_mazes]  # Extract just the maze data
+	else:
+		sorted_mazes = mazes
+	
+	# Experience replay buffer
+	replay_buffer = deque(maxlen=CONFIG["replay_buffer_size"])
+	
+	# Create a directory for saving figures
+	os.makedirs("training_plots", exist_ok=True)
+
+	for ep in range(1, episodes + 1):
+		# Curriculum learning: gradually introduce more complex mazes
+		if CONFIG["use_curriculum_learning"]:
+			# Determine which subset of mazes to use based on training progress
+			phase = min(int((ep / episodes) * CONFIG["curriculum_phases"]), CONFIG["curriculum_phases"] - 1)
+			maze_subset_size = max(1, int((phase + 1) * len(sorted_mazes) / CONFIG["curriculum_phases"]))
+			maze_subset = sorted_mazes[:maze_subset_size]
+			maze_data = random.choice(maze_subset)
+		else:
+			maze_data = random.choice(mazes)
+		
+		env = MazeEnv(maze_data["maze"], maze_data["start"], maze_data["goal"])
+		state = env.reset()
+		episode_reward = 0
+		done = False
+		steps = 0
+		
+		# For loop detection
+		state_history = deque(maxlen=20)  # Larger history for better loop detection
+		stuck_count = 0
+		
+		# For prioritized sweeping
+		state_transitions = []
+
+		while not done and steps < max_steps:
+			steps += 1
+			state_history.append(state)
+
+			# Detect if stuck in a loop
+			if state_history.count(state) > CONFIG["loop_detection_threshold"]:
+				action = np.random.randint(len(env.actions))
+			else:
+				q_values = get_q_values(q_table, state)
+				action = select_action(q_values, epsilon, temperature)
+
+			next_state, reward, done = env.step(action)
+			episode_reward += reward
+			
+			# Add to experience replay buffer
+			replay_buffer.append((state, action, reward, next_state, done))
+			
+			# Track state transitions for prioritized sweeping
+			state_transitions.append((state, action, reward, next_state, done))
+
+			# Update stuck counter
+			if next_state == state:
+				stuck_count += 1
+			else:
+				stuck_count = 0
+
+			# Force a random move if stuck
+			if stuck_count >= max_stuck_steps and not done:
+				action = np.random.randint(len(env.actions))
+				next_state, forced_reward, forced_done = env.step(action)
+				episode_reward += forced_reward
+				done = forced_done
+				stuck_count = 0
+				
+				# Add forced move to replay buffer
+				replay_buffer.append((state, action, forced_reward, next_state, forced_done))
+				state_transitions.append((state, action, forced_reward, next_state, forced_done))
+
+			# Standard Q-learning update
+			q_values = get_q_values(q_table, state)
+			old_q = q_values[action]
+			next_q_values = get_q_values(q_table, next_state)
+			best_next_q = max(next_q_values)
+			new_q = old_q + alpha * (reward + gamma * best_next_q - old_q)
+			q_values[action] = new_q
+			q_table[state] = q_values
+
+			state = next_state
+		
+		# Experience replay after episode if enabled
+		if CONFIG["use_experience_replay"] and ep % CONFIG["replay_frequency"] == 0:
+			q_table = experience_replay(
+				q_table, 
+				replay_buffer, 
+				CONFIG["replay_batch_size"], 
+				alpha, 
+				gamma
+			)
+		
+		# Prioritized sweeping if enabled
+		if CONFIG["use_prioritized_sweeping"]:
+			q_table = prioritized_sweeping(
+				q_table, 
+				state_transitions, 
+				alpha, 
+				gamma, 
+				CONFIG["priority_threshold"]
+			)
+		
+		# Track episode results
+		total_rewards.append(episode_reward)
+		steps_per_episode.append(steps)
+		epsilon_values.append(epsilon)
+		
+		if done and episode_reward > 0:  # Successfully reached the goal
+			success_count += 1
+		
+		# Calculate current success rate
+		current_success_rate = 100.0 * success_count / ep
+		success_rates.append(current_success_rate)
+
+		# Decay exploration parameters
+		epsilon = max(epsilon_end, epsilon * epsilon_decay)
+		temperature = max(temperature_end, temperature * temperature_decay)
+
+		# Reporting
+		if ep % 1000 == 0:
+			# Calculate mean reward over last 1000 episodes
+			last_1000_mean = np.mean(total_rewards[-1000:])
+			mean_reward_per_1000.append(last_1000_mean)
+			
+			print(f"Episode {ep}/{episodes}: Reward={episode_reward:.1f}, Steps={steps}, "
+					f"Epsilon={epsilon:.3f}, Success Rate={current_success_rate:.2f}%")
+			
+			if CONFIG["use_curriculum_learning"]:
+				print(f"  Current Maze Complexity: {env.complexity:.2f}, "
+						f"Current Phase: {phase+1}/{CONFIG['curriculum_phases']}")
+			
+			print(f"  Average Last 1000 Rewards: {last_1000_mean:.2f}")
+			
+			# Plot training progress every 10,000 episodes
+			if ep % 10000 == 0:
+				plot_training_progress(
+					total_rewards,
+					steps_per_episode,
+					epsilon_values,
+					success_rates,
+					mean_reward_per_1000,
+					ep
+				)
+	
+	# Final statistics
+	avg_reward = np.mean(total_rewards)
+	success_rate = 100.0 * success_count / episodes
+	avg_steps_success = np.mean([s for i, s in enumerate(steps_per_episode) if i < len(total_rewards) and total_rewards[i] > 0]) if success_count > 0 else 0
+	
+	print("\nTraining Finished!")
+	print(f"  Average Reward: {avg_reward:.2f}")
+	print(f"  Success Rate: {success_rate:.2f}%")
+	print(f"  Average Steps (successful episodes): {avg_steps_success:.2f}")
+	
+	# Final learning curves
+	plot_training_progress(
+		total_rewards,
+		steps_per_episode,
+		epsilon_values,
+		success_rates,
+		mean_reward_per_1000,
+		episodes,
+		final=True
+	)
+	
+	return q_table
+
+def plot_training_progress(rewards, steps, epsilons, success_rates, mean_rewards_per_1000, episode, final=False):
+	"""Plot training metrics to visualize learning progress"""
+	plt.figure(figsize=(15, 12))
+	
+	# Plot moving average of rewards
+	window_size = min(100, len(rewards))
+	if window_size > 0:
+		smoothed_rewards = np.convolve(rewards, np.ones(window_size)/window_size, mode='valid')
+		
+		plt.subplot(3, 2, 1)
+		plt.plot(smoothed_rewards)
+		plt.title('Average Reward (Smoothed)')
+		plt.xlabel('Episode')
+		plt.ylabel('Reward')
+		
+		# Steps per episode
+		plt.subplot(3, 2, 2)
+		smoothed_steps = np.convolve(steps, np.ones(window_size)/window_size, mode='valid')
+		plt.plot(smoothed_steps)
+		plt.title('Steps per Episode (Smoothed)')
+		plt.xlabel('Episode')
+		plt.ylabel('Steps')
+		
+		# Epsilon decay
+		plt.subplot(3, 2, 3)
+		plt.plot(epsilons)
+		plt.title('Exploration Rate (Epsilon)')
+		plt.xlabel('Episode')
+		plt.ylabel('Epsilon')
+		
+		# Success rate progression
+		plt.subplot(3, 2, 4)
+		plt.plot(success_rates)
+		plt.title('Success Rate Progression')
+		plt.xlabel('Episode')
+		plt.ylabel('Success Rate (%)')
+		plt.ylim(0, 100)
+		
+		# Mean reward per 1000 episodes
+		plt.subplot(3, 2, 5)
+		plt.plot(range(1000, len(rewards) + 1, 1000), mean_rewards_per_1000)
+		plt.title('Mean Reward per 1000 Episodes')
+		plt.xlabel('Episode')
+		plt.ylabel('Mean Reward')
+		
+		# Reward histogram 
+		plt.subplot(3, 2, 6)
+		plt.hist(rewards, bins=50)
+		plt.title('Reward Distribution')
+		plt.xlabel('Reward')
+		plt.ylabel('Frequency')
+	
+	plt.tight_layout()
+	
+	# Save figure
+	if final:
+		plt.savefig(f"training_plots/final_training_progress.png")
+	else:
+		plt.savefig(f"training_plots/training_progress_ep{episode}.png")
+	
+	plt.close()
+
+def save_q_table(q_table, output_folder, filename):
+	"""Save the Q-table to disk."""
+	os.makedirs(output_folder, exist_ok=True)
+	filepath = os.path.join(output_folder, filename)
 	with open(filepath, "wb") as f:
-		pickle.dump(model, f)
-	print(f"Model saved to {filepath}")
+		pickle.dump(q_table, f)
+	print(f"Q-table saved to {filepath}")
+
+def visualize_maze_policy(q_table, maze_data, output_folder="maze_visualizations"):
+	"""Visualize the learned policy for a specific maze"""
+	os.makedirs(output_folder, exist_ok=True)
+	
+	maze = np.array(maze_data["maze"])
+	start = tuple(maze_data["start"])
+	goal = tuple(maze_data["goal"])
+	
+	# Create a visualization of the maze with policy arrows
+	plt.figure(figsize=(12, 12))
+	plt.imshow(maze, cmap='binary')
+	
+	# Action directions for visualization
+	arrows = ['→', '↓', '←', '↑']
+	arrow_colors = ['blue', 'green', 'red', 'purple']
+	
+	# Plot arrows for each navigable cell
+	for i in range(maze.shape[0]):
+		for j in range(maze.shape[1]):
+			if maze[i, j] == 0:  # If navigable
+				state = (i, j)
+				if state in q_table:
+					q_values = q_table[state]
+					best_action = np.argmax(q_values)
+					
+					# Add Q-value annotation
+					plt.text(j, i-0.3, f"{max(q_values):.1f}", 
+								ha='center', va='center', 
+								color='black', fontsize=7)
+					
+					# Plot arrow for best action
+					plt.text(j, i, arrows[best_action], 
+								ha='center', va='center', 
+								color=arrow_colors[best_action],
+								fontsize=12, fontweight='bold')
+	
+	# Mark start and goal
+	plt.scatter(start[1], start[0], c='green', s=200, marker='o', label='Start')
+	plt.scatter(goal[1], goal[0], c='red', s=200, marker='*', label='Goal')
+	
+	plt.title('Maze Policy Visualization')
+	plt.legend()
+	plt.grid(False)
+	
+	# Save the visualization
+	plt.savefig(f"{output_folder}/policy_visualization.png")
+	plt.close()
+
+def visualize_training_metrics(total_rewards, success_rates, output_folder="training_analysis"):
+	"""Create detailed visualizations of training metrics"""
+	os.makedirs(output_folder, exist_ok=True)
+	
+	# Analyze reward distribution
+	plt.figure(figsize=(15, 8))
+	
+	# Plot reward histogram 
+	plt.subplot(1, 2, 1)
+	plt.hist(total_rewards, bins=50, color='skyblue', edgecolor='black')
+	plt.axvline(np.mean(total_rewards), color='r', linestyle='--', linewidth=1, 
+				label=f'Mean: {np.mean(total_rewards):.2f}')
+	plt.axvline(np.median(total_rewards), color='g', linestyle='--', linewidth=1,
+				label=f'Median: {np.median(total_rewards):.2f}')
+	plt.title('Total Reward Distribution')
+	plt.xlabel('Reward')
+	plt.ylabel('Frequency')
+	plt.legend()
+	
+	# Success rate over time
+	plt.subplot(1, 2, 2)
+	plt.plot(success_rates, color='green')
+	plt.title('Success Rate Progression')
+	plt.xlabel('Episode')
+	plt.ylabel('Success Rate (%)')
+	plt.ylim(0, 100)
+	
+	plt.tight_layout()
+	plt.savefig(f"{output_folder}/training_metrics_analysis.png")
+	plt.close()
+
+# ===================================================
+# Main
+# ===================================================
 
 if __name__ == "__main__":
-	# Define paths
-	maze_folder = "mazes"
-	model_folder = "model"
-	model_filename = "q_table.pkl"
+	MAZE_FOLDER = "mazes"
+	MODEL_FOLDER = "model"
+	MODEL_FILE = "q_table.pkl"
 
-	# Load mazes
-	print("Loading mazes...")
-	mazes = load_mazes(maze_folder)
-	print(f"Loaded {len(mazes)} mazes.")
+	print("Loading mazes for training...")
+	mazes = load_mazes(MAZE_FOLDER)
+	print(f"Loaded {len(mazes)} maze(s).")
 
-	#training parameters
-	episodes = 7000
-	alpha = 0.5 # Learning rate higher means more weight on new information and lower means slower learning but smoother convergence
-	gamma = 0.99  # Discount factor Long-term planning for high and shortterm for low
-	epsilon = 0.9  # Initial exploration rate
-	max_steps = 5000 #max steps to avoid infinite loops
-	max_failed_attempts = 10
+	print("Starting Q-learning training with enhanced features...")
+	print(f"  - Experience Replay: {'Enabled' if CONFIG['use_experience_replay'] else 'Disabled'}")
+	print(f"  - Prioritized Sweeping: {'Enabled' if CONFIG['use_prioritized_sweeping'] else 'Disabled'}")
+	print(f"  - Curriculum Learning: {'Enabled' if CONFIG['use_curriculum_learning'] else 'Disabled'}")
+	
+	q_table = train_q_learning(mazes=mazes)
 
-	# Train Q-learning agent
-	print("Training Q-learning agent...")
-	q_table = train_q_learning(mazes, episodes=episodes, alpha=alpha, gamma=gamma, epsilon=epsilon, max_failed_attempts=max_failed_attempts, max_steps=max_steps)
-
-	# Save the trained model
-	print("Saving the trained model...")
-	save_model(q_table, model_folder, model_filename)
+	save_q_table(q_table, MODEL_FOLDER, MODEL_FILE)
+	
+	# Visualize the policy for a sample maze
+	if mazes:
+		print("Generating policy visualization for a sample maze...")
+		visualize_maze_policy(q_table, mazes[0])
+		
+		# Create additional analysis visualizations
+		print("Generating additional training analysis visualizations...")
+		visualize_maze_policy(q_table, mazes[-1], output_folder="maze_visualizations")
+	
+	print("Training complete! You're ready to go solve some mazes!")
 									</code></pre>
 							</div>
 						</div>
