@@ -56,20 +56,21 @@
 							<div class="modern-background">									
 								<h2>Introduction</h2>
 								<p><strong>Background</strong></p>
-								<p>Object Detection is a computer vision task where a model identifies and localizes multiple objects within an image or video. This involves not only classifying objects but also predicting their positions through bounding boxes. A popular approach to object detection is the YOLO (You Only Look Once) family of models, known for their speed and accuracy.</p>
-								<p><a href="https://yolov8.com/" target="_blank">YOLOv8</a> is the latest iteration in this series, designed to enhance performance, simplify use, and expand versatility. YOLOv8 uses a single-stage architecture, meaning it predicts bounding boxes and class probabilities in one pass through the network, making it faster than many alternatives.</p>
+
+								<p>During the machine learning module, we learned how to build a Convolutional Neural Network (CNN) for object detection, as documented <a href="../modulePages/machineLearning/machineLearning3.html" target="_blank">here</a>, and this project aims to explore alternatives for object detection. Object Detection is a computer vision process where models classify objects. We aim at not only classifying them but also localizing them within images or videos through bounding boxes. A popular approach in this domain is the YOLO (You Only Look Once) family of models, renowned for their speed and accuracy, with the latest iteration, <a href="https://yolov8.com/" target="_blank">YOLOv8</a>, designed to enhance performance, simplify usage, and expand versatility by employing a single-stage architecture that predicts bounding boxes and class probabilities in one pass through the network.</p>
+
 								<p><strong>Scope</strong></p>
 								<p>This project demonstrates a real-time object detection application using Python. The system leverages the YOLO object detection model and a simple tkinter user interface to allow users to start and stop a live webcam feed with object detection enabled.</p>
-								<p>Note: This project will be a rather small project introducing how easily object detection can be used with pre-trained models.</p>
+								
 								<p><strong>Deliverables (High-Level Scope)</strong></p>
 									<ul>
 										<li>A simple frontend built with <a href="https://docs.python.org/3/library/tkinter.html" target="_blank">tkinter</a> that allows the user to start and stop the live video feed and also enable and disable object detection.</li>
-										<li>A backend that uses YOLO object detection objects in real-time.</li>
+										<li>A backend that uses <a href="https://yolov8.com/" target="_blank">YOLOv8</a> to detect objects in real-time.</li>
 									</ul>
 								<p><strong>Out of Scope</strong></p>
 									<ul>
-										<li>Training the machine learning algorithm. A pre-built model will be used.</li>
-										<li>Any adjustment options of the tool by the user.</li>
+										<li>Training the model. A pre-built model will be used.</li>
+										<li>Any options for the user to adjust the model or process via the user interface.</li>
 										<li>Any other additional feature that is not described in the deliverables above.</li>
 									</ul>
 								<p><strong>High-Level Design</strong></p>
