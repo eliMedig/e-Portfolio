@@ -333,7 +333,7 @@
 										</tr>
 									</tbody>
 								</table>
-								<p>The agent still gets stuck after improving the success rate to 39.38% and implementing various measures to avoid this behaviour:</p>
+								<p>The agent still gets stuck after improving the success rate to 39.38% and implementing various measures to avoid this behaviour. The reason for sticking in a loop is due to a bad reward structure which allows the agent to repeate actions that do not lead to the main goal but still incrase the total rewards collected:</p>
 								<div class="video-container">
 									<video controls autoplay>
 										<source src="../videos/mazeSolver1.mp4" type="video/mp4">
@@ -369,10 +369,11 @@
 										</tr>
 									</tbody>
 								</table>
-								<p>PENDING</p>
-							
-								This was the final code used to build the model:
-								<br><br>
+								
+								<p>After further research, I realized the hyperparameter values I initially chose for my learning agent were excessively large, and even reducing alpha to around 0.05 has yet to substantially improve my success rate.</p>
+
+								<p>This was the final code used to build the model:</p>
+
 								<pre><code class="language-python">import os
 import os
 import json
@@ -387,45 +388,45 @@ import matplotlib.pyplot as plt
 # ===================================================
 
 CONFIG = {
-	# Maze reward/penalty parameters
-	"step_penalty": -0.005,           # Even smaller step penalty
-	"goal_reward": 500,               # Reasonable goal reward (was 50)
-	"reward_closer": 0.2,             # Smaller incremental reward
-	"reward_further": -0.05,          # Very small penalty
-	"wall_penalty": -0.1,             # Much smaller wall penalty
-	"exploration_bonus": 0.5,         # Modest exploration bonus
-	"revisit_penalty": -0.01,         # Minimal revisit penalty
-	"loop_detection_threshold": 15,   # Very permissive loop detection
-	
-	# Learning parameters - focused on stable learning
-	"episodes": 15000,                # More episodes (was 50'000)
-	"alpha": 0.05,                    # Smaller learning rate for stability
-	"gamma": 0.95,                    # Slightly reduced discount factor
-	"epsilon_start": 1.0,
-	"epsilon_end": 0.15,              # Higher final exploration rate
-	"epsilon_decay": 0.9999,          # Very slow epsilon decay
-	"temperature_start": 2.0,
-	"temperature_end": 0.5,
-	"temperature_decay": 0.9999,
-	"max_steps": 1000,
-	"max_stuck_steps": 20,            # Very patient with getting stuck
-	
-	# Q-value initialization
-	"optimistic_value": 2,            # Slight optimism (was 1)
-	
-	# Experience replay - more aggressive
-	"use_experience_replay": True,
-	"replay_buffer_size": 100000,     # Much larger buffer
-	"replay_batch_size": 128,         # Larger batch size
-	"replay_frequency": 4,            # More frequent replay
-	
-	# Prioritized sweeping - more updates
-	"use_prioritized_sweeping": True,
-	"priority_threshold": 0.05,       # Even lower threshold
-	
-	# Curriculum learning - much more gradual
-	"use_curriculum_learning": True,
-	"curriculum_phases": 20           # Start with very simple mazes
+    # Maze reward/penalty parameters
+    "step_penalty": -1,
+    "goal_reward": 10000,
+    "reward_closer": 15,
+    "reward_farther": -5,
+    "wall_penalty": -10,
+    "exploration_bonus": 5,
+    "revisit_penalty": -2,
+    "loop_detection_threshold": 10,
+
+    # Learning parameters
+    "episodes": 10000, 
+    "alpha": 0.05,
+    "gamma": 0.99,
+    "epsilon_start": 1.0,
+    "epsilon_end": 0.05,
+    "epsilon_decay": 0.9995,
+    "temperature_start": 1.0,   
+    "temperature_end": 0.05,    
+    "temperature_decay": 0.9995,
+    "max_steps": 2000,
+    "max_stuck_steps": 5,
+
+    # Q-value initialization
+    "optimistic_value": 5,
+
+    # Experience replay
+    "use_experience_replay": True,
+    "replay_buffer_size": 200000,  
+    "replay_batch_size": 128,     
+    "replay_frequency": 4,
+
+    # Prioritized sweeping
+    "use_prioritized_sweeping": True,
+    "priority_threshold": 0.05,
+
+    # Curriculum learning
+    "use_curriculum_learning": False,
+    "curriculum_phases": 10
 }
 
 # ===================================================

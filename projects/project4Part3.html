@@ -69,21 +69,48 @@
 import os
 import json
 import pickle
+import random
 import numpy as np
 import matplotlib.pyplot as plt
+from collections import deque
+
+# ===================================================
+# Configuration (must match your training script)
+# ===================================================
+
+CONFIG = {
+	# Reward structure parameters
+    "step_penalty": -1,
+    "goal_reward": 10000,
+    "reward_closer": 15,
+    "reward_farther": -5,
+    "wall_penalty": -10,
+    "exploration_bonus": 5,
+    "revisit_penalty": -2,
+
+	# Simulation parameters
+    "max_steps": 2000,
+    "max_stuck_steps": 5,
+	"step_delay": 0.01,
+}
+
+# ===================================================
+# Maze Environment (Simulation)
+# ===================================================
 
 class MazeEnv:
+	
 	def __init__(self, maze, start, goal):
 		self.maze = np.array(maze)
 		self.start = tuple(start)
 		self.goal = tuple(goal)
-		self.position = self.start  # Initialize at start
-		self.actions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # right, down, left, up
+		# Define actions in order: right, down, left, up
+		self.actions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+		self.reset()
 
 	def reset(self):
-		"""Reset the agent to the start position."""
 		self.position = self.start
-		print(f"Agent reset to start position: {self.position}")
+		self.visited_states = {self.start}
 		return self.position
 
 	def step(self, action):
@@ -91,116 +118,152 @@ class MazeEnv:
 		dx, dy = self.actions[action]
 		nx, ny = x + dx, y + dy
 
-		# Check bounds and walls
-		if 0 <= nx < self.maze.shape[0] and 0 <= ny < self.maze.shape[1] and self.maze[nx, ny] == 0:
-			self.position = (nx, ny)
+		# Attempt movement: if valid, update position; else, remain in place.
+		if (0 <= nx < self.maze.shape[0] and 0 <= ny < self.maze.shape[1]
+			and self.maze[nx, ny] == 0):
+			new_position = (nx, ny)
+		else:
+			new_position = self.position
 
-		# Check if goal is reached
-		done = self.position == self.goal
-		reward = 10 if done else -1  # Reward for reaching the goal, penalty for each step
+		done = False
+		reward = CONFIG["step_penalty"]
 
-		return self.position, reward, done
+		# If goal is reached:
+		if new_position == self.goal:
+			reward = CONFIG["goal_reward"]
+			done = True
+		else:
+			# Distance-based reward/penalty
+			old_dist = abs(x - self.goal[0]) + abs(y - self.goal[1])
+			new_dist = abs(new_position[0] - self.goal[0]) + abs(new_position[1] - self.goal[1])
+			if new_dist < old_dist:
+				reward += CONFIG["reward_closer"]
+			elif new_dist > old_dist:
+				reward += CONFIG["reward_farther"]
 
-def render(self):
-	"""Visualize the maze with the current position."""
-	maze_copy = self.maze.copy()
-	maze_copy[self.position] = 2  # Mark current position
-	maze_copy[self.goal] = 3  # Mark goal
-	print(maze_copy)
+			# Penalty for hitting a wall/out-of-bounds
+			if new_position == self.position and (nx, ny) != self.position:
+				reward += CONFIG["wall_penalty"]
 
+			# Exploration bonus for new cell; penalty if revisiting
+			if new_position not in self.visited_states:
+				reward += CONFIG["exploration_bonus"]
+				self.visited_states.add(new_position)
+			else:
+				reward += CONFIG["revisit_penalty"]
+
+		self.position = new_position
+		return new_position, reward, done
+
+# ===================================================
+# Helper Functions
+# ===================================================
 
 def load_test_maze(folder, filename):
-	"""Load a test maze JSON file."""
 	filepath = os.path.join(folder, filename)
-	with open(filepath, "r") as f:
-		maze_data = json.load(f)
-	return maze_data
+	with open(filepath, 'r') as f:
+		return json.load(f)
 
-
-def load_model(folder, filename):
-	"""Load the trained Q-table from the model folder."""
-	filepath = os.path.join(folder, filename)
+def load_q_table(model_folder, model_file):
+	"""Load the Q-table from disk."""
+	filepath = os.path.join(model_folder, model_file)
 	with open(filepath, "rb") as f:
 		q_table = pickle.load(f)
-	print(f"Model loaded from {filepath}")
+	print(f"Loaded Q-table from {filepath}")
 	return q_table
 
-def simulate_solver(env, q_table, step_delay=1):
-	"""Simulate the agent solving the maze with live rendering and detailed logs."""
-	state = env.reset()  # Reset to start
+def simulate_solver(env, q_table, config=CONFIG):
+	state = env.reset()
 	done = False
 	step_count = 0
 
+	# Use a deque to maintain a history of the last N states.
+	state_history = deque(maxlen=10)  # Adjust the window size as needed.
+	
 	plt.ion()
 	fig, ax = plt.subplots(figsize=(6, 6))
 
-	print("Starting maze solver...")
-	print(f"Solver initialized. Start position: {state}, Goal position: {env.goal}")
+	print(f"Simulation start. Start={env.start}, Goal={env.goal}")
 
-	while not done:
-		ax.clear()
-		maze_copy = env.maze.copy()
-		maze_copy[env.position] = 2  # Mark agent
-		maze_copy[env.goal] = 3  # Mark goal
-
-		ax.imshow(maze_copy, cmap="binary", origin="upper")
-		ax.text(env.goal[1], env.goal[0], "E", color="red", ha="center", va="center", fontsize=16)
-		ax.text(env.position[1], env.position[0], "S", color="green", ha="center", va="center", fontsize=16)
-
-		plt.draw()
-		plt.pause(step_delay)
-
-		# Fetch Q-values for current state
-		q_values = q_table.get(state, [0, 0, 0, 0])
-
-		# Choose action based on Q-values
-		action = np.argmax(q_values)
-		print(f"Step {step_count}: Current state: {state}, Action: {action}, Q-values: {q_values}")
-
-		# Execute the action
-		state, reward, done = env.step(action)
-		print(f"  New state: {state}, Reward: {reward}, Goal reached: {done}")
-
+	while not done and step_count < config["max_steps"]:
 		step_count += 1
 
-		# Safety check to prevent infinite loops
-		if step_count > 1000:
-			print("Too many steps! Exiting to prevent infinite loop.")
-			break
+		# Visualize the maze.
+		ax.clear()
+		maze_copy = env.maze.copy()
+		maze_copy[env.position] = 2  # Mark agent's position.
+		maze_copy[env.goal] = 3      # Mark goal.
+		ax.imshow(maze_copy, cmap="binary", origin="upper")
+		ax.text(env.goal[1], env.goal[0], "E", color="red", fontsize=14,
+				ha="center", va="center")
+		ax.text(env.position[1], env.position[0], "S", color="green", fontsize=14,
+				ha="center", va="center")
+		plt.draw()
+		plt.pause(config["step_delay"])
+
+		# Append current state to the history.
+		state_history.append(state)
+
+		# Check if the current state appears too frequently in the recent history.
+		if state_history.count(state) > config["max_stuck_steps"]:
+			print(f"Stuck detected at state {state}. Forcing escape with multiple random moves.")
+			for _ in range(3):  # Force 3 consecutive random actions.
+				action = np.random.randint(len(env.actions))
+				next_state, reward, done = env.step(action)
+				step_count += 1
+				print(f"  Forced random move: State={state}, Action={action}, Reward={reward}")
+				state = next_state
+				if done:
+					break
+			state_history.clear()  # Reset history after escape sequence.
+			if done:
+				break
+			continue
+		else:
+			q_values = q_table.get(state, [0, 0, 0, 0])
+			action = np.argmax(q_values)
+
+		next_state, reward, done = env.step(action)
+		print(f"Step {step_count} | State={state}, Action={action}, Reward={reward}, Done={done}")
+
+		state = next_state
 
 	plt.ioff()
 	plt.show()
-	print(f"Maze solved in {step_count} steps!")
+
+	if done:
+		print(f"Maze solved in {step_count} steps.")
+	else:
+		print(f"Hit {step_count} steps without solving the maze.")
+
+# ===================================================
+# Main
+# ===================================================
 
 if __name__ == "__main__":
-	# Paths
 	test_maze_folder = "testMaze"
 	test_maze_file = "maze_Test.json"
 	model_folder = "model"
 	model_file = "q_table.pkl"
 
-	# Load the test maze
 	print("Loading test maze...")
 	test_maze_data = load_test_maze(test_maze_folder, test_maze_file)
 
-	# Load the trained model
-	print("Loading trained model...")
-	q_table = load_model(model_folder, model_file)
+	print("Loading Q-table...")
+	q_table = load_q_table(model_folder, model_file)
 
-	# Create the maze environment
 	print("Setting up the environment...")
 	env = MazeEnv(test_maze_data["maze"], test_maze_data["start"], test_maze_data["goal"])
 
-	# Get step delay from the user
+	# Optional: allow user to adjust the step delay via input.
 	try:
-		step_delay = float(input("Enter the step delay in seconds (e.g., 1 for 1 second per step): ").strip())
+		step_delay_input = input("Enter step delay in seconds (default {}): ".format(CONFIG["step_delay"])).strip()
+		CONFIG["step_delay"] = float(step_delay_input) if step_delay_input else CONFIG["step_delay"]
 	except ValueError:
-		print("Invalid input. Using default delay of 1 second.")
-		step_delay = 1.0
+		pass
 
-	# Simulate and visualize the solution
-	print("Solving the maze...")
-	simulate_solver(env, q_table, step_delay)
+	print("Starting solver simulation...")
+	simulate_solver(env, q_table, config=CONFIG)
 									</code></pre>
 							</div>
 						</div>
