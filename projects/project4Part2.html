@@ -56,17 +56,294 @@
 							</ul>
 							<div class="modern-background">									
 								<h2>Reinforcement Learning to resolve the maze</h2>
+								<p>The mazeBuilder.py aims at:</p>
 								<ul>
-									<li>Implements a Q-learning algorithm to train an agent for solving mazes.</li>
-									<li>Incorporates movement rewards and penalties, including incentives for exploration and penalties for moving away from the goal or staying still.</li>
-									<li>Allows configuration of training parameters such as learning rate (alpha), discount factor (gamma), and exploration rate (epsilon).</li>
-									<li>Tracks training metrics for performance evaluation and bug fixing.</li>
-									<li>Supports saving the trained Q-table model for future use and testing.</li>
+									<li>Implementing a Q-learning algorithm to train an agent for solving mazes.</li>
+									<li>Incorporating movement rewards and penalties, including incentives for exploration.</li>
+									<li>Allowing configuration of training parameters such as learning rate (alpha), discount factor (gamma), and exploration rate (epsilon).</li>
+									<li>Tracking of training metrics for performance evaluation and bug fixing.</li>
+									<li>Supporting saving the trained Q-table model for future use and testing.</li>
 								</ul>
-								<p>This is an example for how the creation works and what debugging and feedback steps are includuded in the CLI:</p>
-								<img src="../images/project4builder.jpg" alt="Maze Example" style="max-width: 100%; height: auto;">
-								<br><br>						
-									<pre><code class="language-python">
+
+								<p>Below is a detailed overview of the key training parameters I used to build and refine my RL model. Each parameter is carefully tuned to strike a balance between exploration, exploitation, and overall performance. </p>								
+								<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
+									<thead>
+										<tr style="background-color: #8d8d8d; color: #333333;">
+											<th style="padding: 10px; border: 1px solid #ddd;">Dataset (Parameter)</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Predicted Value (FCNN Result)</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Expected Value (Control Value)</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Difference (FCNN Deviation)</th>
+										</tr>
+									</thead>
+									<tbody>
+										<!-- EPISODES -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">EPISODES</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">30,000</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Number of training episodes to run the agent.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Larger values typically allow more exploration and learning.
+											</td>
+										</tr>
+										<!-- ALPHA -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">ALPHA</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">0.45</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Learning rate: controls how quickly the agent updates its Q-values.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Higher values can speed up learning but risk overshooting.
+											</td>
+										</tr>
+										<!-- GAMMA -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">GAMMA</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">0.99</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Discount factor: determines how the agent values future rewards over immediate ones.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Closer to 1.0 means the agent heavily favors long-term gains.
+											</td>
+										</tr>
+										<!-- EPSILON_START -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">EPSILON_START</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">1.0</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Starting exploration rate for an epsilon-greedy policy.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Initially explores fully (random actions).
+											</td>
+										</tr>
+										<!-- EPSILON_END -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">EPSILON_END</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">0.01</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Minimum exploration rate after decay.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Agent still explores occasionally even at low epsilon.
+											</td>
+										</tr>
+										<!-- EPSILON_DECAY -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">EPSILON_DECAY</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">0.9995</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Rate at which epsilon decreases each episode.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Slowly reduces exploration over time.
+											</td>
+										</tr>
+										<!-- TEMPERATURE_START -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">TEMPERATURE_START</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">1.0</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Initial temperature for softmax action selection (if used).
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Higher temperature means more random exploration initially.
+											</td>
+										</tr>
+										<!-- TEMPERATURE_END -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">TEMPERATURE_END</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">0.01</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Final temperature after decay.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Encourages more deterministic choices later in training.
+											</td>
+										</tr>
+										<!-- TEMPERATURE_DECAY -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">TEMPERATURE_DECAY</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">0.999</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Rate at which the temperature decreases each episode.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Gradually shifts behavior from exploratory to exploitative.
+											</td>
+										</tr>
+										<!-- MAX_STEPS -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">MAX_STEPS</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">4,000</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Maximum steps allowed in a single episode.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Prevents episodes from running indefinitely.
+											</td>
+										</tr>
+										<!-- MAX_STUCK_STEPS -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">MAX_STUCK_STEPS</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">10</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Maximum consecutive steps with no movement.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Helps the agent avoid getting stuck in loops or dead ends.
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								
+
+								<p>Below is a detailed overview of the reward structure I implemented during training. Each component reflects how the agent is incentivized or penalized for specific actions and outcomes, guiding it to navigate the maze more effectively and reach the goal. </p>
+
+								<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
+									<thead>
+										<tr style="background-color: #8d8d8d; color: #333333;">
+											<th style="padding: 10px; border: 1px solid #ddd;">Dataset (Reward Component)</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Predicted Value (FCNN Result)</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Expected Value (Control Value)</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Difference (FCNN Deviation)</th>
+										</tr>
+									</thead>
+									<tbody>
+										<!-- Base Step Penalty -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">Base Step Penalty</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">-0.1</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Applies to every step taken, preventing the agent from wandering indefinitely.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Encourages more purposeful movement to reach the goal.
+											</td>
+										</tr>
+										<!-- Goal Reward -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">Goal Reward</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">+250</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Granted when the agent reaches the goal location.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Strong incentive to navigate successfully.
+											</td>
+										</tr>
+										<!-- Distance-Based Closer -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">Distance-Based: Closer</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">+5</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Added when the new position is closer to the goal than the old position.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Rewards steps that move the agent toward the goal.
+											</td>
+										</tr>
+										<!-- Distance-Based Farther -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">Distance-Based: Farther</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">-1</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Subtracted if the agent moves away from the goal.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Penalizes counterproductive moves.
+											</td>
+										</tr>
+										<!-- Hitting Wall or Out-of-Bounds -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">Collision (Wall/Out-of-Bounds)</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">-4</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Occurs if the agent attempts to move into a wall or outside the maze.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Discourages invalid moves.
+											</td>
+										</tr>
+										<!-- Visiting New State -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">Visiting New State</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">+5</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Reward for exploring unvisited cells.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Encourages exploration of unknown territory.
+											</td>
+										</tr>
+										<!-- Revisiting State Penalty -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">Revisiting State Penalty</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">-3</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Applied if the agent re-enters a previously visited state.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Discourages oscillation or toggling between the same cells.
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								
+
+								<p></p>
+								<p>During my training, I initially ran into a significant problem: my agent was racking up high rewards without truly solving the mazes. I realized it was exploiting a classic “oscillation” loophole, moving back and forth to collect a net positive reward by gaining +6 for moving closer and only −1 for moving farther away. To fix this, I added a penalty for revisiting any cell, ensuring the agent wouldn’t profit by simply toggling positions.</p>
+					
+								<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
+									<thead>
+										<tr style="background-color: #8d8d8d; color: #333333;">
+											<th style="padding: 10px; border: 1px solid #ddd;">Attempt</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Parameters / Log Mention</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Success Rate</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">1</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">First run with a higher base penalty, small goal reward, many steps wandering.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">0.05%</td>
+										</tr>
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">2</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Adjusted parameters (some increased goal reward, smaller step penalty).</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">6.15%</td>
+										</tr>
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">3</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Another set of reward changes adjusting all rewards slightly.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">8.75%</td>
+										</tr>
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">4</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Eventually changed to a bigger goal reward to 1000 after and reduced epsilon and temperature decay from 0.999 to 0.9999.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">24.14%</td>
+										</tr>
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">5</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Bigger reward for goal reaching, increased epsilon and temperature decay (0.9995) while also increasing rewards for exploration.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">39.38%</td>
+										</tr>
+									</tbody>
+								</table>
+								<p>The agent still gets stuck after improving the success rate to 39.38% and implementing various measures to avoid this behaviour:</p>
+								<div class="video-container">
+									<video controls autoplay>
+										<source src="../videos/mazeSolver1.mp4" type="video/mp4">
+										Your browser does not support the video tag.
+									</video>
+									<br><br>
+								</div>
+								
+
+								<pre><code class="language-python">
 import os
 import json
 import numpy as np
