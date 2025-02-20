@@ -294,9 +294,8 @@
 								</table>
 								
 
-								<p></p>
-								<p>During my training, I initially ran into a significant problem: my agent was racking up high rewards without truly solving the mazes. I realized it was exploiting a classic “oscillation” loophole, moving back and forth to collect a net positive reward by gaining +6 for moving closer and only −1 for moving farther away. To fix this, I added a penalty for revisiting any cell, ensuring the agent wouldn’t profit by simply toggling positions.</p>
-					
+								<p>The following table shows my attempts at training the agent in maze solving:</p>
+								
 								<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
 									<thead>
 										<tr style="background-color: #8d8d8d; color: #333333;">
@@ -331,27 +330,6 @@
 											<td style="padding: 10px; border: 1px solid #ddd;">Bigger reward for goal reaching, increased epsilon and temperature decay (0.9995) while also increasing rewards for exploration.</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">39.38%</td>
 										</tr>
-									</tbody>
-								</table>
-								<p>The agent still gets stuck after improving the success rate to 39.38% and implementing various measures to avoid this behaviour. The reason for sticking in a loop is due to a bad reward structure which allows the agent to repeate actions that do not lead to the main goal but still incrase the total rewards collected:</p>
-								<div class="video-container">
-									<video controls autoplay>
-										<source src="../videos/mazeSolver1.mp4" type="video/mp4">
-										Your browser does not support the video tag.
-									</video>
-									<br><br>
-								</div>
-
-								<p>I continued by further tweaking and changing the rewards and learning parameteres. This part was very hard as it was not always clear why the agent acted in a specific way and how the changes of parameteres affected it:</p>
-								<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
-									<thead>
-										<tr style="background-color: #8d8d8d; color: #333333;">
-											<th style="padding: 10px; border: 1px solid #ddd;">Attempt</th>
-											<th style="padding: 10px; border: 1px solid #ddd;">Parameters / Log Mention</th>
-											<th style="padding: 10px; border: 1px solid #ddd;">Success Rate</th>
-										</tr>
-									</thead>
-									<tbody>
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">6</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">I increased the rewards for exploration further and adjusted the max step count as well as the learning parameters.</td>
@@ -369,10 +347,33 @@
 										</tr>
 									</tbody>
 								</table>
-								
-								<p>After further research, I realized the hyperparameter values I initially chose for my learning agent were excessively large, and even reducing alpha to around 0.05 has yet to substantially improve my success rate.</p>
+								<p>During my training, I initially ran into a significant problem: my agent was racking up high rewards without truly solving the mazes (see video below). I realized it was exploiting a classic “oscillation” loophole, moving back and forth to collect a net positive reward by gaining +6 for moving closer and only −1 for moving farther away. To fix this, I added a penalty for revisiting any cell, ensuring the agent wouldn’t profit by simply toggling positions.</p>
+								<div class="video-container">
+									<video controls autoplay>
+										<source src="../videos/mazeSolver1.mp4" type="video/mp4">
+										Your browser does not support the video tag.
+									</video>
+									<br><br>
+								</div>
 
-								<p>This was the final code used to build the model:</p>
+								<p>I continued by further tweaking and changing the rewards and learning parameteres. This part was very hard as it was not always clear why the agent acted in a specific way and how the changes of parameteres affected it. I decided to break the process down by starting with a very low complexity environment and constantly increasing the complexity. My first attempt was to build an agent that can simply walk from start to finish in an empty maze and then increasing the complexity of the maze over time.</p>
+								<div class="video-container">
+									<video controls autoplay>
+										<source src="../videos/mazeSolver2.mp4" type="video/mp4">
+										Your browser does not support the video tag.
+									</video>
+									<br><br>
+								</div>
+								<p>After some training with mazes and obsticle arenas I tested the agent on new maps with new obsticles and it completed them all successfully (see video below). The agent may not have used the best route but it achieved to reach the goal. Further finetuning, more learning data and training are required. I will continue to train the model with increasing difficulting using cirriculum learning.</p>
+								<div class="video-container">
+									<video controls autoplay>
+										<source src="../videos/mazeSolver3.mp4" type="video/mp4">
+										Your browser does not support the video tag.
+									</video>
+									<br><br>
+								</div>
+								
+								<p><strong>The Code:</strong></p>
 
 								<pre><code class="language-python">import os
 import os
