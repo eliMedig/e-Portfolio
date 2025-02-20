@@ -56,7 +56,7 @@
 							</ul>
 							<div class="modern-background">
 									<h2>Results</h2>
-									<p>The reinforcement learning maze solver highlights its ability to train an agent for efficient maze navigation. Despite the challenges faced, this project helped to understand the nuances of RL model training. For the result I further downsized the mazes and achieved a high accuracy on a small training and test set.</p>
+									<p>The reinforcement learning maze solver highlights its ability to train an agent for efficient maze navigation. Despite the challenges faced, this project helped to understand the nuances of RL model training. I learned that Q-Learning is a very helpful technique to help an agent solve a known problem but it becomes hard to use the same technique to solve "new" problems. For example it can easily learn how to solve complexe mazes as long as it knows the mazes and had a chance to train on them. It does not achieve well in new mazes it has never seen before. I think Q-Learning can be very helpful to detect new patters when solving an issue but not as a general agent that can be used to solve unknonw challenges.</p>
 									<div class="video-container">
 										<video controls autoplay>
 											<source src="../videos/mazeSolver.mp4" type="video/mp4">
@@ -64,29 +64,17 @@
 										</video>
 										<br><br>
 									</div>
-									<p><strong>Model Performance</strong></p>
-									<ul>
-									  <li>Developed and trained a Q-learning model capable of navigating mazes with a focus on achieving generalization.</li>
-									  <li>Achieved a training success rate of 95.31% for 9 small mazes (6x6), but scaling to larger mazes (even 8x8) introduced challenges most probably due not setting up the reward function correctly.</li>
-									  <li>The parameters used where set to alpha = 0.05 (Learning Rate), gamma = 0.99 (Discount Factor) and epsilon = 0.9 (Exploration Rate - decaying dynamically during training).</li>
-									</ul>
 								  
 									<p><strong>Key Takeaways</strong></p>
 									<ul>
-									  <li>Reward and penalty systems effectively guided the agent but required careful adjustment to avoid overfitting.</li>
+									  <li>Q-Learning can perform well in known environments but is hard to tweak for new environments.</li>
+									  <li>Reward and penalty systems effectively guided the agent but required careful adjustment.</li>
 									  <li>Dynamic exploration strategies provided a balance between discovering new paths and exploiting known optimal paths.</li>
-									  <li>The agent demonstrated some ability to generalize and solve unseen test mazes, though consistency remains a challenge.</li>
-									  <li>Scaling to larger mazes (beyond 8x8) revealed limitations in the current approach and parameter set.</li>
+									  <li>The agent demonstrated some ability to generalize and solve unseen test mazes, though consistency remains a challenge and complex mazes can not be solved.</li>
 									</ul>
 								  
-									<p><strong>Conclusion and Future Work</strong></p>
-									<p>This project demonstrates the potential of reinforcement learning for solving navigation problems, with a focus on achieving generalization over different maze sizes. While small mazes were navigated successfully, scaling up remains an open challenge. Future work will explore enhancements to address these limitations:</p>
-									<ul>
-									  <li>Further parameter fine-tuning to improve performance on larger, more complex mazes.</li>
-									  <li>Doing a deep dive into the rewwards function to increase the RL agent model.</li>
-									  <li>Integrating an intuitive GUI for better visualization and user interaction.</li>
-									  <li>Introducing alternativ to the Q-tables appraoch like Deep Reinforcement Learning (DRL).</li>
-									</ul>
+									<p><strong>Conclusion</strong></p>
+									<p>This project demonstrates the potential of reinforcement learning for solving navigation problems, with a focus on achieving generalization over different maze sizes. While small mazes and parkours were navigated successfully, scaling up remains an open challenge. I am currently thinking of heading into the direction of using Deep Q-Networks (DQN) which could be a better fit to train on random mazes to achieve a general maze solver agent.</p>
 							</div>
 						</div>
 					</div>

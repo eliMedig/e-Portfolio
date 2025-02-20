@@ -56,6 +56,7 @@
 							</ul>
 							<div class="modern-background">									
 								<h2>Testing the Maze Solver with the Trained Model</h2>
+									<p>This code tries to use the created model against mazes to see how well the agent performs. Note that the videos in part 2 show this tool which:</p>
 									<ul>
 										<li>Loads a maze from a JSON file and visualizes it (built with the maze builder but not part of the learning data for the Q-table).</li>
 										<li>Loads a pre-trained Q-table model to simulate maze solving (built with the model builder from step 2).</li>
@@ -80,18 +81,18 @@ from collections import deque
 
 CONFIG = {
 	# Reward structure parameters
-    "step_penalty": -1,
-    "goal_reward": 10000,
-    "reward_closer": 15,
-    "reward_farther": -5,
-    "wall_penalty": -10,
-    "exploration_bonus": 5,
-    "revisit_penalty": -2,
+	"step_penalty": -0.1, #was -0.1
+	"goal_reward": 1000, #was 1000
+	"reward_closer": 2, #was 2
+	"reward_farther": -1, #was -1
+	"wall_penalty": -1, #was -1
+	"exploration_bonus": 1, #was 1
+	"revisit_penalty": -1, #was -1
 
 	# Simulation parameters
-    "max_steps": 2000,
-    "max_stuck_steps": 5,
-	"step_delay": 0.01,
+	"max_steps": 1000,
+	"max_stuck_steps": 5,
+	"step_delay": 0.025,
 }
 
 # ===================================================
@@ -142,7 +143,7 @@ class MazeEnv:
 				reward += CONFIG["reward_farther"]
 
 			# Penalty for hitting a wall/out-of-bounds
-			if new_position == self.position and (nx, ny) != self.position:
+			if new_position == self.position:
 				reward += CONFIG["wall_penalty"]
 
 			# Exploration bonus for new cell; penalty if revisiting
