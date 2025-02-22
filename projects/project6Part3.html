@@ -348,6 +348,61 @@ for episode in range(NUM_EPISODES):
 torch.save(dqn.state_dict(), "spaceship_dqn.pth")
 env.close()
 								</code></pre>
+
+								<p>This code can be used to run the final model and use it to play a game:</p>
+								<pre><code class="language-python"></code>
+import torch
+import numpy as np
+import matplotlib.pyplot as plt
+import cv2
+from spaceship_env import SpaceshipDodgerEnv
+from dqn_model import DQN
+
+#load the trained model
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = DQN(input_shape=(4, 96, 96), num_actions=4).to(device)
+model.load_state_dict(torch.load("models/spaceship_dqn.pth", map_location=device))
+model.eval()
+
+env = SpaceshipDodgerEnv()
+state = env.reset()
+state = np.expand_dims(state, axis=0)
+
+done = False
+
+def visualize_attention(state, q_values):
+	attention_map = np.mean(state[0], axis=0)
+
+	plt.clf()
+	plt.imshow(attention_map, cmap="jet", alpha=0.7)  #show attention heatmap
+	plt.colorbar(label="Importance")
+	plt.title(f"Agent Focus - Chosen Action: {np.argmax(q_values.cpu().numpy())}")
+	plt.axis("off")
+	plt.pause(0.001)
+
+while not done:
+	#show the game screen
+	env.render()  
+
+	state_tensor = torch.tensor(state, dtype=torch.float32, device=device).squeeze(0).unsqueeze(0)
+
+	with torch.no_grad():
+		q_values = model(state_tensor)
+		action = torch.argmax(q_values).item()
+
+	next_state, _, done, _ = env.step(action)
+	next_state = np.expand_dims(next_state, axis=0)
+
+	#show heatmap of what the agent is focusing on
+	visualize_attention(state, q_values)
+
+	#update state
+	state = next_state  
+
+env.close()
+plt.show()
+								</code></pre>
+
 							</div>
 						</div>						
 					</div>
