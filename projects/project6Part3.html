@@ -255,6 +255,8 @@ def forward(self, x):
 
 
 								<pre><code class="language-python">
+import os
+import json
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -265,16 +267,16 @@ from dqn_model import DQN
 from replay_buffer import ReplayBuffer
 import matplotlib.pyplot as plt
 
-GAMMA = 0.97
-LR = 5e-4
-BATCH_SIZE = 128
-MEMORY_SIZE = 100000
+GAMMA = 0.98
+LR = 1e-4
+BATCH_SIZE = 64
+MEMORY_SIZE = 50000
 EPSILON_START = 1.0
-EPSILON_END = 0.01
-EPSILON_DECAY = 200000
-TARGET_UPDATE = 10000
-NUM_EPISODES = 3000
-MAX_STEPS = 10000
+EPSILON_END = 0.05
+EPSILON_DECAY = 10000
+TARGET_UPDATE = 2000
+NUM_EPISODES = 500
+MAX_STEPS = 5000
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
@@ -287,10 +289,38 @@ target_dqn.load_state_dict(dqn.state_dict())
 optimizer = optim.Adam(dqn.parameters(), lr=LR)
 replay_buffer = ReplayBuffer(MEMORY_SIZE)
 
+# Ask the user whether to start from scratch or resume from a checkpoint.
+resume_training = input("Do you want to resume training from a checkpoint? (y/n): ").strip().lower()
+if resume_training.startswith('y'):
+	model_file = input("Enter the model checkpoint filename (e.g., spaceship_dqn.pth): ").strip()
+	if os.path.isfile(model_file):
+		dqn.load_state_dict(torch.load(model_file, map_location=device))
+		print("Model checkpoint loaded successfully!")
+	else:
+		print("Model file not found. Starting training from scratch.")
+	opt_file = input("Enter the optimizer checkpoint filename (or leave blank to skip): ").strip()
+	if opt_file and os.path.isfile(opt_file):
+		optimizer.load_state_dict(torch.load(opt_file, map_location=device))
+		print("Optimizer checkpoint loaded successfully!")
+	else:
+		print("No optimizer checkpoint loaded. Continuing without it.")
+	# Optionally, load additional training state like step_count:
+	state_file = input("Enter training state filename (JSON with step_count) (or leave blank to skip): ").strip()
+	if state_file and os.path.isfile(state_file):
+		with open(state_file, "r") as f:
+			training_state = json.load(f)
+		step_count = training_state.get("step_count", 0)
+		print(f"Resuming with step_count = {step_count}")
+	else:
+		step_count = 0
+		print("No training state loaded. Starting step_count from 0.")
+else:
+	step_count = 0
+	print("Starting training from scratch.")
+
 def get_epsilon(step):
 	return EPSILON_END + (EPSILON_START - EPSILON_END) * np.exp(-1.0 * step / EPSILON_DECAY)
 
-step_count = 0
 for episode in range(NUM_EPISODES):
 	state = env.reset()
 	state = np.expand_dims(state, axis=0)
@@ -300,7 +330,7 @@ for episode in range(NUM_EPISODES):
 		step_count += 1
 		epsilon = get_epsilon(step_count)
 
-		if episode % 1 == 0:
+		if episode % 100 == 0:
 			env.render()
 		else:
 			env.render(mode="rgb_array")
@@ -345,8 +375,14 @@ for episode in range(NUM_EPISODES):
 
 	print(f"Episode {episode + 1}/{NUM_EPISODES}, Reward: {episode_reward:.2f}, Epsilon: {epsilon:.3f}")
 
+# Save checkpoints at the end of training.
 torch.save(dqn.state_dict(), "spaceship_dqn.pth")
-env.close()
+torch.save(optimizer.state_dict(), "optimizer.pth")
+# Optionally, save training state such as step_count.
+with open("train_state.json", "w") as f:
+	json.dump({"step_count": step_count}, f)
+
+env.close()									
 								</code></pre>
 
 								<p>This code can be used to run the final model and use it to play a game:</p>
