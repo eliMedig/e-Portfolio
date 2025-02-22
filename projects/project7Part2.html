@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>e-Portfolio Elias - Projects Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div class="inner">
+						<div class="button-container">
+							<a href="../index.html" class="logo home-button">
+								<span class="symbol"><img src="../images/home-icon.png" alt="" /></span><span class="title">Home</span>
+							</a>
+							<a href="../projects.html" class="logo back-button">
+								<span class="symbol"><img src="../images/back-icon.png" alt="" /></span><span class="title">Back</span>
+							</a>
+						</div>
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+					</div>
+				</header>
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<button id="darkModeToggle">Toggle Dark Mode</button>
+						<br>
+						<br>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../modulePages/inductionModule.html">Induction Module</a></li>
+						<li><a href="../modulePages/aiFundamentals.html">Understanding Artificial Intelligence</a></li>
+						<li><a href="../modulePages/numericalAnalysis.html">Numerical Analysis</a></li>
+						<li><a href="../modulePages/machineLearning.html">Machine Learning</a></li>
+						<li><a href="../modulePages/knowledgeRep.html">Knowledge Representation and Reasoning</a></li>
+						<li><a href="../modulePages/intelligentAgents.html">Intelligent Agents</a></li>
+						<li><a href="../modulePages/researchMethods.html">Research Methods and Professional Practice</a></li>
+						<li><a href="../modulePages/masterThesis.html">MSc Computing Project</a></li>
+						<li><a href="../projects.html">Projects</a></li>
+					</ul>
+				</nav>
+				<div id="main">
+					<div class="inner">
+						<h1>Project 7: AI-Powered Gaming Agent</h1>
+						<ul class="actions small">
+							<li><a href="project7Intro.html" class="button primary">Introduction</a></li>
+							<li><a href="project7Part1.html" class="button primary">Part 1</a></li>
+							<li><a href="project7Part2.html" class="button primary disabled">Part 2</a></li>
+							<li><a href="project7Part3.html" class="button primary">Part 3</a></li>
+						</ul>
+						<div class="modern-background">
+							<h2>Object detection (Proof of Concept)</h2>
+							<p><strong>Background</strong></p>
+							<p>This Proof of Concept (PoC) aims to leverage <a href="https://yolov8.com/" target="_blank">YOLOv8's</a> real-time object detection capabilities to track the player in Geometry Wars 3. <a href="https://yolov8.com/" target="_blank">YOLOv8</a> is a state-of-the-art object detection model known for its speed and accuracy, making it suitable for real-time applications such as game analytics and AI-driven assistance tools. You can train the YOLOv8 model with your own data building a specific object detection solution. This capability will be leveraged for this project. The PoC aims at:</p>
+
+							<ul>
+								<li>Detecting the player within the game screen in real-time.</li>
+								<li>Projecting the detections live in a separate screen (live feedback for evaluation).</li>
+							</ul>
+
+							<p>Note: In a first step we avoid segementation and focus on object detection. Segementation will only be implemented once this PoC was successfull.</p>
+
+							<p><strong>Step 1 - Gather Testing Data from Geometry Wars 3</strong></p>
+							<p>To train the YOLOv8 model, a dataset of in-game screenshots will be collected. The screenshots are processed according to the inputs in PART 1 which include:</p>
+							<ul>
+								<li>Taking a screenshot every x seconds.</li>
+								<li>Applying grayscaling and edge detection.</li>
+								<li>Storing the final screenshot.</li>
+							</ul>
+							<p>A total of 200 screenshots have been created for this PoC using the python script shown during PART 1.</p>
+
+							<p><strong>Step 2 - Label Testdata and export in YOLO 1.1 format</strong></p>
+							<p>Labeling has been simplified. The player object has been labeled using square boxes avoiding more complex structures. All labeling has been done with <a href="https://www.cvat.ai/" target="_blank">CVAT.ai</a>. All 200 screenshots have been labeled and stored alongside the label coordinates in the format required by YOLOv8.</p>
+
+							<span class="image main"><img src="../images/trainigDataPoc.png" alt="Training Data" /></span>
+							
+
+							<p><strong>Step 3 - Train YOLOV8 to detect the player on the screen</strong></p>
+							<p>The YOLOv8 object detection model can easily be trained by:</p>
+							<ol>
+								<li>Organizing the dataset by storing images (.png) and corresponding label (.txt) files under the obj_train_data folder, ensuring separate subfolders for training and validation data.</li>
+								<li>Executing the command <code>yolo train model=yolov8n.pt data=data.yaml epochs=50 imgsz=640</code>, where the number of epochs and image size are specified. These parameters may be adjusted in the future for the full-scale implementation beyond the proof of concept (PoC).</li>
+								<li>The model, along with training results, will be stored under the runs/detect/train directory, with the trained weights available inside the weights subfolder.</li>
+							</ol>
+
+							<p><strong>Step 4 - Validate the trained model</strong></p>
+
+							<span class="image main"><img src="../images/trainigDataPocEvaluation.png" alt="Training Data Evaluation" /></span>
+
+							<p>The evaulation shows that the model was very well trained and increasingly became better at predicting the player position correctly.</p>
+
+							<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
+								<thead>
+									<tr>
+										<th>Validation Metric</th>
+										<th>Explanation</th>
+										<th>Interpretation</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>train/box_loss</td>
+										<td>Measures how well the model predicts object bounding boxes during training.</td>
+										<td>A decreasing trend indicates improving localization accuracy.</td>
+									</tr>
+									<tr>
+										<td>train/cls_loss</td>
+										<td>Measures the model’s performance in correctly classifying detected objects during training.</td>
+										<td>A consistent downward trend suggests improved classification accuracy.</td>
+									</tr>
+									<tr>
+										<td>train/dfl_loss</td>
+										<td>Evaluates the quality of distribution predictions for object localization during training.</td>
+										<td>A steady decrease means better regression of box boundaries.</td>
+									</tr>
+									<tr>
+										<td>metrics/precision(B)</td>
+										<td>Indicates the proportion of detected objects that are actually correct (true positives).</td>
+										<td>High precision (>0.8) means fewer false positives.</td>
+									</tr>									
+									<tr>
+										<td>metrics/recall(B)</td>
+										<td>Measures how many actual objects the model detects out of all available objects.</td>
+										<td>Increasing and high recall (>0.8) means the model is capturing most objects.</td>
+									</tr>
+									<tr>
+										<td>val/box_loss</td>
+										<td>Measures how well the model predicts object bounding boxes during validation.</td>
+										<td>A decreasing trend indicates improving localization accuracy.</td>
+									</tr>
+									<tr>
+										<td>val/cls_loss</td>
+										<td>Measures the model’s performance in correctly classifying detected objects during validation.</td>
+										<td>A consistent downward trend suggests improved classification accuracy.</td>
+									</tr>
+									<tr>
+										<td>val/dfl_loss</td>
+										<td>Evaluates the quality of distribution predictions for object localization during validation.</td>
+										<td>A steady decrease means better regression of box boundaries.</td>
+									</tr>
+									<tr>
+										<td>metrics/mAP50(B)</td>
+										<td>Evaluates the model's precision and recall at an IoU* threshold of 50%.</td>
+										<td>A higher value (>0.8) indicates strong detection performance at lenient criteria.</td>
+									</tr>									
+									<tr>
+										<td>metrics/mAP50-95(B)</td>
+										<td>Measures precision and recall across a range of IoU* thresholds (from 50% to 95%).</td>
+										<td>A gradual increase shows improving model robustness across IoU levels.</td>
+									</tr>
+								</tbody>
+							</table>
+							<p>*IoU (Intersection over Union) is a metric used to evaluate the accuracy of an object detection model. It measures the overlap between the predicted bounding box and the ground truth (actual) bounding box.</p>
+
+							<p><strong>Step 5 - Using the trained model</strong></p>
+
+							<p>The results of the PoC were highly promising. The object detection model effectively and confidently identified the player throughout the gameplay, demonstrating its capability in real-time scenarios. However, to further enhance detection accuracy especially during more complex and crowded scenes, such as intense enemy encounters and gate explosions—additional training data will be beneficial. Building on the success of this PoC, the next phase will focus on developing a fully functional object detection system. This will involve expanding the model to recognize all key objects on screen and incorporating a more diverse dataset, covering a wide range of gameplay scenarios to improve robustness and overall performance.</p>
+
+							<div class="video-container">
+								<video controls autoplay>
+									<source src="../videos/resultObjectDetection.mp4" type="video/mp4">
+									Your browser does not support the video tag.
+								</video>
+								<br><br>
+							</div>
+
+						</div>
+					</div>
+				</div>	
+			</div>
+
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/darkmode.js"></script>
+
+	</body>
+</html>

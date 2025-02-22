@@ -44,164 +44,43 @@
 						<li><a href="../projects.html">Projects</a></li>
 					</ul>
 				</nav>
-				<div id="main">
-					<div class="inner">
-						<h1>Project 6: AI-Powered Gaming Agent</h1>
-						<ul class="actions small">
-							<li><a href="project6Intro.html" class="button primary disabled">Introduction</a></li>
-							<li><a href="project6Part1.html" class="button primary">Part 1</a></li>
-							<li><a href="project6Part2.html" class="button primary">Part 2</a></li>
-							<li><a href="project6Part3.html" class="button primary">Part 3</a></li>
-						</ul>
-						<div class="modern-background">
-							<h2>Introduction</h2>
-							<div>
-							<p><strong>Jump direclty to:</strong></p>
-								<a href="project6Part1.html">PART 1 - Data gathering and Feature Engineering for Training Data</a>
-								<br>
-								<a href="project6Part2.html">PART 2 - Object detection (Proof of Concept)</a>
-								<br>
-								<a href="project6Part3.html">PART 3 - Segementation (Proof of Concept)</a>
-								<br>
-								<br>
+					<div id="main">
+						<div class="inner">
+							<h1>Project 6: Reinforcement Gaming Agent</h1>
+							<ul class="actions small">
+								<li><a href="project6Intro.html" class="button primary disabled">Introduction</a></li>
+								<li><a href="project6Part1.html" class="button primary">Part 1</a></li>
+								<li><a href="project6Part2.html" class="button primary">Part 2</a></li>
+								<li><a href="project6Part3.html" class="button primary">Part 3</a></li>
+								<li><a href="project6Result.html" class="button primary">Results</a></li>
+							</ul>
+							<div class="modern-background">
+								<h2>Introduction</h2>
+								<p><strong>Background</strong></p>
+								<p>After working with Q-Tables I am now looking into other RL methods focusing in DQN. DQN leverages deep learning to approximate Q-values in high-dimensional state spaces, making it a powerful alternative when traditional Q-tables become impractical. The primary goal of this project is to design a simple, fast-paced game with an easily measurable scoring system ideal for evaluating the performance of the DQN agent.</p>
+								<p>A <a href="https://medium.com/@samina.amin/deep-q-learning-dqn-71c109586bae">Deep Q-Network</a> combines the traditional Q-learning algorithm with deep neural networks. In this setup, the neural network processes raw input data (for example, visual frames from the game) and outputs a set of Q-values corresponding to the available actions. The agent employs an epsilon-greedy strategy to balance exploration (trying new actions) and exploitation (leveraging learned strategies). Additionally, by using experience replay—where past experiences are stored and sampled randomly—the learning process is made more robust and less prone to instability. Periodically synchronizing with a target network further ensures that the Q-value approximations remain accurate over time. This approach empowers the DQN to learn effective policies even in environments with a vast or continuous state space.</p>
+
+								<p><strong>Deliverables (High-Level Scope)</strong></p>
+								<ul>
+									<li>Game Creation: Developed a lightweight game that maintains low complexity and ensures a rapid pace. This design choice facilitates quick iterations and reliable point measurements to assess the agent’s performance.</li>
+									<li>Environment Development: Built a robust game environment that acts as the interface for the DQN agent. The environment manages game state transitions, reward calculations, and enforces rules for agent interactions, all detailed in the project files.</li>
+									<li>DQN Training Module: Implemented the core learning component that trains the DQN agent. This module incorporates key techniques such as experience replay and target network updates to stabilize and enhance the learning process.</li>
+								</ul>
+								
+								<p><strong>Out of Scope</strong></p>
+								<ul>
+									<li>The project is designed as a proof-of-concept (PoC) to demonstrate the viability of DQN in a controlled setting. Advanced optimizations or fine-tuning for maximum performance are not the primary focus.</li>
+									<li>No user interface will be built. All interactions with the agent and environment are conducted directly via the console. A dedicated UI for user interaction is intentionally omitted to keep the focus on the core RL techniques.</li>
+								</ul>
+								
+								<p><strong>High-Level Design</strong></p>
+								<p>The image illustrates how a Deep Q-Network (DQN) operates. The agent receives a state from the environment, which is processed by a deep neural network. The network then outputs Q-values for possible actions, and the optimal action is selected. This action is executed in the game environment, leading to a reward based on its effectiveness. The agent uses this feedback to adjust its behavior over time, improving its decision-making through reinforcement learning.</p>
+								<span class="image main"><img src="../images/project6Image1.jpg" alt="Environment Setup" /></span>
+
 							</div>
-							<p><strong>Background</strong></p>
-							<p>This project aims to develop an artificial intelligence (AI) Agent capable of autonomously playing <a href="https://en.wikipedia.org/wiki/Geometry_Wars" target="_blank">Geometry Wars</a>. Geometry Wars is a popular arcade-style video game where players control a small spaceship within a rectangular arena. The game challenges players to navigate the arena while avoiding and triggering the destruction of enemies, which appear as geometric shapes such as triangles and circles. Points are earned by successfully eliminating these enemies, staying alive, and strategically maneuvering through the environment. Hence the name Geometry Wars.</p>
-							<p>Geometry Wars features multiple game modes, but for this project, we will focus on Pacifism Mode, which simplifies gameplay by limiting the player's controls and reducing overall complexity. In this mode, the player's spaceship can only navigate the arena without the ability to shoot. The primary objective is to strategically fly through gates, triggering their explosions to eliminate enemies and accumulate points. After destroying enemies small green geometrical forms will appear that act as multipliers for the score. The goal is to collect them alongside destroying enemies to increase the total game score. The game ends once the player touches any enemy.</p>
-
-							<div class="video-container">
-								<video controls autoplay>
-									<source src="../videos/GeometryWars.mp4" type="video/mp4">
-									Your browser does not support the video tag.
-								</video>
-								<br><br>
-							</div>
-
-							<p>To successfully navigate the game, the player must:</p>
-							<ol> 
-								<li>Recognize its position within the game environment.</li>
-								<li>Determine its position relative to other objects, such as walls and enemies.</li>
-								<li>Identify its position in relation to gates that help the player to destroy the enemies.</li>
-								<li>Determine the optimal path to pass through gates.</li>
-								<li>Understand the available movement options (game controls) and their potential effects on the game.</li>
-								<li>Move the Player figure on the game by providing control inputs via the controller.</li>
-							</ol>
-
-							<span class="image main"><img src="../images/environment_gamingSetup.png" alt="Environment Setup" /></span>
-
-							<p><strong>How an AI could play the game autonomously</strong></p>
-
-							<p>The image below provides a visual representation of how a <a href="https://www.ibm.com/think/topics/convolutional-neural-networks" target="_blank">Convolutional Neural Network (CNN)</a> can detect key game elements in Geometry Wars: Pacifism Mode. In practice, the image may undergo preprocessing to reduce complexity before being analyzed by the CNN. This could include transformations such as converting to grayscale, resizing, or applying filtering techniques to enhance relevant features while minimizing unnecessary details (more details on this later). The CNN is responsible for identifying critical objects within the game environment, including the player spaceship, enemies, gates, and borders, by drawing bounding boxes around them. These detections must then be processed and converted into meaningful spatial data that the <a href="https://en.wikipedia.org/wiki/Reinforcement_learning" target="_blank">Reinforcement Learning (RL)</a> Agent can interpret to make strategic movement decisions.</p>
-							
-							<span class="image main"><img src="../images/geometryWars_Objects.png" alt="Objects" /></span>
-							
-							<p>To be more specific the CNN's output will provide the Reinforcement Learning Agent bounding box coordinates for detected objects, which will be translated into numerical representations of their relative positions on the game screen. This transformation allows the RL Agent to understand the spatial relationships between the player and other game elements other in other words - the Agent will be able to see the game.</p>
-							<p>Once the Agent sees the the next step will be to take a decsion on what the next move should be and use the provided controller integration to send the commands to the game. Directly after the Agent input a screenshot will be taken and processed by the CNN. This second screenshot will be used to analyse the Agent's move and provide rewards based on the result.</p>
-
-							<p>This brings us to the most critical challenge for a successful implementation of the AI Agent is the design of an effective reward function. The reward function serves as the primary mechanism for guiding the Agent’s learning process by providing positive or negative feedback based on its actions. Proper reward shaping is essential to ensure the AI develops optimal strategies, balancing short-term survival with long-term objectives. Some points to concider are:</p>
-							<ol>
-								<li>Balancing Multiple Objectives: The AI must carefully balance multiple goals, such as avoiding enemies, navigating through gates, and maximizing survival time, ensuring that reward weighting does not result in excessive risk-taking or overly cautious behavior.</li>
-								<li>Sparse vs. Dense Rewards: In the fast-paced environment of Geometry Wars, the AI must receive sufficiently frequent and meaningful rewards to accelerate learning without making them too trivial or redundant.</li>
-								<li>Handling Dynamic Game Elements: The reward function must dynamically adapt to the game's ever-changing conditions without overfitting to specific patterns, allowing the AI to generalize effectively across different scenarios.</li>
-								<li>Reward Conflicts: The AI must resolve conflicting objectives, such as staying close to gates to maximize rewards while minimizing collision risks, requiring a carefully balanced reward function that promotes strategic and risk-aware decision-making.</li>
-							</ol>
-							<p>The table below shows a possible rewards map. Note that the rewards will need to be tweaked and adjusted during RL Agent training:</p>
-
-							<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
-								<thead>
-									<tr style="background-color: #8d8d8d; color: #333333;">
-										<th style="border: 1px solid #ddd; padding: 8px;">Event</th>
-										<th style="border: 1px solid #ddd; padding: 8px;">Reward Value</th>
-										<th style="border: 1px solid #ddd; padding: 8px;">Description</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td style="border: 1px solid #ddd; padding: 8px;">Passing through a gate</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">+50</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">Encourages using gates to eliminate enemies.</td>
-									</tr>
-									<tr>
-										<td style="border: 1px solid #ddd; padding: 8px;">Staying alive over time</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">+5 per second</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">Rewards survival and avoiding enemies.</td>
-									</tr>
-									<tr>
-										<td style="border: 1px solid #ddd; padding: 8px;">Moving closer to a gate</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">+10</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">Encourages positioning for successful traversal.</td>
-									</tr>
-									<tr>
-										<td style="border: 1px solid #ddd; padding: 8px;">Keeping a safe distance from enemies</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">+5</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">Encourages strategic movement and caution.</td>
-									</tr>
-							
-									<tr>
-										<td style="border: 1px solid #ddd; padding: 8px;">Collision with an enemy</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">-100</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">Harsh penalty to prevent reckless movement.</td>
-									</tr>
-									<tr>
-										<td style="border: 1px solid #ddd; padding: 8px;">Getting too close to enemies</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">-5</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">Discourages risky proximity to threats.</td>
-									</tr>
-									<tr>
-										<td style="border: 1px solid #ddd; padding: 8px;">Hitting the border wall</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">-10</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">Encourages staying within the safe area.</td>
-									</tr>
-									<tr>
-										<td style="border: 1px solid #ddd; padding: 8px;">Staying idle too long</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">-10</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">Prevents stagnant behavior, promoting activity.</td>
-									</tr>
-									<tr>
-										<td style="border: 1px solid #ddd; padding: 8px;">Collecting Multipliers</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">+1</td>
-										<td style="border: 1px solid #ddd; padding: 8px;">Promoting the collection of multipliers on the field.</td>
-									</tr>
-								</tbody>
-							</table>
-							
-
-							<p><strong>Deliverables (High-Level Scope)</strong></p>
-							<ul>
-								<li>Develop an AI system capable of playing Geometry Wars: Pacifism Mode autonomously.</li>
-								<li>Utilize a CNN for object detection, identifying key elements like enemies, walls, and gates.</li>
-								<li>Implement reinforcement learning to optimize movement strategies over time.</li>
-								<li>Establish an automated pipeline to capture, process, and analyze game states in real-time.</li>
-								<li>Implement a reward system that encourages strategic gameplay and survival.</li>
-								<li>Automate game resets upon failure and continue training over extended periods.</li>
-							</ul>
-							<p><strong>Out of Scope</strong></p>
-							<ul>
-								<li>Graphical User Interface (GUI) Development.</li>
-								<li>Shooting Mechanics and Other Game Modes.</li>
-								<li>Multi-Agent Interaction.</li>
-							</ul>
-
-							<p><strong>Activity Diagrams</strong></p>
-							<p>*Note that the Training RL Agent activity is an infinite loop which will be manually monitored, adjustd and closed.</p>
-							<span class="image main"><img src="../images/project6activity.jpg" alt="Activity Diagram" /></span>
-
-							<p><strong>High-Level Design</strong></p>
-							<p>Will be provided once the technology stack and approach are clear.</p>
-							<ul>
-								<li>Computer Vision: OpenCV, TensorFlow/PyTorch for CNN-based object detection.</li>
-								<li>Reinforcement Learning: Deep Q-Learning (DQN), experience replay, reward shaping.</li>
-								<li>Game Control: Controller emulation with pyvjoy, vgamepad or similar libraries.</li>
-								<li>Automation: Python-based environment reset and episode management.</li>
-								<li>Performance Tracking: Logging frameworks for evaluating learning progress.</li>
-							</ul>
-
-						</div>
+						</div>						
 					</div>
 				</div>
-				
-					
-			</div>
 
 			<script src="../assets/js/jquery.min.js"></script>
 			<script src="../assets/js/browser.min.js"></script>

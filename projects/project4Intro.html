@@ -44,43 +44,70 @@
 						<li><a href="../projects.html">Projects</a></li>
 					</ul>
 				</nav>
-					<div id="main">
-						<div class="inner">
-							<h1>Project 4: Reinforcement Learning Maze Solver</h1>
-							<ul class="actions small">
-								<li><a href="project4Intro.html" class="button primary disabled">Introduction</a></li>
-								<li><a href="project4Part1.html" class="button primary">Part 1</a></li>
-								<li><a href="project4Part2.html" class="button primary">Part 2</a></li>
-								<li><a href="project4Part3.html" class="button primary">Part 3</a></li>
-								<li><a href="project4Result.html" class="button primary">Results</a></li>
+				<div id="main">
+					<div class="inner">
+						<h1>Project 4: Hierarchical Clustering and SVM: Conceptual Design and Analysis</h1>
+						<ul class="actions small">
+							<li><a href="project4Intro.html" class="button primary disabled">Introduction</a></li>
+						</ul>
+						<div class="modern-background">
+							<h2>Introduction</h2>
+							<p><strong>Building and implementing the solution is currently not planned. Therefore only the background, scope, deliverables, high-level design and process parts are documented as part of this introduction page. The solution may be implemented at a later stage.</strong>.</p>
+							<p><strong>Background</strong></p>
+							<p>The goal is to build a solution that implements a combintation of Hierarchical Clustering (unsupervised learning) and Support Vector Machines SVM (supervised learning).</p>
+							<p>Hierarchical clustering is an unsupervised learning technique used to group data points based on their similarity. This algorithm builds a hierarchy of clusters by either merging smaller clusters (agglomerative approach) or splitting larger clusters (divisive approach). The resulting clusters are visualized as a dendrogram, where each branch represents a cluster. The method is widely used in exploratory data analysis to reveal natural groupings in the data without requiring predefined cluster numbers. On this picture you can see how hierrarchical clustering clusters the elements A-F in a dendogram (right image):</p>
+							
+							<span class="image main"><img src="../images/project5Background1.png" alt="Hierarchical Clustering" /></span>
+							<p>Support Vector Machines (SVMs) on the other hand are supervised learning models used for classification and regression tasks.</p>
+							<ol>
+								<li>Separating Hyperplane: The hyperplane is the decision boundary that separates the data points into different classes (e.g., "+" and "-"). The objective of the SVM is to find the hyperplane that best divides the classes while maximizing the margin.</li>
+								<li>Margin: The margin is the distance between the separating hyperplane and the closest data points from each class. The larger the margin, the better the generalization of the model.</li>
+								<li>Support Vectors: These are the data points that lie closest to the separating hyperplane. They are critical in defining the hyperplane and margin, as the SVM uses only these points to determine the optimal decision boundary.</li>
+							</ol>
+							<p>This image illustrates the key concepts of SVM in a classification scenario:</p>
+							<span class="image main"><img src="../images/project5Background2.jpg" alt="Hierarchical Clustering" /></span>
+							<p><strong>Scope</strong></p>
+							<p>Building a hybrid machine learning application combining unsupervised and supervised learning techniques to achieve an enhanced classification solution. Hierarchical clustering (unsupervised learning) will be used in the first step to identify natural groupings within the learning data, and the resulting cluster labels will be used as additional features for a supervised SVM classifier that predicts the final classes. The primary objective is to design a solution that integrates both supervised and unsupervised machine learning techniques to achieve its goals.</p>
+							<p><strong>Deliverables (High-Level Scope)</strong></p>
+							<ul>
+								<li>A clustering machine learning module that performs hierarchical clustering.</li>
+								<li>Automated augmentation of the existing dataset by incorporating cluster labels as a feature for classification.</li>
+								<li>An SVM model that uses the augmented dataset to classify based on the original features and the cluster result.</li>
+								<li>Evaluation of the pipeline's effectiveness using classification metrics and cluster validation metrics.</li>
 							</ul>
-							<div class="modern-background">
-								<h2>Introduction</h2>
-								<p><strong>Background</strong></p>
-								<p>Reinforcement Learning (RL) is a powerful machine learning paradigm that enables agents to learn optimal behaviors through interactions with their environment. This project focuses on applying RL principles to solve mazes, a classic problem in AI research. The maze-solving agent navigates through various maze structures, learning strategies to reach a defined goal state from a starting point while avoiding obstacles. The underlying methodology leverages Q-Learning, a model-free RL algorithm, to iteratively improve the agent's decision-making capabilities. By rewarding progress towards the goal and penalizing inefficient or incorrect moves, the system adapts to complex scenarios and achieves efficient navigation. This approach showcases the potential of RL in solving structured problems and demonstrates its scalability to diverse challenges.</p>
-								<span class="image main"><img src="../images/project5Background4.jpg" alt="RL Learning Image" /></span>
-								<p><strong>Scope</strong></p>
-								<p>This project aims at building a reinforcement learning application where an agent learns to navigate through mazes. The system will be designed to generalize maze solving across various maze sizes and complexities. The project emphasizes building, training, and testing an AI-based maze solver using Python.</p>
-								<p>Note: This project aims to showcase the potential of reinforcement learning in problem-solving while creating a generalized tool for maze navigation it will not include a graphical user interface (GUI).</p>
-								<p><strong>Deliverables (High-Level Scope)</strong></p>
-								<ul>
-									<li>The Maze Builder which allows users to create customizable mazes with adjustable parameters such as size and complexity.</li>
-									<li>The Maze Solver Model Builder which is a reinforcement learning layer that trains a model to solve mazes by learning optimal navigation strategies getting rewarded for solving the maze.</li>
-									<li>The Maze Solver which is the agent that and includes a visualization tool to demonstrate how the it solves new mazes using the trained model.</li>
-								</ul>
-								<p>The solution will be built using Python. <a href="https://www.simplilearn.com/tutorials/machine-learning-tutorial/what-is-q-learning#:~:text=A%20Q%2Dtable%20is%20a,following%20the%20optimal%20policy%20afterward." target="_blank">Q-Tables</a>. A Q-table is a fundamental component in reinforcement learning, specifically in Q-learning, a model-free reinforcement learning algorithm. Further <a href="https://matplotlib.org/" target="_blank">Matplotlib</a>. All mazes will be built using <a href="https://pypi.org/project/mazelib/" target="_blank">mazelib</a> library which offers maze creation capabilities.</p>
-								<p><strong>Out of Scope</strong></p>
-								<ul>
-									<li>Creating a GUI for the maze builder or solver (initially CLI-based).</li>
-									<li>Advanced features like multi-agent training or 3D environments.</li>
-									<li>Manual user intervention during the agent’s training process.</li>
-								</ul>
-								<p><strong>High-Level Design</strong></p>
-								<span class="image main"><img src="../images/project4Hld.jpg" alt="HLD" /></span>
-							</div>
-						</div>						
+							<p><strong>Out of Scope</strong></p>
+							<ul>
+								<li>Real-time predictions or deployment of the solution (focus is on model training and evaluation).</li>
+								<li>Advanced clustering methods like DBSCAN or Gaussian Mixture Models (limited to hierarchical clustering).</li>
+								<li>Sophisticated feature engineering beyond the integration of cluster labels.</li>
+								<li>Advanced error handling beyond basic input data validation checks.</li>
+							</ul>
+							<p><strong>High-Level Design</strong></p>
+							<span class="image main"><img src="../images/project5Hld.jpg" alt="HLD" /></span>
+							<ol>
+								<p>Process for setting up the environment:</p>
+								<li>The <strong>(1) Data Store</strong> is responsible for storing the datasets. Initially, it requires a clean clustering learning dataset as well as a clean SVM learning dataset with classes.</li>
+								<li>The <strong>(2) Clustering Model Builder</strong> is the layer responsible for building the hierarchical clustering model (unsupervised learning) based on the clean clustering learning dataset.</li>
+								<li>The <strong>(4) ML Model</strong> is stored together with all relevant parameters for its usage.</li>
+								<li>The <strong>(5) Clustering Model Use</strong> layer is responsible for running the clustering algorithm on the clean SVM learning dataset (class is removed for this step). It will send the cluster predictions to the Dataset Augmentation.</li>
+								<li>The <strong>(7) Dataset Augmentation</strong> is responsible for creating the augmented dataset required to train the SVM algorithm.</li>
+								<li>The <strong>(1) Data Store</strong> is used to store the augmented dataset.</li>
+								<li>The <strong>(3) SVM Model Builder</strong> layer is responsible for building the SVM model based on the augmented dataset.</li>
+								<li>The <strong>(4) ML Model</strong> is stored together with all relevant parameters for its usage.</li>
+								<br><br>
+								<p>Process for usage of the Environment:</p>
+								<li>The <strong>(1) Data Store</strong> requires a clean prediction dataset without classes.</li>
+								<li>The <strong>(5) Clustering Model Use</strong> is used to create clustering predictions based on the clean prediction dataset without classes.</li>
+								<li>The <strong>(7) Dataset Augmentation</strong> is responsible for creating the augmented dataset required to run the SVM model prediction.</li>
+								<li>The <strong>(6) SVM Model Use</strong> layer is responsible for running the final SVM predictions against the augmented dataset including the clustering result. It will provide the final predictions.</li>
+							</ol>
+
+						</div>
 					</div>
 				</div>
+				
+					
+			</div>
 
 			<script src="../assets/js/jquery.min.js"></script>
 			<script src="../assets/js/browser.min.js"></script>
