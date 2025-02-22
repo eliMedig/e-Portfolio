@@ -49,14 +49,65 @@
 							<h1>Project 6: Reinforcement Gaming Agent</h1>
 							<ul class="actions small">
 								<li><a href="project6Intro.html" class="button primary">Introduction</a></li>
-								<li><a href="project6Part1.html" class="button primary disabled">Part 1</a></li>
+								<li><a href="project6Part1.html" class="button primary">Part 1</a></li>
 								<li><a href="project6Part2.html" class="button primary">Part 2</a></li>
 								<li><a href="project6Part3.html" class="button primary">Part 3</a></li>
-								<li><a href="project6Result.html" class="button primary">Results</a></li>
+								<li><a href="project6Result.html" class="button primary disabled">Results</a></li>
 							</ul>
 							<div class="modern-background">
 								<h2>Results</h2>
-								<p>Text</p>
+								<p>I began training the Reinforcement Learning (RL) agent using well-established best-practice parameters as a foundation. From there, I continuously refined the model by adjusting, experimenting, and fine-tuning key hyperparameters to enhance performance. This results section showcases key insights from the training process, along with videos demonstrating the agent's learning progress and evolving strategies.</p>
+								
+								<p>The initial agent exhibited fascinating behavior right from the start. In my first attempt at setting up the environment, I overlooked properly defining the game boundaries, which led to the following unexpected outcome:</p>
+								<div class="video-container">
+									<video controls autoplay>
+										<source src="../videos/DqnGameResult1.mp4" type="video/mp4">
+										Your browser does not support the video tag.
+									</video>
+									<br><br>
+								</div>
+
+								<p>After correcting the underlying issue and retraining the agent, I observed another interesting pattern. Rather than navigating dynamically, the agent still moveed towards the boundaries and remained there:</p>
+
+								<div class="video-container">
+									<video controls autoplay>
+										<source src="../videos/DqnGameResult2.mp4" type="video/mp4">
+										Your browser does not support the video tag.
+									</video>
+									<br><br>
+								</div>
+
+								<p>I continued training the agent, making iterative improvements along the way. I adjusted the reward structure, introduced new incentives, fine-tuned hyperparameters, and extended the training duration by increasing the number of episodes.</p>
+								<p>The following video showcases a trained agent playing the game, with an overlaid heatmap representing its focus areas. This visualization provides insight into how the agent perceives its environment. While the agent clearly reacts to enemies, its behavior is still not optimal. Instead of avoiding them strategically, it appears to move directly into their trajectory.</p>
+
+								<div class="video-container">
+									<video controls autoplay>
+										<source src="../videos/DqnGameResult3.mp4" type="video/mp4">
+										Your browser does not support the video tag.
+									</video>
+									<br><br>
+								</div>
+
+								<p>I decided to continue training the agent:</p>
+
+								<div class="video-container">
+									<video controls autoplay>
+										<source src="../videos/DqnGameResult4.mp4" type="video/mp4">
+										Your browser does not support the video tag.
+									</video>
+									<br><br>
+								</div>
+
+								<p>The following video shows the final agent which showcases a better understanding of its environment by avoiding enemies more efficiently:</p>
+
+								<div class="video-container">
+									<video controls autoplay>
+										<source src="../videos/DqnGameResult5.mp4" type="video/mp4">
+										Your browser does not support the video tag.
+									</video>
+									<br><br>
+								</div>
+
 							</div>
 						</div>						
 					</div>

@@ -56,10 +56,297 @@
 							</ul>
 							<div class="modern-background">
 								<h2>DQN Model</h2>
-								<p>Text</p>
+								<p>Now that we have successfully built the Spaceship Dodger game and a custom Gym environment, we can move to the next critical step: training the AI agent using a Deep Q-Network (DQN).</p>
 								
+								<p>Since training an RL agent is unstable when learning from sequential data, we use a Replay Buffer to store past experiences and sample them randomly for training. This helps break correlations and improves learning stability.</p>
 								<pre><code class="language-python">
-CODE
+import random
+import numpy as np
+import torch
+
+class ReplayBuffer:
+	def __init__(self, capacity):
+		self.capacity = capacity
+		self.buffer = []
+		self.position = 0
+
+	def push(self, state, action, reward, next_state, done):
+		if len(self.buffer) < self.capacity:
+			self.buffer.append(None)
+
+		self.buffer[self.position] = (state, action, reward, next_state, done)
+		self.position = (self.position + 1) % self.capacity
+
+	def sample(self, batch_size):
+		batch = random.sample(self.buffer, batch_size)
+		states, actions, rewards, next_states, dones = zip(*batch)
+		
+		return (
+			torch.tensor(np.array(states), dtype=torch.float32).squeeze(1),
+			torch.tensor(actions, dtype=torch.int64),
+			torch.tensor(rewards, dtype=torch.float32),
+			torch.tensor(np.array(next_states), dtype=torch.float32).squeeze(1),
+			torch.tensor(dones, dtype=torch.bool)
+		)
+
+	def __len__(self):
+		return len(self.buffer)
+								</code></pre>
+
+								<p>Now, we define the neural network that predicts Q-values for each possible action. The architecture includes 3 convolutional layers, 2 fully connected layers and ReLU activation function:</p>
+								<span class="image main"><img src="../images/project6Image2.jpg" alt="Environment Setup" /></span>
+
+								<pre><code class="language-python">
+class DQN(nn.Module):
+def __init__(self, input_shape, num_actions):
+	super(DQN, self).__init__()
+
+	self.conv = nn.Sequential(
+		nn.Conv2d(input_shape[0], 32, kernel_size=3, stride=2),
+		nn.ReLU(),
+		nn.Conv2d(32, 64, kernel_size=3, stride=2),
+		nn.ReLU(),
+		nn.Conv2d(64, 64, kernel_size=3, stride=2),
+		nn.ReLU(),
+	)
+
+	conv_out_size = self._get_conv_out(input_shape)
+
+	self.fc = nn.Sequential(
+		nn.Linear(conv_out_size, 512),
+		nn.ReLU(),
+		nn.Linear(512, num_actions)
+	)
+
+def _get_conv_out(self, shape):
+	with torch.no_grad():
+		return self.conv(torch.zeros(1, *shape)).view(1, -1).size(1)
+
+def forward(self, x):
+	x = x.float() / 255.0  # Normalize pixel values
+	conv_out = self.conv(x).view(x.size()[0], -1)
+	return self.fc(conv_out)
+								</code></pre>
+
+								<p>Now we bring everything together in train_dqn.py. Note that this file also includes the parameters for the model training.</p>
+								<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
+									<thead>
+										<tr style="background-color: #8d8d8d; color: #333333;">
+											<th style="padding: 10px; border: 1px solid #ddd;">Parameter</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Value</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Description</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">How it works</th>
+										</tr>
+									</thead>
+									<tbody>
+										<!-- GAMMA -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">GAMMA</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">0.97</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Discount factor for future rewards.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												A higher value prioritizes long-term rewards, making the agent consider future outcomes.
+											</td>
+										</tr>
+										<!-- Learning Rate -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">LR (Learning Rate)</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">5e-4</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Step size for updating the DQN’s weights.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Controls how quickly the model adapts to new information. A small value ensures stable learning.
+											</td>
+										</tr>
+										<!-- BATCH_SIZE -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">BATCH_SIZE</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">128</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Number of experiences sampled from the Replay Buffer per training step.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Larger batches improve stability, but too large can slow learning and increase memory usage.
+											</td>
+										</tr>
+										<!-- MEMORY_SIZE -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">MEMORY_SIZE</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">100000</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Maximum capacity of the Replay Buffer.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Stores past experiences so the agent can learn from old events instead of only recent ones.
+											</td>
+										</tr>
+										<!-- EPSILON_START -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">EPSILON_START</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">1.0</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Initial exploration rate for an epsilon-greedy policy.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												The agent starts by taking completely random actions to explore the environment.
+											</td>
+										</tr>
+										<!-- EPSILON_END -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">EPSILON_END</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">0.01</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Minimum exploration rate after decay.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												The agent still explores occasionally, even in later stages of training.
+											</td>
+										</tr>
+										<!-- EPSILON_DECAY -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">EPSILON_DECAY</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">200000</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Rate at which epsilon decreases per step.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Controls how quickly the agent shifts from exploring to exploiting known strategies.
+											</td>
+										</tr>
+										<!-- TARGET_UPDATE -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">TARGET_UPDATE</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">10000</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Number of steps before updating the target network.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Helps stabilize training by preventing frequent updates to the target network.
+											</td>
+										</tr>
+										<!-- NUM_EPISODES -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">NUM_EPISODES</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">3000</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Total number of training episodes.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												More episodes give the agent time to learn better strategies.
+											</td>
+										</tr>
+										<!-- MAX_STEPS -->
+										<tr>
+											<td style="padding: 10px; border: 1px solid #ddd;">MAX_STEPS</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">10000</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Maximum steps allowed per episode.
+											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">
+												Prevents episodes from running indefinitely, ensuring training efficiency.
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								
+
+
+								<pre><code class="language-python">
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+import random
+from spaceship_env import SpaceshipDodgerEnv
+from dqn_model import DQN
+from replay_buffer import ReplayBuffer
+import matplotlib.pyplot as plt
+
+GAMMA = 0.97
+LR = 5e-4
+BATCH_SIZE = 128
+MEMORY_SIZE = 100000
+EPSILON_START = 1.0
+EPSILON_END = 0.01
+EPSILON_DECAY = 200000
+TARGET_UPDATE = 10000
+NUM_EPISODES = 3000
+MAX_STEPS = 10000
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {device}")
+
+env = SpaceshipDodgerEnv()
+dqn = DQN(input_shape=(4, 96, 96), num_actions=4).to(device)
+target_dqn = DQN(input_shape=(4, 96, 96), num_actions=4).to(device)
+target_dqn.load_state_dict(dqn.state_dict())
+
+optimizer = optim.Adam(dqn.parameters(), lr=LR)
+replay_buffer = ReplayBuffer(MEMORY_SIZE)
+
+def get_epsilon(step):
+	return EPSILON_END + (EPSILON_START - EPSILON_END) * np.exp(-1.0 * step / EPSILON_DECAY)
+
+step_count = 0
+for episode in range(NUM_EPISODES):
+	state = env.reset()
+	state = np.expand_dims(state, axis=0)
+	episode_reward = 0
+
+	for t in range(MAX_STEPS):
+		step_count += 1
+		epsilon = get_epsilon(step_count)
+
+		if episode % 1 == 0:
+			env.render()
+		else:
+			env.render(mode="rgb_array")
+
+		if random.random() < epsilon:
+			action = env.action_space.sample()
+		else:
+			with torch.no_grad():
+				state_tensor = torch.tensor(state, dtype=torch.float32, device=device)
+				q_values = dqn(state_tensor)
+				action = torch.argmax(q_values).item()
+
+		next_state, reward, done, _ = env.step(action)
+		next_state = np.expand_dims(next_state, axis=0)
+		episode_reward += reward
+
+		replay_buffer.push(state, action, reward, next_state, done)
+		state = next_state
+
+		if len(replay_buffer) > BATCH_SIZE:
+			states, actions, rewards, next_states, dones = replay_buffer.sample(BATCH_SIZE)
+			states = states.to(device)
+			actions = actions.to(device).unsqueeze(1)
+			rewards = rewards.to(device)
+			next_states = next_states.to(device)
+			dones = dones.to(device)
+
+			current_q_values = dqn(states).gather(1, actions).squeeze(1)
+			next_q_values = target_dqn(next_states).max(1)[0]
+			target_q_values = rewards + (1 - dones.float()) * GAMMA * next_q_values
+
+			loss = nn.MSELoss()(current_q_values, target_q_values)
+			optimizer.zero_grad()
+			loss.backward()
+			optimizer.step()
+
+		if step_count % TARGET_UPDATE == 0:
+			target_dqn.load_state_dict(dqn.state_dict())
+
+		if done:
+			break
+
+	print(f"Episode {episode + 1}/{NUM_EPISODES}, Reward: {episode_reward:.2f}, Epsilon: {epsilon:.3f}")
+
+torch.save(dqn.state_dict(), "spaceship_dqn.pth")
+env.close()
 								</code></pre>
 							</div>
 						</div>						
