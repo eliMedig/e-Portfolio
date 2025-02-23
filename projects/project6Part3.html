@@ -134,125 +134,73 @@ def forward(self, x):
 										<tr style="background-color: #8d8d8d; color: #333333;">
 											<th style="padding: 10px; border: 1px solid #ddd;">Parameter</th>
 											<th style="padding: 10px; border: 1px solid #ddd;">Value</th>
-											<th style="padding: 10px; border: 1px solid #ddd;">Description</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Explanation</th>
 											<th style="padding: 10px; border: 1px solid #ddd;">How it works</th>
 										</tr>
 									</thead>
 									<tbody>
-										<!-- GAMMA -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">GAMMA</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">0.97</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Discount factor for future rewards.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												A higher value prioritizes long-term rewards, making the agent consider future outcomes.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Gamma controls how much the agent cares about future rewards. In the Q-learning update, the future reward is multiplied by gamma. So a reward received one step ahead is valued at 0.97 times its actual value, two steps ahead at 0.97², and so on.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">If you expect a reward of 100 in one step, its discounted value becomes 100 × 0.97 = 97. In two steps, it would be 100 × 0.97² ≈ 94.09.</td>
 										</tr>
-										<!-- Learning Rate -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">LR (Learning Rate)</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">5e-4</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Step size for updating the DQN’s weights.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Controls how quickly the model adapts to new information. A small value ensures stable learning.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">The learning rate determines how quickly the neural network updates its weights during training. A small learning rate, like 0.0005, makes sure that updates are gradual, leading to stable learning.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">When the network computes the gradient to update weights, each update is scaled by 0.0005. If the gradient suggests a change of 1 unit, the actual change applied is just 0.0005 units.</td>
 										</tr>
-										<!-- BATCH_SIZE -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">BATCH_SIZE</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">128</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Number of experiences sampled from the Replay Buffer per training step.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Larger batches improve stability, but too large can slow learning and increase memory usage.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Batch size is the number of experiences sampled from the replay buffer to update the network in one go. Using 128 samples helps smooth out the learning by providing a robust estimate of the gradient.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Instead of updating your strategy based on one single experience (which can be noisy), you blend 128 experiences together, much like making a smoothie for a richer taste.</td>
 										</tr>
-										<!-- MEMORY_SIZE -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">MEMORY_SIZE</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">100000</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Maximum capacity of the Replay Buffer.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Stores past experiences so the agent can learn from old events instead of only recent ones.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">This is the maximum number of past experiences that the agent can store. The replay buffer allows the agent to learn from a wide variety of experiences, not just the most recent ones.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">With a memory size of 100,000, the agent has a huge “memory bank” to pull from, which can be crucial for learning diverse strategies.</td>
 										</tr>
-										<!-- EPSILON_START -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">EPSILON_START</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">1.0</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Initial exploration rate for an epsilon-greedy policy.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												The agent starts by taking completely random actions to explore the environment.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Epsilon determines how often the agent takes a random action (exploration) versus relying on its learned policy (exploitation).</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Starting at 1.0 means the agent is initially exploring entirely at random, while 0.01 means it rarely takes random actions later on.</td>
 										</tr>
-										<!-- EPSILON_END -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">EPSILON_END</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">0.01</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Minimum exploration rate after decay.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												The agent still explores occasionally, even in later stages of training.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Minimum exploration rate after decay.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">With an epsilon rate of 0.01 the agent still explores occasionally, even in later stages of training. The higher the number, the more consistant exploration at a later stage.</td>
 										</tr>
-										<!-- EPSILON_DECAY -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">EPSILON_DECAY</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">200000</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Rate at which epsilon decreases per step.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Controls how quickly the agent shifts from exploring to exploiting known strategies.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">This value indicates the number of steps over which the epsilon value decays from its start value (1.0) to its end value (0.01).</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">It will take 200000 steps to go from the initial value 1.0 to the end value 0.01.</td>
 										</tr>
-										<!-- TARGET_UPDATE -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">TARGET_UPDATE</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">10000</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Number of steps before updating the target network.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Helps stabilize training by preventing frequent updates to the target network.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">In Deep Q-Networks (DQN), there is a target network used to stabilize training. The target network’s weights are updated with the current network’s weights only every 10,000 steps.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Think of it like syncing your phone with your computer every once in a while rather than constantly—this periodic update helps ensure stability in what the agent is learning.</td>
 										</tr>
-										<!-- NUM_EPISODES -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">NUM_EPISODES</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">3000</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Total number of training episodes.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												More episodes give the agent time to learn better strategies.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Total number of training episodes that the agent runs through during training.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">The agent will go through 3000 game sessions if episodes are set to 3000.</td>
 										</tr>
-										<!-- MAX_STEPS -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">MAX_STEPS</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">10000</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Maximum steps allowed per episode.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Prevents episodes from running indefinitely, ensuring training efficiency.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Maximum steps allowed per episode. Prevents episodes from running indefinitely, ensuring training efficiency.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Each of the episodes defined is limited by 10'000 steps that the agent can take. Once reached the episode will end.</td>
 										</tr>
 									</tbody>
 								</table>
-								
-
 
 								<pre><code class="language-python">
 import os
