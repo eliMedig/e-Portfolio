@@ -76,126 +76,71 @@
 										</tr>
 									</thead>
 									<tbody>
-										<!-- EPISODES -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">EPISODES</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">1'000-2'000 per maze in the test data set</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Number of training episodes to run the agent.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Larger values typically allow more exploration and learning.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Number of training episodes to run the agent.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Larger values typically allow more exploration and learning.</td>
 										</tr>
-										<!-- ALPHA -->
 										<tr>
-											<td style="padding: 10px; border: 1px solid #ddd;">ALPHA</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">ALPHA (Learning Rate or LR)</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">0.0125</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Learning rate: controls how quickly the agent updates its Q-values.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Higher values can speed up learning but risk overshooting.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">The learning rate determines how quickly the neural network updates its weights during training. A small learning rate, like 0.0005, makes sure that updates are gradual, leading to stable learning.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Higher values can speed up learning but risk overshooting.</td>
 										</tr>
-										<!-- GAMMA -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">GAMMA</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">0.99</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Discount factor: determines how the agent values future rewards over immediate ones.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Closer to 1.0 means the agent heavily favors long-term gains.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Gamma controls how much the agent cares about future rewards. In the Q-learning update, the future reward is multiplied by gamma. So a reward received one step ahead is valued at 0.99 times its actual value, two steps ahead at 0.97², and so on.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Closer to 1.0 means the agent heavily favors long-term gains.</td>
 										</tr>
-										<!-- EPSILON_START -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">EPSILON_START</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">1.0</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Starting exploration rate for an epsilon-greedy policy.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Initially explores fully (random actions).
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Epsilon determines how often the agent takes a random action (exploration) versus relying on its learned policy (exploitation).</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Initially explores fully (random actions).</td>
 										</tr>
-										<!-- EPSILON_END -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">EPSILON_END</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">0.15</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Minimum exploration rate after decay.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Agent still explores occasionally even at low epsilon.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Minimum exploration rate after decay.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Agent still explores occasionally even at low epsilon.</td>
 										</tr>
-										<!-- EPSILON_DECAY -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">EPSILON_DECAY</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">0.9998</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Rate at which epsilon decreases each episode.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Slowly reduces exploration over time.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Rate at which epsilon decreases each episode.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Slowly reduces exploration over time.</td>
 										</tr>
-										<!-- TEMPERATURE_START -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">TEMPERATURE_START</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">1.0</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Initial temperature for softmax action selection (if used).
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Higher temperature means more random exploration initially.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Initial temperature for softmax action selection (if used). Temperature shapes the “smoothness” of the action probabilities when you’re following a softmax strategy.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Higher temperature means more random exploration initially.</td>
 										</tr>
-										<!-- TEMPERATURE_END -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">TEMPERATURE_END</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">0.15</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Final temperature after decay.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Encourages more deterministic choices later in training.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Final temperature after decay.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Encourages more deterministic choices later in training.</td>
 										</tr>
-										<!-- TEMPERATURE_DECAY -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">TEMPERATURE_DECAY</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">0.9998</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Rate at which the temperature decreases each episode.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Gradually shifts behavior from exploratory to exploitative.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Rate at which the temperature decreases each episode.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Gradually shifts behavior from exploratory to exploitative.</td>
 										</tr>
-										<!-- MAX_STEPS -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">MAX_STEPS</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">1'000</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Maximum steps allowed in a single episode.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Prevents episodes from running indefinitely.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Maximum steps the agent is allowed to take in a single episode.</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Prevents episodes from running indefinitely.</td>
 										</tr>
-										<!-- MAX_STUCK_STEPS -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">MAX_STUCK_STEPS</td>
 											<td style="padding: 10px; border: 1px solid #ddd;">20</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Maximum consecutive steps with no movement.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Helps the agent avoid getting stuck in loops or dead ends.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Maximum consecutive steps with no movement the agent can take (being stuck).</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Helps the agent avoid getting stuck in loops or dead ends.</td>
 										</tr>
 									</tbody>
 								</table>
