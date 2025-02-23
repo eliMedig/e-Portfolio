@@ -67,7 +67,7 @@
 									<br><br>
 								</div>
 
-								<p>After correcting the underlying issue and retraining the agent, I observed another interesting pattern. Rather than navigating dynamically, the agent still moveed towards the boundaries and remained there:</p>
+								<p>After correcting the underlying issue and retraining the agent, I observed another interesting pattern. Rather than navigating dynamically, the agent still moveed towards the boundaries and remained there and this was after a new training session:</p>
 
 								<div class="video-container">
 									<video controls autoplay>
@@ -77,7 +77,7 @@
 									<br><br>
 								</div>
 
-								<p>I continued training the agent, making iterative improvements along the way. I adjusted the reward structure, introduced new incentives, fine-tuned hyperparameters, and extended the training duration by increasing the number of episodes.</p>
+								<p>I continued training the agent, introducing various changes to the code along the way. I adjusted the reward structure, introduced new incentives (for example a penalty for staying at the wall), fine-tuned hyperparameters, and extended the training duration by increasing the number of episodes.</p>
 								<p>The following video showcases a trained agent playing the game, with an overlaid heatmap representing its focus areas (trained over 3000 episodes). This visualization provides insight into how the agent perceives its environment. While the agent clearly reacts to enemies, its behavior is still not optimal. Instead of avoiding them strategically, it appears to move directly into their trajectory.</p>
 
 								<div class="video-container">
@@ -88,7 +88,7 @@
 									<br><br>
 								</div>
 
-								<p>I decided to continue training the agent:</p>
+								<p>I decided to continue training and evaluating the agent and recorded some of the training sessions:</p>
 
 								<div class="video-container">
 									<video controls autoplay>
@@ -98,7 +98,7 @@
 									<br><br>
 								</div>
 
-								<p>The next agent showcased a better understanding of its environment which can be seen by how he avoiding enemies more efficiently but the agent still struggled with situations where the enemies were to fast and where it therefore did not have enough reaction time. It is important to mention that this was achieved with only 100 episodes. Further training may increase the accuracy of the agent:</p>
+								<p>After a lot of fine-tuning and trial and error the agent showcased a better understanding of its environment which can be seen by how he avoiding enemies more efficiently but the agent still struggled with situations where the enemies were to fast and where it therefore did not have enough reaction time. It is important to mention that this was achieved with only 100 episodes. Further training may increase the accuracy of the agent:</p>
 
 								<div class="video-container">
 									<video controls autoplay>
@@ -108,7 +108,7 @@
 									<br><br>
 								</div>
 
-								<p>After training the agent for 100 episodes, I adjusted the reward structure to emphasize avoiding enemies. I then continued training for an additional 500 episodes with the modified rewards:</p>
+								<p>After training the agent for 100 episodes, I adjusted the reward structure to put more emphasis on avoiding enemies. I then continued training the same agent for an additional 500 episodes with these modified rewards. It’s important to note that changing the reward structure during training carries some risks. The agent relies on these rewards to navigate the environment, such modifications might introduce unexpected challenges.</p>
 
 								<div class="video-container">
 									<video controls autoplay>
@@ -126,6 +126,8 @@
 									</video>
 									<br><br>
 								</div>
+
+								<p>The agent was far from perfect but the PoC showcased how DQN can be used to train an agent in a dynamic environment. It also showed how important a meaningful rewarads structure is and how the rewards affect the agent's behavior.</p>
 
 								<p><strong>Conclusion</strong></p>
 								<p>Building a Reinforcement Learning (RL) agent requires a deep understanding of the training process, particularly the reward function, input representation, and tuning of training parameters. The complexity arises from the interdependence of various variables, making trial and error a crucial part of optimizing the agent's performance. Increasing the number of training episodes significantly prolonged training sessions, with each run taking approximately 2-3 hours, making further refinements more challenging.</p>

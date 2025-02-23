@@ -55,22 +55,12 @@
 							</ul>
 							<div class="modern-background">									
 								<h2>Backend</h2>
-									<ul>
-										<li>
-											The backend, built using OpenCV and the YOLOv8 model from the <a href="https://docs.ultralytics.com/models/yolov8/" target="_blank">Ultralytics library</a>, performs the following tasks:
-											<ol>
-												<li>Receive Video Frames: Accepts raw video frames from the frontend.</li>
-												<li>Process Frames:
-													<ul>
-														<li>If object detection is enabled, frames are passed through YOLOv8 for detection. Objects are identified, and bounding boxes are drawn around them.</li>
-														<li>If object detection is disabled, frames are returned unprocessed.</li>
-													</ul>
-												</li>
-												<li>Send Processed Frames: Returns processed frames (with or without annotations) back to the frontend.</li>
-											</ol>
-										</li>
-										<li>The backend ensures efficient frame processing and skips unnecessary computations when object detection is turned off.</li>
-									</ul>
+								<p>The backend, built using OpenCV and the YOLOv8 model from the <a href="https://docs.ultralytics.com/models/yolov8/" target="_blank">Ultralytics library</a>, performs the following tasks:</p>
+								<ul>
+									<li>Accepts raw video frames from the frontend.</li>
+									<li>If object detection is enabled, backend processes the frames with YOLOv8 and draws bounding boxes are drawn detected objects.</li>
+									<li>Returns processed frames (with or without annotations) back to the frontend.</li>
+								</ul>
 
 									<pre><code class="language-python">
 import cv2

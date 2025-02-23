@@ -302,7 +302,7 @@
 								</table>
 								
 
-								<p>The following table shows my attempts at training the agent in maze solving:</p>
+								<p>The following table shows my attempts at training the agent in maze solving. Note that the Q-Tables approach chosen is mainly used to teach an agent how to solve a particular problem and not generalizing a problem. This is why creating an agent that successfully solves "new" mazes was hard but the agent excelled in solving the mazes he was trained on. I decided to still try to create a generalized maze solver agent to better understand the overall process:</p>
 								
 								<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
 									<thead>
@@ -370,7 +370,7 @@
 										</tr>
 									</tbody>
 								</table>
-								<p>During my training, I initially ran into a significant problem: my agent was racking up high rewards without truly solving the mazes (see video below). I realized it was exploiting a classic “oscillation” loophole, moving back and forth to collect a net positive reward by gaining +6 for moving closer and only −1 for moving farther away. To fix this, I added a penalty for revisiting any cell, ensuring the agent wouldn’t profit by simply toggling positions.</p>
+								<p>During my training, I initially ran into a significant problem: my agent was racking up high rewards without truly solving new mazes (see video below). I realized it was exploiting a classic “oscillation” loophole, moving back and forth to collect a net positive reward by gaining +6 for moving closer and only −1 for moving farther away. To fix this, I added a penalty for revisiting any cell, ensuring the agent wouldn’t profit by simply toggling positions.</p>
 								<div class="video-container">
 									<video controls autoplay>
 										<source src="../videos/mazeSolver1.mp4" type="video/mp4">
@@ -403,6 +403,8 @@
 									</video>
 									<br><br>
 								</div>
+
+								<p>At this point I decided to end the discovery process of creating a Q-Table agent to solve "new" / "unknown" mazes. The results are documented in the results page.</p>
 
 								<p><strong>The Code:</strong></p>
 

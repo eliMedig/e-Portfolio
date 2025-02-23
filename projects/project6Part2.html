@@ -56,7 +56,7 @@
 							</ul>
 							<div class="modern-background">
 								<h2>Agent Environment Setup</h2>
-								<p>Deep Q-Networks (DQN) are a type of Reinforcement Learning (RL) algorithm that require an environment where an agent can interact, take actions, and receive rewards to learn optimal behavior. To facilitate this, we use Gym, an open-source toolkit developed by OpenAI, which provides a structured interface for designing and running RL environments. Instead of using a prebuilt Atari Gym environment, we built our own custom Gym environment for the Spaceship Dodger game, so our RL agent can learn in a controlled and tailored setting.</p>
+								<p>Deep Q-Networks (DQN) are a type of Reinforcement Learning (RL) algorithm that require an environment where an agent can interact, take actions, and receive rewards to learn optimal behavior. Instead of using a prebuilt Gym environment, we built our own custom Gym environment for our game, so our RL agent can learn in a controlled and tailored setting which we can adjust whenever we like.</p>
 								<ul>
 									<li>It provides a standardized way for RL agents to interact with a game or simulation.</li>
 									<li>It defines state observations, actions, rewards, and termination conditions, making training consistent.</li>
@@ -68,71 +68,45 @@
 								<table style="border-collapse: collapse; max-width: 100%; text-align: left;">
 									<thead>
 										<tr style="background-color: #8d8d8d; color: #333333;">
-											<th style="padding: 10px; border: 1px solid #ddd;">Reward Type</th>
-											<th style="padding: 10px; border: 1px solid #ddd;">Value</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Event</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Condition</th>
+											<th style="padding: 10px; border: 1px solid #ddd;">Reward</th>
 											<th style="padding: 10px; border: 1px solid #ddd;">Description</th>
-											<th style="padding: 10px; border: 1px solid #ddd;">How It Works</th>
 										</tr>
 									</thead>
 									<tbody>
-										<!-- Survival Reward -->
 										<tr>
-											<td style="padding: 10px; border: 1px solid #ddd;">Survival Reward</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">1 + (time_elapsed / 1000) * 0.1</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Rewards the agent for surviving longer.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												The longer the agent survives, the more reward it accumulates over time.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Base Survival Reward</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Every step</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">+1 + (time_elapsed/1000)</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Provides a continuously increasing reward based on the elapsed time, incentivizing the player to survive longer.</td>
 										</tr>
-										<!-- Wall Collision Penalty -->
 										<tr>
 											<td style="padding: 10px; border: 1px solid #ddd;">Wall Collision Penalty</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">-5</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Penalizes the agent for hitting the screen boundary.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												If the agent moves into the edge of the screen, it receives a penalty to discourage unnecessary boundary contact.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">When the player touches the left/right or top/bottom boundaries</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">-min(25, 5 + (screen_dimension / max(1, player coordinate)))</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Penalizes the player for hitting the edges of the screen. The penalty increases as the player gets closer to the boundary, capped at 25.</td>
 										</tr>
-										<!-- Smart Movement Reward -->
 										<tr>
-											<td style="padding: 10px; border: 1px solid #ddd;">Smart Movement Reward</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">+3</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Rewards the agent for moving away from enemies.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												If the agent moves in a direction that increases the distance between itself and an enemy, it earns extra reward.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Moving Away from Enemy Bonus</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">When the player's movement vector is directed away from an enemy (dot product &lt; 0)</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">+5 per enemy</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Rewards evasive maneuvers by giving a bonus when the player moves in the opposite direction from an approaching enemy.</td>
 										</tr>
-										<!-- Close Proximity Reward -->
 										<tr>
-											<td style="padding: 10px; border: 1px solid #ddd;">Close Proximity Reward</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">+0.125</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Small reward for being close to an enemy.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Encourages the agent to interact with enemies while still maintaining movement strategies.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Proximity Penalty</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">For each enemy within 50 pixels of the player</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">-(50 - distance) × 2</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Penalizes the player for being too close to an enemy, with a larger penalty the closer the enemy is (within a 50-pixel range).</td>
 										</tr>
-										<!-- Collision Penalty (Game Over) -->
 										<tr>
-											<td style="padding: 10px; border: 1px solid #ddd;">Collision Penalty (Game Over)</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">-1000</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												Heavy penalty for colliding with an enemy.
-											</td>
-											<td style="padding: 10px; border: 1px solid #ddd;">
-												If the agent collides with an enemy, the episode ends, and it receives a large negative reward to reinforce survival behavior.
-											</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">Collision Penalty</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">When the player collides with any enemy</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">-300</td>
+											<td style="padding: 10px; border: 1px solid #ddd;">A severe penalty that results in an immediate game over, discouraging direct collisions with enemies.</td>
 										</tr>
 									</tbody>
-								</table>
-								
+								</table>								
 
 								<pre><code class="language-python">
 import pygame
@@ -158,16 +132,10 @@ class SpaceshipDodgerEnv(gym.Env):
 		self.font = pygame.font.SysFont(None, 36)
 
 		self.action_space = spaces.Discrete(4)
-
-		self.observation_space = spaces.Box(
-			low=0, high=255, shape=(4, 96, 96), dtype=np.uint8
-		)
-
+		self.observation_space = spaces.Box(low=0, high=255, shape=(4, 96, 96), dtype=np.uint8)
 		self.frame_stack = deque(maxlen=4)
-
 		self.last_spawn_time = pygame.time.get_ticks()
-		self.base_spawn_interval = 2000  #initial spawn interval in ms
-
+		self.base_spawn_interval = 2000
 		self.reset()
 
 	def reset(self):
@@ -175,91 +143,74 @@ class SpaceshipDodgerEnv(gym.Env):
 		self.enemies = pygame.sprite.Group()
 		self.start_time = pygame.time.get_ticks()
 		self.running = True
-		
-		#initialize spawn timer for frame-based enemy spawning
 		self.spawn_timer = 0
 
-		#spawn initial enemy
+		#spawn an initial enemy
 		player_position = self.player.rect.center
 		self.enemies.add(spawn_enemy(player_position))
 
-		#get initial processed frame and fill the stack with it
+		#initial processed frame and fill the stack with it
 		frame = self._get_processed_frame()
-		self.frame_stack = deque([frame]*4, maxlen=4)
+		self.frame_stack = deque([frame] * 4, maxlen=4)
 
 		return np.concatenate(list(self.frame_stack), axis=0)
 
 	def step(self, action):
-		#store previous position for smart movement reward
 		prev_x, prev_y = self.player.rect.x, self.player.rect.y
-
-		#move player based on action
-		if action == 0:  #UP
+		
+		#movement based on action
+		if action == 0:  # UP
 			self.player.rect.y -= self.player.speed
-		elif action == 1:  #DOWN
+		elif action == 1:  # DOWN
 			self.player.rect.y += self.player.speed
-		elif action == 2:  #LEFT
+		elif action == 2:  # LEFT
 			self.player.rect.x -= self.player.speed
-		elif action == 3:  #RIGHT
+		elif action == 3:  # RIGHT
 			self.player.rect.x += self.player.speed
 
-		#compute time elapsed since the episode started
 		time_elapsed = pygame.time.get_ticks() - self.start_time
-
-		#survival reward increases over time
-		reward = 1 + (time_elapsed / 1000) * 0.1
+		
+		#survival reward
+		reward = 1 + (time_elapsed / 1000) * 1.0  
 		done = False
 
-		#wall Penalty
+		#Wall penalty
 		if self.player.rect.left == 0 or self.player.rect.right == self.screen_width:
-			reward -= 5
+			reward -= min(25, 5 + (self.screen_width / max(1, self.player.rect.x)))
 		if self.player.rect.top == 0 or self.player.rect.bottom == self.screen_height:
-			reward -= 5
-
-		#keep player inside the screen bounds
+			reward -= min(25, 5 + (self.screen_height / max(1, self.player.rect.y)))
+		
+		#player inside screen bounds
 		self.player.rect.clamp_ip(pygame.Rect(0, 0, self.screen_width, self.screen_height))
 
-		#timer-based Enemy Spawn Logic
-		current_time = pygame.time.get_ticks()
-		#old spawn logic
-		# Current timer-based spawn logic
-		#current_time = pygame.time.get_ticks()
-		#spawn_interval = max(500, self.base_spawn_interval - ((current_time - self.start_time) // 3000) * 100)
-		#if current_time - self.last_spawn_time >= spawn_interval:
-		#    player_position = self.player.rect.center
-		#    self.enemies.add(spawn_enemy(player_position))
-		#    self.last_spawn_time = current_time
-
-		#new spawn logic
+		#enemy spawning
 		self.spawn_timer += 1
-		if self.spawn_timer % 30 == 0:
-			player_position = self.player.rect.center
-			self.enemies.add(spawn_enemy(player_position))
+		if self.spawn_timer % np.random.randint(30, 50) == 0:
+			self.enemies.add(spawn_enemy(self.player.rect.center))
 
-		#limit Maximum Number of Enemies
-		max_enemies = min(20, 10 + ((current_time - self.start_time) // 5000))
+		#max number of enemies (dynamically)
+		max_enemies = min(20, 10 + ((time_elapsed) // 5000))
 		while len(self.enemies) > max_enemies:
 			self.enemies.sprites()[0].kill()
 
-		#update enemy movement
 		self.enemies.update()
 
-		#smart Movement Reward (move away from enemies)
+		#reward for moving away from enemies
 		for enemy in self.enemies:
 			enemy_vec = np.array(enemy.rect.center) - np.array(self.player.rect.center)
 			player_movement_vec = np.array([self.player.rect.x, self.player.rect.y]) - np.array([prev_x, prev_y])
 			if np.dot(enemy_vec, player_movement_vec) < 0:
-				reward += 3
+				reward += 5  #bonus for moving away
 			distance = np.linalg.norm(np.array(self.player.rect.center) - np.array(enemy.rect.center))
 			if distance < 50:
-				reward += 0.125
+				reward -= (50 - distance) * 2 #bonus for distance)
 
-		#collision Penalty (Game Over)
+		#collision penalty
 		if pygame.sprite.spritecollideany(self.player, self.enemies):
-			reward = -1000
+			reward -= 300
 			done = True
 
-		#update frame stack with new processed frame
+		#frame stack for observations
 		new_frame = self._get_processed_frame()
 		self.frame_stack.append(new_frame)
 		stacked_frames = np.concatenate(list(self.frame_stack), axis=0)
@@ -270,9 +221,7 @@ class SpaceshipDodgerEnv(gym.Env):
 		self.screen.fill((0, 0, 0))
 		self.screen.blit(self.player.image, self.player.rect)
 		self.enemies.draw(self.screen)
-		if hasattr(self, "render_mode") and self.render_mode == "human":
-			pygame.display.update()
-
+		
 		frame = pygame.surfarray.array3d(pygame.display.get_surface())
 		frame = np.transpose(frame, (1, 0, 2))
 		frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
@@ -280,14 +229,13 @@ class SpaceshipDodgerEnv(gym.Env):
 		return np.expand_dims(frame, axis=0)
 
 	def render(self, mode="human"):
-		self.render_mode = mode
 		if mode == "human":
 			pygame.display.flip()
 		else:
 			pygame.display.iconify()
 
 	def close(self):
-		pygame.quit()
+		pygame.quit()																
 								</code></pre>
 							</div>
 						</div>						

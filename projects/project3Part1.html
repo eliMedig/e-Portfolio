@@ -55,18 +55,12 @@
 							</ul>
 							<div class="modern-background">									
 								<h2>Frontend</h2>
+									<p>The frontend is built with tkinter. It is responsible to show the user the live video feed and take screenshots which are sent to the backend for processing. It also offers a simple user interface that allows to:</p>
 									<ul>
-										<li>
-											A simple frontend built using Tkinter that opens a window including 4 buttons:
-											<ol>
-												<li>Start Video Feed: Begins capturing and displaying live video feed from the camera.</li>
-												<li>Stop Video Feed: Stops the video feed and replaces the display with a black frame.</li>
-												<li>Start Object Detection: Enables YOLOv8-based object detection, which processes frames to identify and annotate detected objects.</li>
-												<li>Stop Object Detection: Disables object detection while keeping the live feed running.</li>
-											</ol>
-										</li>
-										<li>The frontend sends raw video frames to the backend for processing and receives processed frames in return.</li>
-										<li>Processed frames (with or without annotations) are displayed in real-time on the frontend window.</li>
+										<li>Start Video Feed: Begins capturing and displaying live video feed from the camera.</li>
+										<li>Stop Video Feed: Stops the video feed and replaces the display with a black frame.</li>
+										<li>Start Object Detection: Enables YOLOv8-based object detection, which processes frames to identify and annotate detected objects.</li>
+										<li>Stop Object Detection: Disables object detection while keeping the live feed running.</li>
 									</ul>
 									<pre><code class="language-python">
 import tkinter as tk
