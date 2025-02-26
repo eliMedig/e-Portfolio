@@ -69,7 +69,7 @@
 import requests
 import json
 
-conversation = "This is the initial prompt. Please tell the user your purpose and ask for the information you require."
+conversation = "This is the initial prompt. Please tell the user your purpose and ask for the information you require." #the LLM will receive this message alongside the instructions to know a new session started.
 messageToUser = ""
 code = ""
 currentUserInput = ""
@@ -225,7 +225,7 @@ if __name__ == "__main__":
 	main()
 						</code></pre>
 
-						<p><strong>Following the system prompt that has been used:</strong></p>
+						<p>Following the system prompt that has been used. Note that the conversation variable always includes this string: "This is the initial prompt. Please tell the user your purpose and ask for the information you require.". The LLM will receive this message alongside the instructions to know a new session started.". The prompt below will be appended so the actual prompt to the LLM includes this string as well.</p>
 						<span class="image main"><img src="../images/project2image1.jpg" alt="Image" /></span>
 							
 						</div>

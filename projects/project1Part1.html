@@ -84,7 +84,7 @@ from tensorflow.keras.utils import plot_model
 import sys
 import joblib
 
-#set the default values for all model parameters, file location and target_value column
+#initialize variables
 default_csv_file = "dataTraining/trainRegression.csv"
 default_target_value_column = "target_value"
 random_state_default = 1234
@@ -95,7 +95,7 @@ epochs_default = 50
 batch_size_default = 32
 validation_split_default = 0.2
 
-#ask user for CSV file location
+#ask user for csv file location
 csv_file = input(f"Enter name of CSV data source (default: {default_csv_file}): ").strip()
 csv_file = csv_file if csv_file else default_csv_file
 

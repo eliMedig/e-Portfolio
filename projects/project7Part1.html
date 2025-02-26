@@ -160,35 +160,35 @@ return edge_detected_images
 							<pre><code class="language-python">
 def ocr_score_multiplier(image_path, output_folder):
 
-# Load the processed grayscale image
+#load the processed grayscale image
 processed_image = cv2.imread(image_path)
 if processed_image is None:
 	print(f"Error: Unable to read image {image_path}")
 	return
 
-# Fixed coordinates for Points and Multiplier areas (xtl, ytl, xbr, ybr)
+#fixed coordinates for Points and Multiplier areas (xtl, ytl, xbr, ybr)
 points_region = (97, 122, 401, 158)  # (xtl, ytl, xbr, ybr)
 multiplier_region = (97, 159, 401, 195)  # (xtl, ytl, xbr, ybr)
 
-# Crop the defined regions
+#crop the defined regions
 points_crop = processed_image[points_region[1]:points_region[3], points_region[0]:points_region[2]]
 multiplier_crop = processed_image[multiplier_region[1]:multiplier_region[3], multiplier_region[0]:multiplier_region[2]]
 
-# Preprocess images (convert to grayscale and threshold for better OCR)
+#preprocess images (convert to grayscale and threshold for better OCR)
 points_crop_gray = cv2.cvtColor(points_crop, cv2.COLOR_BGR2GRAY)
 multiplier_crop_gray = cv2.cvtColor(multiplier_crop, cv2.COLOR_BGR2GRAY)
 
 _, points_thresh = cv2.threshold(points_crop_gray, 150, 255, cv2.THRESH_BINARY)
 _, multiplier_thresh = cv2.threshold(multiplier_crop_gray, 150, 255, cv2.THRESH_BINARY)
 
-# OCR settings to focus on digits and special characters
+#OCR settings to focus on digits and special characters
 custom_config = r'--psm 7 --oem 3 -c tessedit_char_whitelist=0123456789x'
 
-# Extract text using Tesseract OCR
+#extract text using Tesseract OCR
 points_text = pytesseract.image_to_string(points_thresh, config=custom_config).strip()
 multiplier_text = pytesseract.image_to_string(multiplier_thresh, config=custom_config).strip()
 
-# Store the results in a text file
+#store the results in a text file
 result_filename = os.path.splitext(os.path.basename(image_path))[0] + "_ocr_results.txt"
 result_path = os.path.join(output_folder, result_filename)
 

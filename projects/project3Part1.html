@@ -76,14 +76,13 @@ class LiveFeedApp:
 		self.root.title("Live Camera Feed")
 		self.root.geometry("640x480")
 		
-		# Backend handler
 		self.video_handler = backend.VideoStreamHandler()
 
-		# Create a frame for the buttons
+		#create a frame for the buttons
 		button_frame = Frame(root)
 		button_frame.pack(pady=10)
 
-		# Add buttons to the frame
+		#buttons
 		self.start_button = Button(button_frame, text="Start Live Feed", command=self.start_feed, font=("Arial", 12))
 		self.start_button.pack(side="left", padx=5)
 
@@ -96,7 +95,7 @@ class LiveFeedApp:
 		self.stop_detect_button = Button(button_frame, text="Stop Object Detection", command=self.stop_detection, font=("Arial", 12))
 		self.stop_detect_button.pack(side="left", padx=5)
 		
-		# Label for video feed
+		#label for video frame
 		self.video_label = Label(root)
 		self.video_label.pack()
 		
@@ -156,7 +155,7 @@ class LiveFeedApp:
 if __name__ == "__main__":
 	root = tk.Tk()
 	app = LiveFeedApp(root)
-	root.protocol("WM_DELETE_WINDOW", app.close)  # Handle window close
+	root.protocol("WM_DELETE_WINDOW", app.close)
 	root.mainloop()
 									</code></pre>
 							</div>
