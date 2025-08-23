@@ -210,6 +210,41 @@
 
 									<div class="week-header">Week 5</div>
 										<div class="week-content">
+
+										<h2>Theory</h2>
+										<p><strong>Agent Communication</strong></p>
+										<p>Communication is central to multi-agent systems, as most tasks require agents to exchange information, request actions, or query one another. To formalise how agents communicate, researchers draw on speech act theory, first introduced by Austin (1962) and extended by Searle (1969). Speech acts treat language as actions that can change the world. Searle identified five categories:</p>
+
+										<ul>
+											<li>Representatives – stating facts (“It’s raining”).</li>
+											<li>Directives – attempting to get someone to do something (“Pass the salt”).</li>
+											<li>Commissives – committing to a future action (“I promise to help”).</li>
+											<li>Expressives – expressing internal state (“Thank you”, “I feel sad”).</li>
+											<li>Declarations – performing an action by speaking (“I now pronounce you married”, “We declare war”).</li>
+										</ul>
+
+										<p>Each speech act has two parts: the performative verb (intention, e.g. request, inform) and the propositional content (the actual information). For example, “The door is closed” could mean an observation, a request, or a question, depending on intention. Cohen and Perrault formalised these semantics with precondition–delete–add rules, ensuring agents make requests only when meaningful (e.g., not asking impossible actions).</p>
+
+										<p><strong>Agent-Communication Languages</strong></p>
+										<p>To operationalise this in multi-agent systems, Agent Communication Languages (ACLs) provide a protocol for structured interaction. One example is KQML (Knowledge Query and Manipulation Language), which defines performatives like ask-if (query truth), tell (provide information), perform (request an action), and reply (answer a query). KQML works alongside KIF (Knowledge Interchange Format), a logic-based language for expressing the actual message content.</p>
+										<p>Successful communication also requires a shared vocabulary, which is provided by ontologies. Ontologies define concepts, categories, and relationships in a domain (e.g., in the Block World ontology: On(x,y), OnTable(x), Clear(x)). Actions are described with preconditions, deletions, and additions (e.g., Stack(x,y) requires Clear(y) and Holding(x)). A challenge is semantic heterogeneity – different agents may use different ontologies. To address this, ontology alignment methods identify correspondences between terms, while approaches like Correspondence Inclusion Dialogue (CID) allow agents to negotiate shared meaning without revealing full internal ontologies.</p>
+
+										<h2>Contributions & Artefacts</h2>
+										<p><strong>Second Weekly Discussion - Initial Post</strong></p>
+
+										<P>Agent Communication Languages (ACLs), such as Knowledge Query and Manipulation Language (KQML) were designed to standardise the way autonomous agents exchange information.</P>
+										<P>Their main advantage is the high-level abstraction they provide. Rather than just passing data, agents can exchange speech acts such as inform, request, or propose, which embed semantics about intent (Labrou and Finin, 1997). This facilitates cooperation, negotiation, and knowledge sharing in distributed systems, especially when agents are heterogeneous and developed independently from each other.</P>
+										<P>Compared to direct method using programming languages such as Python or Java, ACLs offer greater flexibility and interoperability. In a traditional method call, the sender must know the exact interface and implementation details of the receiver as the call may otherwise not work properly or not at all. In contrast, ACLs aim at decouple communication from implementation, allowing agents to learn to understand each other dynamically and interpret messages according to an agreed ontologies (Wooldridge, 2009). </P>
+										<P>When it comes to disadvantages, parsing and interpreting high-level speech acts incurs additional computational overhead as there is no simple structure that allows every call to look the same as known from APIs (Paurobally, 2007). Furthermore, achieving true semantic interoperability requires shared ontologies, which can be difficult to standardise across domains.</P>
+
+
+										<h2>References</h2>
+											<ul>
+												<li>University of Essex Online (2025) ‘Agent Communication’ [Online learncast]. In: Intelligent Agents.</li>
+												<li>Labrou, Y. and Finin, T., 1994, November. A semantics approach for KQML—a general purpose communication language for software agents. In Proceedings of the third international conference on Information and knowledge management (pp. 447-455).</li>
+												<li>Paurobally, S., Tamma, V. and Wooldrdige, M., 2007. A framework for web service negotiation. ACM Transactions on Autonomous and Adaptive Systems (TAAS), 2(4), pp.14-es.</li>
+											</ul>
+
 									</div>
 
 									<div class="week-header">Week 6</div>
