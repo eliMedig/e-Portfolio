@@ -249,7 +249,108 @@
 
 									<div class="week-header">Week 6</div>
 										<div class="week-content">
-									</div>
+											<h2>Theory</h2>
+											<p><strong>KQML as an agent communication language</strong></p>
+											<p>Finin et al. (1994) introduce the Knowledge Query and Manipulation Language (KQML) as a general-purpose communication language for software agents. The paper outlines KQML’s design as a protocol for exchanging information and knowledge in distributed, heterogeneous environments. It emphasises how KQML supports “performatives,” or high-level message types such as ask, tell, and achieve, grounded in speech act theory, which allow agents to communicate not just data but intent. The authors highlight KQML’s flexibility for knowledge sharing, negotiation, and coordination, while also acknowledging challenges around defining precise semantics and ensuring interoperability across diverse agent systems.</p>
+
+											<h2>Contributions & Artefacts</h2>
+											<p><strong>Second Weekly Discussion - Peer Responses</strong></p>
+											<p><strong>Peer Response 1</strong></p>
+											<p>Hi Nikos, thank you for your interesting post and also for your thoughtful response to my own contribution. I appreciate how you expanded on the grounding of ACLs in speech act theory and the role of conversation policies in structuring multi-step dialogues. This highlights well the contrast to simple method invocation, which lacks both semantics and protocol-level coherence. Your point about inconsistent implementations of KQML also resonates with me. Without well-defined semantics, it becomes difficult to guarantee interoperability in heterogeneous environments (Finin et al., 1994).</p>
+											<p>Building on your initial post, I found your emphasis on autonomy particularly important. As you note, method calls in object-oriented programming enforce deterministic execution, while ACLs allow agents to interpret messages according to their goals and constraints. This flexibility aligns closely with Wooldridge’s (2009) distinction between objects acting because they are invoked versus agents acting because they choose to. The autonomy dimension not only adds realism but also supports negotiation-based problem solving in distributed environments (Jennings, Sycara and Wooldridge, 1998).</p>
+											<p>At the same time, I agree with your caution regarding ontology alignment. Shared vocabularies are essential for semantic interoperability, and mismatches can undermine otherwise well-structured conversations. This is a risk that must be considered and taken care (Payne and Tamma, 2014).</p>
+
+											<p><strong>Peer Response 2</strong></p>
+											<p>Hi Mohamed, thank you for your clear and well-structured post. I especially appreciated how you contrasted the abstraction and semantic richness of ACLs with the efficiency and clarity of direct method invocation. Your point about ACLs enabling intentions such as inform, ask or recommend rather than just raw data transfer really captures the essence of why they were designed in the first place (Finin, Labrou and Mayfield, 1994).</p>
+											<p>I would like to build on your observation about efficiency. While it is true that parsing ACL performatives adds computational overhead, research suggests that this trade-off is justified in environments where negotiation and autonomy are critical. Jennings, Sycara and Wooldridge (1998) argue that ACLs enable distributed problem solving in ways that direct invocation cannot, because they allow agents to flexibly decide how to respond, rather than being constrained to execute a predetermined method. Of course, this means that one must decide actively whether to choose this trade-off or not.</p>
+											<p>Your discussion of ontology alignment also stood out and was very interesting. Labrou and Finin (1997) indeed highlight this as one of the biggest challenges in ACL use. More recent work in semantic web technologies has tried to address this problem through ontology matching and mediation frameworks (Shvaiko and Euzenat, 2013). These tools can reduce miscommunication but, as you noted, they further increase complexity and computational effort.</p>
+											<p>Overall I fully agree with your conclusion that ACLs might outperform other methods but come with larger costs, which means they are not the perfect fit in all scenarios.</p>
+
+											<h2>References</h2>
+												<ul>
+													<li>Finin, T., Fritzson, R., McKay, D. and McEntire, R., 1994, November. KQML as an agent communication language. In Proceedings of the third international conference on Information and knowledge management (pp. 456-463).</li>
+													<li>Wooldridge, M., 2009. An introduction to multiagent systems. John wiley & sons.</li>
+													<li>Jennings, N.R., Sycara, K. and Wooldridge, M., 1998. A roadmap of agent research and development. Autonomous agents and multi-agent systems, 1(1), pp.7-38.</li>
+													<li>Payne, T.R. and Tamma, V., 2014, May. Negotiating over ontological correspondences with asymmetric and incomplete knowledge. In Proceedings of the 2014 international conference on Autonomous agents and multi-agent systems (pp. 517-524).</li>
+													<li>Labrou, Y. and Finin, T. (1997) Semantics and conversations for an agent communication language. In: Proceedings of the 15th International Joint Conference on Artificial Intelligence. San Francisco: Morgan Kaufmann, pp. 584–591.</li>
+													<li>Shvaiko, P. and Euzenat, J. (2013) ‘Ontology matching: state of the art and future challenges’, IEEE Transactions on Knowledge and Data Engineering, 25(1), pp. 158–176. https://doi.org/10.1109/TKDE.2011.253</li>
+												</ul>
+												
+											<p><strong>Creating Agent Dialogues</strong></p>
+											<p>The exercise was to create a short KQML dialogue (with KIF content) where Alice, a procurement agent, asks Bob, a warehouse agent, whether 50-inch TVs are in stock, how many are available, and how many HDMI ports they have.</p>
+
+											<p>Alice asks bom if any 50 inch TVs are at stock:</p>
+											<pre><code class="language-python">
+(kqml
+	:performative ask-if
+	:sender Alice
+	:receiver Bob
+	:language KIF
+	:ontology warehouse-ontology-v1
+	:reply-with q1
+	:content
+	"(exists (?t ?q)
+		(and (television ?t)
+			(= (size-inch ?t) 50)
+			(stock-qty ?t ?q)
+			(> ?q 0)))")
+											</code></pre>
+
+											
+											<p>Bob returns confirmation of availability:</p>
+											<pre><code class="language-python">
+(kqml
+	:performative tell
+	:sender Bob
+	:receiver Alice
+	:in-reply-to q1
+	:language KIF
+	:ontology warehouse-ontology-v1
+	:content "true")
+											</code></pre>
+
+											<p>Alice asks of Bob about the HDMI ports:</p>
+											<pre><code class="language-python">
+(kqml
+	:performative ask-all
+	:sender Alice
+	:receiver Bob
+	:language KIF
+	:ontology warehouse-ontology-v1
+	:reply-with q3
+	:content
+	"(setof (?m ?k)
+		(exists (?t)
+		(and (television ?t)
+				(= (size-inch ?t) 50)
+				(model ?t ?m)
+				(hdmi-ports ?t ?k))))")
+											</code></pre>
+
+											<p>Bob provides a report with all HDMI ports per-model:</p>
+											<pre><code class="language-python">
+(kqml
+	:performative tell
+	:sender Bob
+	:receiver Alice
+	:in-reply-to q3
+	:language KIF
+	:ontology warehouse-ontology-v1
+	:content
+	"(= (setof (?m ?k)
+			(exists (?t)
+			(and (television ?t)
+				(= (size-inch ?t) 50)
+				(model ?t ?m)
+				(hdmi-ports ?t ?k))))
+		{ (\"Samsung-QN90B-50\" 4)
+			(\"LG-C3-50\" 4)
+			(\"Sony-X90L-50\" 2) })")
+											</code></pre>
+
+											<p>*I used an LLM to facilitate the creation of the KQML queries.</p>
+
+										</div>
 
 									<div class="week-header">Week 7</div>
 										<div class="week-content">
