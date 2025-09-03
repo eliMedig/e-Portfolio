@@ -44,7 +44,7 @@
 					<div id="main">
 						<div class="inner">
 
-							<h1>MACHINE LEARNING</h1>
+							<h1>INTELLIGENT AGENTS</h1>
 
 							<ul class="actions small"> 
 								<li><a href="../intelligentAgents.html" class="button primary">Introduction</a></li>
@@ -265,16 +265,6 @@
 											<p>I would like to build on your observation about efficiency. While it is true that parsing ACL performatives adds computational overhead, research suggests that this trade-off is justified in environments where negotiation and autonomy are critical. Jennings, Sycara and Wooldridge (1998) argue that ACLs enable distributed problem solving in ways that direct invocation cannot, because they allow agents to flexibly decide how to respond, rather than being constrained to execute a predetermined method. Of course, this means that one must decide actively whether to choose this trade-off or not.</p>
 											<p>Your discussion of ontology alignment also stood out and was very interesting. Labrou and Finin (1997) indeed highlight this as one of the biggest challenges in ACL use. More recent work in semantic web technologies has tried to address this problem through ontology matching and mediation frameworks (Shvaiko and Euzenat, 2013). These tools can reduce miscommunication but, as you noted, they further increase complexity and computational effort.</p>
 											<p>Overall I fully agree with your conclusion that ACLs might outperform other methods but come with larger costs, which means they are not the perfect fit in all scenarios.</p>
-
-											<h2>References</h2>
-												<ul>
-													<li>Finin, T., Fritzson, R., McKay, D. and McEntire, R., 1994, November. KQML as an agent communication language. In Proceedings of the third international conference on Information and knowledge management (pp. 456-463).</li>
-													<li>Wooldridge, M., 2009. An introduction to multiagent systems. John wiley & sons.</li>
-													<li>Jennings, N.R., Sycara, K. and Wooldridge, M., 1998. A roadmap of agent research and development. Autonomous agents and multi-agent systems, 1(1), pp.7-38.</li>
-													<li>Payne, T.R. and Tamma, V., 2014, May. Negotiating over ontological correspondences with asymmetric and incomplete knowledge. In Proceedings of the 2014 international conference on Autonomous agents and multi-agent systems (pp. 517-524).</li>
-													<li>Labrou, Y. and Finin, T. (1997) Semantics and conversations for an agent communication language. In: Proceedings of the 15th International Joint Conference on Artificial Intelligence. San Francisco: Morgan Kaufmann, pp. 584–591.</li>
-													<li>Shvaiko, P. and Euzenat, J. (2013) ‘Ontology matching: state of the art and future challenges’, IEEE Transactions on Knowledge and Data Engineering, 25(1), pp. 158–176. https://doi.org/10.1109/TKDE.2011.253</li>
-												</ul>
 												
 											<p><strong>Creating Agent Dialogues</strong></p>
 											<p>The exercise was to create a short KQML dialogue (with KIF content) where Alice, a procurement agent, asks Bob, a warehouse agent, whether 50-inch TVs are in stock, how many are available, and how many HDMI ports they have.</p>
@@ -350,31 +340,156 @@
 
 											<p>*I used an LLM to facilitate the creation of the KQML queries.</p>
 
+											<h2>References</h2>
+												<ul>
+													<li>Finin, T., Fritzson, R., McKay, D. and McEntire, R., 1994, November. KQML as an agent communication language. In Proceedings of the third international conference on Information and knowledge management (pp. 456-463).</li>
+													<li>Wooldridge, M., 2009. An introduction to multiagent systems. John wiley & sons.</li>
+													<li>Jennings, N.R., Sycara, K. and Wooldridge, M., 1998. A roadmap of agent research and development. Autonomous agents and multi-agent systems, 1(1), pp.7-38.</li>
+													<li>Payne, T.R. and Tamma, V., 2014, May. Negotiating over ontological correspondences with asymmetric and incomplete knowledge. In Proceedings of the 2014 international conference on Autonomous agents and multi-agent systems (pp. 517-524).</li>
+													<li>Labrou, Y. and Finin, T. (1997) Semantics and conversations for an agent communication language. In: Proceedings of the 15th International Joint Conference on Artificial Intelligence. San Francisco: Morgan Kaufmann, pp. 584–591.</li>
+													<li>Shvaiko, P. and Euzenat, J. (2013) ‘Ontology matching: state of the art and future challenges’, IEEE Transactions on Knowledge and Data Engineering, 25(1), pp. 158–176. https://doi.org/10.1109/TKDE.2011.253</li>
+												</ul>
 										</div>
 
 									<div class="week-header">Week 7</div>
 										<div class="week-content">
+											<h2>Theory</h2>
+											<p><strong>Introduction to NLP</strong></p>
+											<p>Humans are unique in using language to express limitless ideas, which is why the Turing Test focused on linguistic ability. Unlike formal languages (with crisp syntax and semantics), natural language is messy: grammar is flexible, meanings are probabilistic, and ambiguity is everywhere (polysemy, sarcasm, anaphora, “He saw her duck”). NLP exists to bridge this gap by enabling machines to interpret and communicate in our inherently noisy, context-dependent language that dominates today’s data.</p>
+
+											<p><strong>Techniques for NLP</strong></p>
+											<p>NLP draws on pragmatics (implicature, presupposition) and statistical methods like next-word prediction, underpinned by the distributional hypothesis (“a word is known by the company it keeps”). Word embeddings (e.g., word2vec) capture semantic/syntactic relationships and support similarity queries and vector arithmetic (king−man+woman≈queen); patterns like Hearst rules extract hyponym relations at scale. For deeper structure, formal approaches use context-free grammars with constituency parse trees, while dependency parsing models head-dependent relations between words as a graph.</p>
+
+											<h2>Contributions & Artefacts</h2>
+											<p><strong>Second Weekly Discussion - Summary Post</strong></p>
+											<p>Our discussion on Agent Communication Languages (ACLs) highlighted both their conceptual strengths and their practical limitations. My initial post stressed that this abstraction enables negotiation and cooperation across heterogeneous systems, contrasting with method invocation in Python or Java, which is efficient but tightly coupled. However, ACLs introduce overhead and depend heavily on shared ontologies, which can be difficult to maintain (Payne and Tamma, 2014).</p>
+											<p>Peer contributions deepened these points. Nikos emphasised the value of conversation policies for structuring multi-step dialogues, while highlighting interoperability challenges caused by inconsistent semantics. Mohamed contrasted ACLs with lightweight paradigms such as RPC, but noted that ontology alignment and mediation frameworks can reduce miscommunication in practice (Shvaiko and Euzenat, 2013).</p>
+											<p>Overall, the consensus was that ACLs are not a universal solution but a specialised tool that excels in certain parts where autonomy and negotiation is of value while it still is very costly and computationally complex.</p>
+
+
+
+											<h2>References</h2>
+											<ul>
+												<li>University of Essex Online (2025) ‘Natural Language Processing (NLP)’ [Online learncast]. In: Intelligent Agents.</li>
+												<li>Payne, T.R. and Tamma, V. (2014) ‘Negotiating over ontological correspondences with asymmetric and incomplete knowledge’, Autonomous Agents and Multi-Agent Systems, 28(1), pp. 1–35.</li>
+												<li>Shvaiko, P. and Euzenat, J. (2013) Ontology matching. 2nd edn. Heidelberg: Springer.</li>
+											</ul>
 									</div>
 
 									<div class="week-header">Week 8</div>
 										<div class="week-content">
+											<h2>Theory</h2>
+											<p><strong>Getting to Grips with Parse Trees</strong></p>
+											<p>This week’s focus was on parse trees. Zimmerman (2019) explains parse trees as a way of making the hierarchical structure of language explicit. While sentences are written sequentially, parse trees represent them as directional graphs where tokens (syntactic words) are nodes and labelled edges show their grammatical relationships. Each tree has a root, usually the main verb, and subtrees that correspond to phrases. Nodes carry part-of-speech (POS) or full TAG labels, while edges use syntactic dependency labels such as nsubj (subject) or amod (adjective modifier).</p>
+
+											<h2>Contributions & Artefacts</h2>
+											<p><strong>Creating Parse Trees</strong></p>
+											<p>The goal of this weeks activity was to create parse trees for three specific phrases:</p>
+											<ul>
+												<li>The government raised interest rates.</li>
+												<li>The internet gives everyone a voice.</li>
+												<li>The man saw the dog with the telescope.</li>
+											</ul>
+
+											<h2>References</h2>
+											<ul>
+												<li>Zimmerman, V. (2019) Towards Data Science. Getting to Grips with Parse Trees.</li>
+											</ul>
 									</div>
 
 									<div class="week-header">Week 9</div>
 										<div class="week-content">
+											<h2>Theory</h2>
+											<p><strong>Introduction to Adaptive Algorithms</strong></p>
+											<p>Text</p>
+
+											<h2>Contributions & Artefacts</h2>
+											<p><strong>Third Weekly Discussion - Initial Post</strong></p>
+											<p>Text</p>
+
+											<h2>References</h2>
+											<ul>
+												<li>University of Essex Online (2025) ‘Introduction to Adaptive Algorithms’ [Online learncast]. In: Intelligent Agents.</li>
+												<li></li>
+												<li></li>
+											</ul>
 									</div>
 
 									<div class="week-header">Week 10</div>
 										<div class="week-content">
+											<h2>Theory</h2>
+											<p><strong>Title</strong></p>
+											<p>Text</p>
+
+											<h2>Contributions & Artefacts</h2>
+											<p><strong>Third Weekly Discussion - Peer Responses</strong></p>
+											<p><strong>Peer Response 1</strong></p>
+											<p>Text</p>
+
+											<p><strong>Peer Response 1</strong></p>
+											<p>Text</p>
+
+											<p><strong>Deep Learning in Action</strong></p>
+											<p>Text</p>
+
+											<h2>References</h2>
+											<ul>
+												<li></li>
+												<li></li>
+												<li></li>
+											</ul>
 									</div>
 
 									<div class="week-header">Week 11</div>
 										<div class="week-content">
+											<h2>Theory</h2>
+											<p><strong>Intelligent Agents in Action</strong></p>
+											<p>Text</p>
+
+											<h2>Contributions & Artefacts</h2>
+											<p><strong>Third Weekly Discussion - Summary Post</strong></p>
+											<p>Text</p>
+
+											<h2>References</h2>
+											<ul>
+												<li>University of Essex Online (2025) ‘Intelligent Agents in Action’ [Online learncast]. In: Intelligent Agents.</li>
+												<li></li>
+												<li></li>
+											</ul>
 									</div>
 
 									<div class="week-header">Week 12</div>
 										<div class="week-content">
+											<h2>Theory</h2>
+											<p><strong>The Future of Intelligent Agents</strong></p>
+											<p>Text</p>
+
+											<h2>Contributions & Artefacts</h2>
+											<p>This week, our work was dedicated to the submission of our e-Portfolio, with no other contributions or artifacts required.</p>
+
+											<h2>References</h2>
+											<ul>
+												<li></li>
+												<li></li>
+												<li></li>
+											</ul>
 									</div>
+
+									<div class="week-header">Assessments</div>
+										<div class="week-content">
+											<h2>Assessments</h2>
+											<p>This module consist of the following three graded assessments
+												<ol>
+													<li>A group project (20% of grade - due in week 6)</li>
+													<li>An individual presentation (40% of grade - due in week 11)</li>
+													<li>This e-Portfolio page alongside a personal reflection (40% of grade - due in week 12)</li>
+												</ol>
+												<p>You can find more details about the team work and individual assessments on the following sub-pages:</p>
+											<ul>
+												<li><a href="intelligentAgents2.html">Team Work Assessments (Group Project)</a></li>
+												<li><a href="intelligentAgents3.html">Individual Assessments (Individual Presentation, Personal Reflection)</a></li>
+											</ul>
+										</div>
 
 								</div>
 							</div>
