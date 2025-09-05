@@ -384,12 +384,73 @@
 
 											<h2>Contributions & Artefacts</h2>
 											<p><strong>Creating Parse Trees</strong></p>
-											<p>The goal of this weeks activity was to create parse trees for three specific phrases:</p>
+
+											<p>We read <a href="https://towardsdatascience.com/getting-to-grips-with-parse-trees-6e19e7cd3c3c/" target="_blank">Zimmermann's (2019) explanation</a> which introduced parse trees followed by an exercise. The goal of the activity was to create parse trees for three specific phrases:</p>
 											<ul>
 												<li>The government raised interest rates.</li>
 												<li>The internet gives everyone a voice.</li>
 												<li>The man saw the dog with the telescope.</li>
 											</ul>
+
+											<p>In a first step, we define the syntactic parts of a sentence using short labels (e.g., S, NP, VP, PP). Then we build a constituency tree following standard grammar conventions (Penn Treebank style): a single S (sentence) node at the top, branching into phrases (NP, VP, etc.), with terminals (the actual words) at the leaves. Finally, we render the tree and show the result.</p>
+
+											<p>We then define the labels and their meaning:</p>
+
+												<table>
+													<thead>
+														<tr><th>Label</th><th>Meaning</th><th>Example</th></tr>
+													</thead>
+													<tbody>
+														<tr><td><strong>S</strong></td><td>Sentence (clause)</td><td>entire sentence</td></tr>
+														<tr><td><strong>NP</strong></td><td>Noun Phrase</td><td><em>The government</em>, <em>a voice</em></td></tr>
+														<tr><td><strong>VP</strong></td><td>Verb Phrase</td><td><em>raised interest rates</em></td></tr>
+														<tr><td><strong>PP</strong></td><td>Prepositional Phrase</td><td><em>with the telescope</em></td></tr>
+														<tr><td><strong>DT</strong></td><td>Determiner</td><td><em>the, a</em></td></tr>
+														<tr><td><strong>NN</strong></td><td>Noun, singular</td><td><em>government, dog</em></td></tr>
+														<tr><td><strong>NNS</strong></td><td>Noun, plural</td><td><em>rates</em></td></tr>
+														<tr><td><strong>VBD</strong></td><td>Verb, past tense</td><td><em>raised, saw</em></td></tr>
+														<tr><td><strong>VBZ</strong></td><td>Verb, 3rd person sing. present</td><td><em>gives</em></td></tr>
+														<tr><td><strong>IN</strong></td><td>Preposition</td><td><em>with</em></td></tr>
+														<tr><td><strong>.</strong></td><td>Sentence-final punctuation</td><td><em>.</em></td></tr>
+													</tbody>
+												</table>
+
+											<p>Then we build the tree:</p>
+
+											<ol>
+												<li>Tokenize & tag: assign POS tags to each word (DT, NN, VBD, …).</li>
+												<li>Group into phrases: form NPs, VPs, PPs according to grammar rules.</li>
+												<li>Assemble the sentence: create a single S node at the top; typically S → NP VP plus punctuation.</li>
+												<li>Attach modifiers: e.g., PPs can modify an NP or a VP (this can be ambiguous).</li>
+												<li>Render the tree: draw the hierarchy so phrases and words are visible as a tree.</li>
+											</ol>
+							
+											<p>Those are the results:</p>
+
+											<figure style="max-width: auto;">
+												<img src="../../images/parse_tree_1_government.png" alt="Parse tree: The government raised interest rates." style="width:100%; height:auto;">
+												<figcaption><strong>The government raised interest rates.</strong></figcaption>
+											</figure>
+
+											<figure style="max-width: auto;">
+												<img src="../../images/parse_tree_2_internet.png" alt="Parse tree: The internet gives everyone a voice." style="width:100%; height:auto;">
+												<figcaption><strong>The internet gives everyone a voice.</strong></figcaption>
+											</figure>
+
+											<figure style="max-width: auto;">
+												<img src="../../images/parse_tree_3a_np_attachment.png" alt="Parse tree (NP-attachment): The man saw the dog with the telescope." style="width:100%; height:auto;">
+												<figcaption>
+												<strong>The man saw the dog with the telescope.</strong> — <em>NP-attachment</em>
+												</figcaption>
+											</figure>
+
+											<figure style="max-width: auto;">
+												<img src="../../images/parse_tree_3b_vp_attachment.png" alt="Parse tree (VP-attachment): The man saw the dog with the telescope." style="width:100%; height:auto;">
+												<figcaption>
+												<strong>The man saw the dog with the telescope.</strong> — <em>VP-attachment</em>
+												</figcaption>
+											</figure>
+											<br><br>
 
 											<h2>References</h2>
 											<ul>
